@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import networkIcon from "../Icons/network_icon.png";
 import sidebarImage from "../Icons/sidebar.png";
+import Title from "./Title";
+import UpperBar from "./UpperBar";
 
 const SettingsScreen = () => {
   const [activeTab, setActiveTab] = useState("General Settings");
+  const username = "Tal";
 
   const menuItems = [
     "General Settings",
@@ -56,6 +59,7 @@ const SettingsScreen = () => {
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
+       
       {/* Sidebar */}
       <div
         style={{
@@ -71,12 +75,10 @@ const SettingsScreen = () => {
           }}
       >
       </div>
-
+      <UpperBar username={username} /> 
       {/* Main Content */}
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42" }}>
-        <div style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px", textAlign: "center" }}>
-          IDENT - IoT & NoT Device Identification
-        </div>
+        <Title />
 
         <div style={{ display: "flex" }}>
           {/* Menu */}
