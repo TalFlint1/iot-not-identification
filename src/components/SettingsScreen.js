@@ -99,12 +99,27 @@ const SettingsScreen = () => {
           {/* Menu */}
           <div
             style={{
-              width: "30%",
+              width: "20%",
               padding: "10px",
               backgroundColor: "#EDEDED",
               borderRight: "1px solid #ccc",
             }}
           >
+            {/* Settings Header */}
+            <h3
+              style={{
+                fontSize: "30px",
+                fontWeight: "bold",
+                margin: "10px 0 20px",
+                textAlign: "left",
+                color: "#333",
+                marginBottom: "30px",
+                marginTop: "30px",
+                paddingLeft: "40px",
+              }}
+            >
+              Settings
+            </h3>
             {menuItems.map((item) => (
               <div key={item.title}>
                 <button
@@ -114,26 +129,27 @@ const SettingsScreen = () => {
                   style={{
                     width: "100%",
                     padding: "10px",
+                    paddingLeft: "40px",
                     marginBottom: "10px",
                     border: "none",
-                    backgroundColor: activeTab === item.title ? "#D9D9D9" : "#fff",
+                    backgroundColor: activeTab === item.title ? "#D9D9D9" : "#EDEDED",
                     cursor: "pointer",
                     textAlign: "left",
                     fontSize: "16px",
-                    borderRadius: "5px",
+                    borderRadius: "10px",
                     transition: "0.3s",
                     fontWeight: activeTab === item.title ? "bold" : "normal",
                   }}
                   onMouseEnter={(e) => (e.target.style.backgroundColor = "#DDDDDD")}
                   onMouseLeave={(e) =>
                     (e.target.style.backgroundColor =
-                      activeTab === item.title ? "#D9D9D9" : "#fff")
+                      activeTab === item.title ? "#D9D9D9" : "#EDEDED")
                   }
                 >
                   {item.title}
                 </button>
                 {item.children && expandedTab === item.title && (
-                  <div style={{ paddingLeft: "20px" }}>
+                  <div style={{ paddingLeft: "60px" }}>
                     {item.children.map((child) => (
                       <button
                         key={child}
@@ -143,18 +159,18 @@ const SettingsScreen = () => {
                           padding: "10px",
                           marginBottom: "10px",
                           border: "none",
-                          backgroundColor: activeTab === child ? "#D9D9D9" : "#fff",
+                          backgroundColor: activeTab === child ? "#D9D9D9" : "#EDEDED",
                           cursor: "pointer",
                           textAlign: "left",
-                          fontSize: "14px",
-                          borderRadius: "5px",
+                          fontSize: "16px",
+                          borderRadius: "10px",
                           transition: "0.3s",
                           fontWeight: activeTab === child ? "bold" : "normal",
                         }}
                         onMouseEnter={(e) => (e.target.style.backgroundColor = "#DDDDDD")}
                         onMouseLeave={(e) =>
                           (e.target.style.backgroundColor =
-                            activeTab === child ? "#D9D9D9" : "#fff")
+                            activeTab === child ? "#D9D9D9" : "#EDEDED")
                         }
                       >
                         {child}
