@@ -1,0 +1,30 @@
+.custom-radio {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #72F3F7;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+  }
+  
+  .custom-radio:checked {
+    border-color: #72F3F7;
+  }
+  
+  .custom-radio:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #72F3F7;
+    transform: translate(-50%, -50%);
+  }
+  
