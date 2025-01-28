@@ -25,7 +25,7 @@ const UpperBar = ({ username }) => {
             backgroundColor: "#343C42",
             padding: "10px",
             position: "fixed", // Fix it at the top of the screen
-            top: "10px", // Ensure it's at the top
+            top: "2px", // Ensure it's at the top
             left: "320px", // Align it to the left side
             width: "100%", // Make it span the full width of the screen
             zIndex: "1000", // Ensure it stays on top of other content

@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import networkIcon from "../Icons/network_icon.png";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
 
 const SettingsScreen = () => {
   const [activeTab, setActiveTab] = useState("General Settings");
+  const [expandedTab, setExpandedTab] = useState(null); // For collapsible tabs
   const username = "Tal";
 
   const menuItems = [
-    "General Settings",
-    "User Preferences",
-    "Account Management",
-    "Advanced Settings",
-    "Data Management",
-    "Help & Support",
+    {
+      title: "General Settings",
+      children: ["User Preferences", "Account Management"],
+    },
+    { title: "Advanced Settings" },
+    { title: "Data Management" },
+    { title: "Help & Support" },
   ];
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const toggleExpand = (tab) => {
+    setExpandedTab(expandedTab === tab ? null : tab);
   };
 
   const renderContent = () => {
@@ -80,36 +85,84 @@ const SettingsScreen = () => {
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42" }}>
         <Title />
 
-        <div style={{ display: "flex" }}>
+        {/* Unified Box for Menu and Content */}
+        <div
+          style={{
+            display: "flex",
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            overflow: "hidden",
+            marginTop: "20px",
+          }}
+        >
           {/* Menu */}
           <div
             style={{
-              width: "25%",
+              width: "30%",
               padding: "10px",
-              backgroundColor: "#f9f9f9",
+              backgroundColor: "#EDEDED",
               borderRight: "1px solid #ccc",
             }}
           >
             {menuItems.map((item) => (
-              <button
-                key={item}
-                onClick={() => handleTabClick(item)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "10px",
-                  border: "none",
-                  backgroundColor: activeTab === item ? "#d8f4f7" : "#fff",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  fontSize: "16px",
-                  borderRadius: "5px",
-                  transition: "0.3s",
-                  fontWeight: activeTab === item ? "bold" : "normal",
-                }}
-              >
-                {item}
-              </button>
+              <div key={item.title}>
+                <button
+                  onClick={() => {
+                    item.children ? toggleExpand(item.title) : handleTabClick(item.title);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    marginBottom: "10px",
+                    border: "none",
+                    backgroundColor: activeTab === item.title ? "#D9D9D9" : "#fff",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    fontSize: "16px",
+                    borderRadius: "5px",
+                    transition: "0.3s",
+                    fontWeight: activeTab === item.title ? "bold" : "normal",
+                  }}
+                  onMouseEnter={(e) => (e.target.style.backgroundColor = "#DDDDDD")}
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor =
+                      activeTab === item.title ? "#D9D9D9" : "#fff")
+                  }
+                >
+                  {item.title}
+                </button>
+                {item.children && expandedTab === item.title && (
+                  <div style={{ paddingLeft: "20px" }}>
+                    {item.children.map((child) => (
+                      <button
+                        key={child}
+                        onClick={() => handleTabClick(child)}
+                        style={{
+                          width: "100%",
+                          padding: "10px",
+                          marginBottom: "10px",
+                          border: "none",
+                          backgroundColor: activeTab === child ? "#D9D9D9" : "#fff",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          fontSize: "14px",
+                          borderRadius: "5px",
+                          transition: "0.3s",
+                          fontWeight: activeTab === child ? "bold" : "normal",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = "#DDDDDD")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.backgroundColor =
+                            activeTab === child ? "#D9D9D9" : "#fff")
+                        }
+                      >
+                        {child}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
