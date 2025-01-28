@@ -29,7 +29,7 @@ const InputScreen = () => {
         <div className="flex flex-col items-center text-white p-6">
         <p
             style={{
-                fontSize: "22px",  // Adjust the font size
+                fontSize: "20px",  // Adjust the font size
                 margin: "10px 0",  // Add some margin for spacing
                 textAlign: "left",  // Center align the text
                 color: "white",  // Set the text color to white
@@ -43,21 +43,22 @@ const InputScreen = () => {
           {/* New "Choose input option:" text */}
           <p
             style={{
-                fontSize: "18px",  // Adjust the font size
+                fontSize: "22px",  // Adjust the font size
                 margin: "10px 0",  // Add some margin for spacing
                 textAlign: "left",  // Center align the text
                 color: "white",  // Set the text color to white
                 marginLeft: "200px",
                 textDecoration: "underline",
-                marginTop: "40px"
+                marginTop: "40px",
+                marginBottom: "20px"
             }}
         >
             Choose input option:
         </p>
           
           {/* Input Selection */}
-          <div className="mb-4 flex gap-4">
-            <label className="flex items-center gap-2 cursor-pointer">
+          <div className="mb-4 flex gap-4" style={{ marginLeft: "200px" }}>
+            <label className="flex items-center gap-2 cursor-pointer" style={{ marginRight: "50px" }}>
               <input 
                 type="radio" 
                 name="inputType" 
@@ -66,7 +67,7 @@ const InputScreen = () => {
                 onChange={() => setInputType("manual")} 
                 className="custom-radio"
               />
-              Manual Data Entry
+              <span style={{ marginLeft: "10px", color: "white", fontSize: "20px", marginBottom: "20px" }}>Manual Data Entry</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input 
@@ -77,32 +78,103 @@ const InputScreen = () => {
                 onChange={() => setInputType("json")} 
                 className="custom-radio"
               />
-              JSON File
+              <span style={{ marginLeft: "10px", color: "white", fontSize: "20px", marginBottom: "20px" }}>JSON File</span>
             </label>
           </div>
           
           {/* Input Box */}
-          <div className="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-lg">
+          <div
+            className="bg-gray-800 p-6 shadow-lg"
+            style={{
+                marginTop: "20px",
+                marginLeft: "200px",
+                backgroundColor: "#EDEDED",
+                borderRadius: "10px", // More rounded corners
+                height: "300px", // Taller box
+                width: "60%", // Thinner box
+                maxWidth: "800px", // Limit the maximum width
+            }}
+            >
             {inputType === "json" ? (
-              <div className="flex flex-col items-center gap-4">
-                <p className="italic">Select your JSON file from your computer or drag and drop it into the box below</p>
-                <input type="file" className="border border-dashed border-gray-500 p-4 w-full text-center" />
+                <div className="flex flex-col items-center gap-4" style={{ height: "100%", justifyContent: "center" }}>
+                <p className="italic" style={{ marginTop: "20px", marginLeft: "30px", marginBottom: "20px", paddingTop: "20px", fontSize: "18px" }}>
+                    Select your JSON file from your computer or drag and drop it into the box below
+                </p>
+                <label
+                    htmlFor="file-upload"
+                    className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer"
+                    style={{
+                        backgroundColor: "#FFF",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "150px",
+                        width: "200px",
+                        color: "#333",
+                        position: "relative", // Ensure proper positioning of the inner box
+                    }}
+                >
+                    {/* Small box inside the input box */}
+                    <div
+                        style={{
+                            backgroundColor: "#D9D9D9",  // Light gray background for the smaller box
+                            padding: "10px",  // Padding for the smaller box
+                            borderRadius: "8px", // Optional: rounded corners for the small box
+                            textAlign: "center",
+                            fontSize: "16px",  // Adjust font size
+                            color: "#333",  // Text color
+                            position: "absolute", // Absolute positioning to stay within the input box
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)", // Center the text inside the small box
+                            width: "80%",  // Adjust the size of the inner box
+                            border: "2px dashed #4C484E",
+                        }}
+                    >
+                        Choose file or drag it here
+                    </div>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        style={{ display: "none" }} // Fully hide the default file input box
+                    />
+                </label>
                 <div className="flex gap-4">
-                  <button className="bg-green-300 text-black px-4 py-2 rounded-lg">UPLOAD</button>
-                  <button className="bg-teal-400 text-black px-4 py-2 rounded-lg">IDENTIFY</button>
+                    <button className="bg-green-300 text-black px-4 py-2 rounded-lg">UPLOAD</button>
+                    <button className="bg-teal-400 text-black px-4 py-2 rounded-lg">IDENTIFY</button>
                 </div>
-              </div>
+                </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4">
-                <input className="p-2 bg-gray-700 rounded" placeholder="MAC Address" />
-                <input className="p-2 bg-gray-700 rounded" placeholder="HTTP User Agent" />
-                <input className="p-2 bg-gray-700 rounded" placeholder="DHCP Hostname" />
-                <input className="p-2 bg-gray-700 rounded" placeholder="Domains" />
-                <input className="p-2 bg-gray-700 rounded" placeholder="DNS PTR" />
+                <div className="grid grid-cols-2 gap-4" style={{ height: "100%", justifyContent: "center", paddingTop: "20px" }}>
+                <input
+                    className="p-2 bg-gray-700 rounded"
+                    placeholder="MAC Address"
+                    style={{ backgroundColor: "#FFF" }}
+                />
+                <input
+                    className="p-2 bg-gray-700 rounded"
+                    placeholder="HTTP User Agent"
+                    style={{ backgroundColor: "#FFF" }}
+                />
+                <input
+                    className="p-2 bg-gray-700 rounded"
+                    placeholder="DHCP Hostname"
+                    style={{ backgroundColor: "#FFF" }}
+                />
+                <input
+                    className="p-2 bg-gray-700 rounded"
+                    placeholder="Domains"
+                    style={{ backgroundColor: "#FFF" }}
+                />
+                <input
+                    className="p-2 bg-gray-700 rounded"
+                    placeholder="DNS PTR"
+                    style={{ backgroundColor: "#FFF" }}
+                />
                 <button className="bg-teal-400 text-black px-4 py-2 rounded-lg col-span-2">IDENTIFY</button>
-              </div>
+                </div>
             )}
-          </div>
+            </div>
         </div>
       </div>
     </div>
