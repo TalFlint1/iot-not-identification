@@ -3,6 +3,7 @@ import Title from "./Title";
 import sidebarImage from "../Icons/sidebar.png";
 import './InputScreen.css'; // Make sure the path is correct
 import attachmentIcon from "../Icons/attachment.png"; // Adjust path if needed
+import UpperBar from "./UpperBar";
 
 
 const InputScreen = () => {
@@ -32,6 +33,9 @@ const InputScreen = () => {
           padding: 0,
         }}
       ></div>
+
+       {/* Upper Bar */}
+      <UpperBar username="Tal" />
       
       {/* Main Content */}
       <div style={{ flex: 1, padding: "20px" }}>
@@ -43,7 +47,7 @@ const InputScreen = () => {
                 margin: "10px 0",  // Add some margin for spacing
                 textAlign: "left",  // Center align the text
                 color: "white",  // Set the text color to white
-                marginLeft: "200px",
+                marginLeft: "300px",
             }}
         >
             Find out easily what devices are on your network
@@ -57,7 +61,7 @@ const InputScreen = () => {
                 margin: "10px 0",  // Add some margin for spacing
                 textAlign: "left",  // Center align the text
                 color: "white",  // Set the text color to white
-                marginLeft: "200px",
+                marginLeft: "300px",
                 textDecoration: "underline",
                 marginTop: "40px",
                 marginBottom: "20px"
@@ -67,7 +71,7 @@ const InputScreen = () => {
         </p>
           
           {/* Input Selection */}
-          <div className="mb-4 flex gap-4" style={{ marginLeft: "200px" }}>
+          <div className="mb-4 flex gap-4" style={{ marginLeft: "300px" }}>
             <label className="flex items-center gap-2 cursor-pointer" style={{ marginRight: "50px" }}>
               <input 
                 type="radio" 
@@ -97,12 +101,13 @@ const InputScreen = () => {
             className="bg-gray-800 p-6 shadow-lg"
             style={{
                 marginTop: "20px",
-                marginLeft: "200px",
+                marginLeft: "300px",
                 backgroundColor: "#EDEDED",
                 borderRadius: "10px", // More rounded corners
                 height: "300px", // Taller box
-                width: "60%", // Thinner box
+                width: "750px", // Thinner box
                 maxWidth: "800px", // Limit the maximum width
+                border: "1px solid #000000",
                 display: "flex",
             }}
             >
@@ -134,16 +139,16 @@ const InputScreen = () => {
                       backgroundColor: "#D9D9D9",
                       padding: "10px",
                       borderRadius: "8px",
-                      textAlign: "center",
+                      textAlign: "left",
                       fontSize: "16px",
                       color: "#333",
-                      width: "180px",
+                      width: "200px",
                       border: "2px dashed #4C484E",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "5px",
-                      marginLeft: "40px",
+                      gap: "8px",
+                      marginLeft: "60px",
                       marginTop: "-40px"
                     }}
                   >
@@ -168,9 +173,36 @@ const InputScreen = () => {
                 </label>
               
                 {/* Buttons */}
-                <div className="flex gap-4 mt-8" style={{ width: "200px", marginLeft: "30px" }}>
-                  <button className="bg-green-300 text-black px-4 py-2 rounded-lg">CONFIRM UPLOAD</button>
-                  <button className="bg-teal-400 text-black px-4 py-2 rounded-lg">IDENTIFY</button>
+                <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
+                <button 
+                  className="text-black px-4 py-2 rounded-lg" 
+                  style={{ 
+                    width: "200px", 
+                    height: "40px", 
+                    borderRadius: "5px", 
+                    backgroundColor: "#CBF0DB",  // Light greenish color
+                    fontSize: "16px",
+                    border: "1px solid #000000"
+                  }}
+                >
+                  CONFIRM UPLOAD
+                </button>
+
+                <button 
+                  className="text-black px-4 py-2 rounded-lg" 
+                  style={{ 
+                    width: "200px", 
+                    height: "40px", 
+                    borderRadius: "5px", 
+                    backgroundColor: "#68CABE", // Teal color
+                    border: "1px solid #000000",
+                    marginLeft: "40px",
+                    color: "white",
+                    fontSize: "18px"
+                  }}
+                >
+                  IDENTIFY
+                </button>
                 </div>
               </div>
               

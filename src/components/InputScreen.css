@@ -27,4 +27,8 @@
     background-color: #72F3F7;
     transform: translate(-50%, -50%);
   }
+
+  button {
+    cursor: pointer;
+  }
   
