@@ -2,9 +2,19 @@ import { useState } from "react";
 import Title from "./Title";
 import sidebarImage from "../Icons/sidebar.png";
 import './InputScreen.css'; // Make sure the path is correct
+import attachmentIcon from "../Icons/attachment.png"; // Adjust path if needed
+
 
 const InputScreen = () => {
   const [inputType, setInputType] = useState("json"); // Default to JSON file
+  const [selectedFile, setSelectedFile] = useState(null); // State for file name
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file.name); // Update state with file name
+    }
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#343C42", fontFamily: "Arial, sans-serif" }}>
@@ -93,57 +103,77 @@ const InputScreen = () => {
                 height: "300px", // Taller box
                 width: "60%", // Thinner box
                 maxWidth: "800px", // Limit the maximum width
+                display: "flex",
             }}
             >
             {inputType === "json" ? (
                 <div className="flex flex-col items-center gap-4" style={{ height: "100%", justifyContent: "center" }}>
-                <p className="italic" style={{ marginTop: "20px", marginLeft: "30px", marginBottom: "20px", paddingTop: "20px", fontSize: "18px" }}>
-                    Select your JSON file from your computer or drag and drop it into the box below
+                <p className="italic" style={{ marginTop: "20px", marginLeft: "30px", marginBottom: "1px", paddingTop: "20px", fontSize: "18px" }}>
+                  Select your JSON file from your computer or drag and drop it into the box below
                 </p>
+                
+                {/* Label for file upload */}
                 <label
-                    htmlFor="file-upload"
-                    className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer"
-                    style={{
-                        backgroundColor: "#FFF",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "150px",
-                        width: "200px",
-                        color: "#333",
-                        position: "relative", // Ensure proper positioning of the inner box
-                    }}
+                  htmlFor="file-upload"
+                  className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer relative"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column", // Arrange children vertically
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "150px",
+                    width: "200px",
+                    color: "#333",
+                    position: "relative",
+                    borderRadius: "8px",
+                  }}
                 >
-                    {/* Small box inside the input box */}
-                    <div
-                        style={{
-                            backgroundColor: "#D9D9D9",  // Light gray background for the smaller box
-                            padding: "10px",  // Padding for the smaller box
-                            borderRadius: "8px", // Optional: rounded corners for the small box
-                            textAlign: "center",
-                            fontSize: "16px",  // Adjust font size
-                            color: "#333",  // Text color
-                            position: "absolute", // Absolute positioning to stay within the input box
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)", // Center the text inside the small box
-                            width: "80%",  // Adjust the size of the inner box
-                            border: "2px dashed #4C484E",
-                        }}
-                    >
-                        Choose file or drag it here
-                    </div>
-                    <input
-                        id="file-upload"
-                        type="file"
-                        style={{ display: "none" }} // Fully hide the default file input box
-                    />
+                  {/* Small gray box inside the input box */}
+                  <div
+                    style={{
+                      backgroundColor: "#D9D9D9",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                      fontSize: "16px",
+                      color: "#333",
+                      width: "180px",
+                      border: "2px dashed #4C484E",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "5px",
+                      marginLeft: "40px",
+                      marginTop: "-40px"
+                    }}
+                  >
+                    <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
+                    Choose file or drag it here
+                  </div>
+              
+                  {/* Show file name directly under the gray box */}
+                  {selectedFile && (
+                    <p style={{ position: "absolute", bottom: "10px", fontSize: "16px", textAlign: "center", 
+                    marginLeft: "20px", marginBottom: "20px" }}>
+                      Selected file: {selectedFile}
+                    </p>
+                  )}
+              
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => setSelectedFile(e.target.files[0]?.name || "")}
+                  />
                 </label>
-                <div className="flex gap-4">
-                    <button className="bg-green-300 text-black px-4 py-2 rounded-lg">UPLOAD</button>
-                    <button className="bg-teal-400 text-black px-4 py-2 rounded-lg">IDENTIFY</button>
+              
+                {/* Buttons */}
+                <div className="flex gap-4 mt-8" style={{ width: "200px", marginLeft: "30px" }}>
+                  <button className="bg-green-300 text-black px-4 py-2 rounded-lg">CONFIRM UPLOAD</button>
+                  <button className="bg-teal-400 text-black px-4 py-2 rounded-lg">IDENTIFY</button>
                 </div>
-                </div>
+              </div>
+              
             ) : (
                 <div className="grid grid-cols-2 gap-4" style={{ height: "100%", justifyContent: "center", paddingTop: "20px" }}>
                 <input
