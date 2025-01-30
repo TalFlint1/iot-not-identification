@@ -9,6 +9,7 @@ import UpperBar from "./UpperBar";
 const InputScreen = () => {
   const [inputType, setInputType] = useState("json"); // Default to JSON file
   const [selectedFile, setSelectedFile] = useState(null); // State for file name
+  const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -17,20 +18,21 @@ const InputScreen = () => {
     }
   };
 
+  const buttonStyle = {
+    width: "200px", height: "40px", borderRadius: "5px", border: "1px solid #000000", fontSize: "18px",
+  };
+
+  const handleFocus = (placeholder) => {
+    setFocusedInput(placeholder); // When an input box is clicked, it disappears
+  };
+
   return (
     <div style={{ display: "flex", height: "100vh", backgroundColor: "#343C42", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
       <div
         style={{
-          backgroundImage: `url(${sidebarImage})`,
-          backgroundColor: "#343C42",
-          backgroundSize: "contain",
-          backgroundPosition: "left",
-          backgroundRepeat: "no-repeat",
-          height: "100%",
-          width: "14%",
-          margin: 0,
-          padding: 0,
+          backgroundImage: `url(${sidebarImage})`, backgroundColor: "#343C42", backgroundSize: "contain", backgroundPosition: "left",
+          backgroundRepeat: "no-repeat", height: "100%", width: "14%", margin: 0, padding: 0,
         }}
       ></div>
 
@@ -43,28 +45,17 @@ const InputScreen = () => {
         <div className="flex flex-col items-center text-white p-6">
         <p
             style={{
-                fontSize: "20px",  // Adjust the font size
-                margin: "10px 0",  // Add some margin for spacing
-                textAlign: "left",  // Center align the text
-                color: "white",  // Set the text color to white
-                marginLeft: "300px",
+                fontSize: "20px", margin: "10px 0", textAlign: "left", color: "white", marginLeft: "300px",
             }}
         >
             Find out easily what devices are on your network
         </p>
 
-
           {/* New "Choose input option:" text */}
           <p
             style={{
-                fontSize: "22px",  // Adjust the font size
-                margin: "10px 0",  // Add some margin for spacing
-                textAlign: "left",  // Center align the text
-                color: "white",  // Set the text color to white
-                marginLeft: "300px",
-                textDecoration: "underline",
-                marginTop: "40px",
-                marginBottom: "20px"
+                fontSize: "22px", margin: "10px 0", textAlign: "left", color: "white", marginLeft: "300px",
+                textDecoration: "underline", marginTop: "40px", marginBottom: "20px"
             }}
         >
             Choose input option:
@@ -100,15 +91,8 @@ const InputScreen = () => {
           <div
             className="bg-gray-800 p-6 shadow-lg"
             style={{
-                marginTop: "20px",
-                marginLeft: "300px",
-                backgroundColor: "#EDEDED",
-                borderRadius: "10px", // More rounded corners
-                height: "300px", // Taller box
-                width: "750px", // Thinner box
-                maxWidth: "800px", // Limit the maximum width
-                border: "1px solid #000000",
-                display: "flex",
+                marginTop: "20px", marginLeft: "300px", backgroundColor: "#EDEDED", borderRadius: "10px", height: "300px",
+                width: inputType === "json" ? "750px" : "900px", maxWidth: "1200px", border: "1px solid #000000", display: "flex",
             }}
             >
             {inputType === "json" ? (
@@ -122,34 +106,16 @@ const InputScreen = () => {
                   htmlFor="file-upload"
                   className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer relative"
                   style={{
-                    display: "flex",
-                    flexDirection: "column", // Arrange children vertically
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "150px",
-                    width: "200px",
-                    color: "#333",
-                    position: "relative",
-                    borderRadius: "8px",
+                    display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
+                    height: "150px", width: "200px", color: "#333", position: "relative", borderRadius: "8px",
                   }}
                 >
                   {/* Small gray box inside the input box */}
                   <div
                     style={{
-                      backgroundColor: "#D9D9D9",
-                      padding: "10px",
-                      borderRadius: "8px",
-                      textAlign: "left",
-                      fontSize: "16px",
-                      color: "#333",
-                      width: "200px",
-                      border: "2px dashed #4C484E",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      marginLeft: "60px",
-                      marginTop: "-40px"
+                      backgroundColor: "#D9D9D9", padding: "10px", borderRadius: "8px", textAlign: "left", fontSize: "16px", color: "#333",
+                      width: "200px", border: "2px dashed #4C484E", display: "flex", alignItems: "center", justifyContent: "center",
+                      gap: "8px", marginLeft: "60px", marginTop: "-40px", cursor: "pointer"
                     }}
                   >
                     <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
@@ -174,67 +140,40 @@ const InputScreen = () => {
               
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
-                <button 
-                  className="text-black px-4 py-2 rounded-lg" 
-                  style={{ 
-                    width: "200px", 
-                    height: "40px", 
-                    borderRadius: "5px", 
-                    backgroundColor: "#CBF0DB",  // Light greenish color
-                    fontSize: "16px",
-                    border: "1px solid #000000"
-                  }}
-                >
-                  CONFIRM UPLOAD
-                </button>
-
-                <button 
-                  className="text-black px-4 py-2 rounded-lg" 
-                  style={{ 
-                    width: "200px", 
-                    height: "40px", 
-                    borderRadius: "5px", 
-                    backgroundColor: "#68CABE", // Teal color
-                    border: "1px solid #000000",
-                    marginLeft: "40px",
-                    color: "white",
-                    fontSize: "18px"
-                  }}
-                >
-                  IDENTIFY
-                </button>
+                  <button style={{ ...buttonStyle, backgroundColor: "#CBF0DB" }}>CONFIRM UPLOAD</button>
+                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>IDENTIFY</button>
                 </div>
               </div>
               
             ) : (
-                <div className="grid grid-cols-2 gap-4" style={{ height: "100%", justifyContent: "center", paddingTop: "20px" }}>
-                <input
-                    className="p-2 bg-gray-700 rounded"
-                    placeholder="MAC Address"
-                    style={{ backgroundColor: "#FFF" }}
-                />
-                <input
-                    className="p-2 bg-gray-700 rounded"
-                    placeholder="HTTP User Agent"
-                    style={{ backgroundColor: "#FFF" }}
-                />
-                <input
-                    className="p-2 bg-gray-700 rounded"
-                    placeholder="DHCP Hostname"
-                    style={{ backgroundColor: "#FFF" }}
-                />
-                <input
-                    className="p-2 bg-gray-700 rounded"
-                    placeholder="Domains"
-                    style={{ backgroundColor: "#FFF" }}
-                />
-                <input
-                    className="p-2 bg-gray-700 rounded"
-                    placeholder="DNS PTR"
-                    style={{ backgroundColor: "#FFF" }}
-                />
-                <button className="bg-teal-400 text-black px-4 py-2 rounded-lg col-span-2">IDENTIFY</button>
+              <div className="input-grid">
+                {/* First row */}
+                <div className="input-box">
+                  <h3>MAC Address</h3>
+                  <input className="input-box input" placeholder="Example: 00-B0-D0-63-C2-26" />
                 </div>
+                <div className="input-box">
+                  <h3>DHCP Hostname</h3>
+                  <input className="input-box input" placeholder="Example: host1" />
+                </div>
+                <div className="input-box">
+                  <h3>HTTP User Agent</h3>
+                  <input className="input-box input" placeholder="Example: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0)" />
+                </div>
+
+                {/* Second row */}
+                <div className="input-box">
+                  <h3>Domains</h3>
+                  <input className="input-box input" placeholder="Example: example.com" />
+                </div>
+                <div className="input-box">
+                  <h3>DNS PTR</h3>
+                  <input className="input-box input" placeholder="Example: mailserver.example.org" />
+                </div>
+                <div className="input-box">
+                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white" }}>IDENTIFY</button>
+                </div>
+              </div>
             )}
             </div>
         </div>
