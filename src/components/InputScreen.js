@@ -92,7 +92,7 @@ const InputScreen = () => {
             className="bg-gray-800 p-6 shadow-lg"
             style={{
                 marginTop: "20px", marginLeft: "300px", backgroundColor: "#EDEDED", borderRadius: "10px", height: "300px",
-                width: inputType === "json" ? "750px" : "900px", maxWidth: "1200px", border: "1px solid #000000", display: "flex",
+                width: inputType === "json" ? "750px" : "800px", maxWidth: "1200px", border: "1px solid #000000", display: "flex",
             }}
             >
             {inputType === "json" ? (
@@ -171,7 +171,7 @@ const InputScreen = () => {
                   <input className="input-box input" placeholder="Example: mailserver.example.org" />
                 </div>
                 <div className="input-box">
-                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white" }}>IDENTIFY</button>
+                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginTop: "40px" }}>IDENTIFY</button>
                 </div>
               </div>
             )}

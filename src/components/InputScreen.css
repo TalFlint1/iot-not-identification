@@ -36,31 +36,38 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr; /* Define three equal-width columns */
     gap: 20px;  /* Adjust the space between each grid item */
+    margin-top: 10px;
+    margin-bottom: 50px;
+    margin-left: 20px;
   }
-  
-  .input-box {
-    border-radius: 5px;
-    padding: 15px;
-    height: 120px; /* Adjust the height */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .input-box input {
-    background-color: #FFF;
-    height: 40px;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    width: 120%;
-    overflow: hidden; /* Prevents overflow */
-    text-overflow: ellipsis; /* Adds ellipsis if text overflows */
-    white-space: nowrap; /* Prevents wrapping */
-    word-wrap: break-word; /* Allows breaking of words if necessary */
-    box-sizing: border-box; /* Ensures padding and border are included in width */
-    font-size: 12px;
-  }
-  
+  /* Apply margin adjustment directly to h3 tags inside .input-box */
+.input-box h3 {
+  margin-bottom: 5px; /* Shortens the space between the label and the input */
+  margin-top: 10px; /* Shortens the space between the label and the input */
+}
+
+/* Apply to input elements directly inside .input-box */
+.input-box input {
+  background-color: #FFF;
+  height: 40px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  width: 100%; /* Ensures the input takes the full width */
+  box-sizing: border-box;
+  font-size: 12px;
+  padding-left: 5px; /* Optional: adds padding inside the input */
+}
+
+/* Adjusting the overall height and padding for .input-box */
+.input-box {
+  border-radius: 5px;
+  padding: 10px 15px; /* Reduces the space inside the box */
+  height: 100px; /* Adjust height for compact design */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
   
   .input-box p {
     font-size: 12px;
@@ -71,7 +78,7 @@
     background-color: #68CABE;
     color: white;
     width: 100%;
-    height: 40px;
+    height: 50px !important;
     border-radius: 5px;
     border: none;
     margin-top: 10px;
