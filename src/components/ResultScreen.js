@@ -4,25 +4,19 @@ import Title from "./Title";
 import UpperBar from "./UpperBar";
 
 const ResultScreen = () => {
-  const username = "Tal"; // Username can be dynamic or static
-
+  const username = "Tal";
   const deviceResult = "Verkada Security Camera";
-  const confidencePercentage = 82; // Example confidence percentage
-  const justificationText = "Verkada cameras can automatically sync their local storage to the cloud";
+  const confidencePercentage = 82;
+  const justificationText = "\"Verkada cameras can automatically sync their local storage to the cloud\"";
 
-  // Circle filling style
-  const circleStyle = {
-    background: `conic-gradient(#68CABE ${confidencePercentage * 3.6}deg, #e0e0e0 0deg)`,
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-    fontSize: "18px",
-    fontWeight: "bold",
+  // Determine color based on confidence percentage
+  const getColor = (percentage) => {
+    if (percentage >= 80) return "#17B95B"; // Green
+    if (percentage >= 50) return "#FFA500"; // Orange
+    return "#FF0000"; // Red
   };
+
+  const ringColor = getColor(confidencePercentage);
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -41,70 +35,85 @@ const ResultScreen = () => {
         }}
       />
       <UpperBar username={username} />
+      
       {/* Main Content */}
-      <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42" }}>
+      <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42", textAlign: "center", }}>
         <Title />
         
-        {/* Results Mini Title */}
-        <h2 style={{ color: "white", fontSize: "24px", fontWeight: "bold", textTransform: "uppercase" }}>
-          RESULTS
-        </h2>
-
-        {/* Mini Titles (Device, Confidence, Justification) */}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-          <h3 style={{ color: "white" }}>Device</h3>
-          <h3 style={{ color: "white" }}>Confidence</h3>
-          <h3 style={{ color: "white" }}>Justification</h3>
-        </div>
-
-        {/* Result Content */}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+        <p style={{ color: "white", fontSize: "36px", textTransform: "uppercase", fontStyle: "italic", marginBottom: "40px", marginRight: "60px" }}>
+          RESULTS</p>
+        
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "50px", marginTop: "20px" }}>
           {/* Device */}
-          <div style={{ textAlign: "center", width: "30%" }}>
+          <div style={{ textAlign: "center" }}>
+            <p style={{ color: "white", fontSize: "20px", marginBottom: "10px", fontSize: "28px", marginRight: "50px" }}>Device</p>
             <div
               style={{
-                backgroundColor: "#68CABE",
+                backgroundColor: "#6A8EDD",
                 borderRadius: "50%",
-                width: "120px",
-                height: "120px",
+                width: "200px",
+                height: "200px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                marginBottom: "-80px",
+                marginRight: "50px"
               }}
             >
-              <span style={{ color: "white", fontWeight: "bold" }}>{deviceResult}</span>
+              <span style={{ color: "white", fontSize: "28px", textAlign: "center", fontStyle: "italic"}}>{deviceResult}</span>
             </div>
           </div>
-
-          {/* Confidence */}
-          <div style={{ textAlign: "center", width: "30%" }}>
-            <div style={circleStyle}>
-              {confidencePercentage}%
+          
+          {/* Confidence - Circular Progress */}
+          <div style={{ textAlign: "center" }}>
+            <p style={{ color: "white", fontSize: "20px", marginBottom: "10px", fontSize: "28px", marginLeft: "80px" }}>Confidence</p>
+            <div style={{ position: "relative", width: "120px", height: "120px", marginLeft: "50px" }}>
+              <svg width="200" height="200" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#e0e0e0" strokeWidth="10" fill="none" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="40"
+                  stroke={ringColor}
+                  strokeWidth="10"
+                  fill="none"
+                  strokeDasharray="251.2"
+                  strokeDashoffset={251.2 - (confidencePercentage / 100) * 251.2}
+                  strokeLinecap="round"
+                  transform="rotate(-90 50 50)"
+                />
+                <text x="52" y="57" textAnchor="middle" fontSize="20" fill="white">
+                  {confidencePercentage}%
+                </text>
+              </svg>
             </div>
           </div>
-
           {/* Justification */}
-          <div style={{ width: "30%" }}>
-            <div
-              style={{
-                backgroundColor: "#E0E0E0",
-                padding: "20px",
-                borderRadius: "10px",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "black",
-              }}
-            >
-              <p>{justificationText}</p>
-            </div>
+          <div style={{ textAlign: "center" }}>
+          <p style={{ color: "white", fontSize: "20px", marginBottom: "10px", fontSize: "28px", marginLeft: "100px" }}>Justification</p>
+          <div
+            style={{
+              backgroundColor: "#E0E0E0",
+              padding: "20px",
+              borderRadius: "30px",
+              height: "200px",
+              width: "270px",
+              textAlign: "center",
+              marginLeft: "120px",
+              marginBottom: "-80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <p style={{ color: "black", fontSize: "26px", fontStyle: "italic" }}>{justificationText}</p>
+          </div>
           </div>
         </div>
-
+        
         {/* Analyze Another Device */}
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
-          <h3 style={{ color: "white" }}>Analyze Another Device</h3>
+        <div style={{ textAlign: "center", marginTop: "130px" }}>
+          <p style={{ color: "white", fontSize: "24px" }}>Analyze Another Device</p>
           <button
             style={{
               width: "200px",
@@ -117,7 +126,7 @@ const ResultScreen = () => {
               marginTop: "20px",
             }}
           >
-            Identify
+            IDENTIFY
           </button>
         </div>
       </div>
