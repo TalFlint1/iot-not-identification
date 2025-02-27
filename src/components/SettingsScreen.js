@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
+import './SettingsScreen.css';
 
 const SettingsScreen = () => {
   const [activeTab, setActiveTab] = useState("General Settings");
@@ -74,26 +75,57 @@ const SettingsScreen = () => {
       case "Account Management":
         return (
           <div>
-            <h3>Account Management</h3>
+            <h3 style={{ marginTop: "20px" }}>Account Management</h3>
             <div className="account-info">
-              <p><span>Name:</span> Tal</p>
-              <p><span>Username:</span> tal123</p>
-              <p><span>Connected Accounts:</span></p>
-              <p>Platform: Google</p>
-              <p>Status: <span style={{ color: "green" }}>Connected</span></p>
-              <button className="disconnect">Disconnect</button>
+              <p style={{ marginTop: "20px" }}><span>Name:</span> Tal</p>
+              <p style={{ marginTop: "20px" }}><span>Username:</span> tal123</p>
+              <p style={{ marginTop: "20px" }}><span>Connected Accounts:</span></p>
+              <p style={{ marginTop: "20px" }}>Platform: Google</p>
+              <p style={{ marginTop: "20px", marginBottom: "20px" }}>Status: <span style={{ color: "green" }}>Connected</span></p>
             </div>
 
             <div className="account-buttons">
-              <button>Change Password</button>
-              <button>Delete Account</button>
+            <button className="btn change-password-btn">Change Password</button>
+            <button className="btn delete-account-btn">Delete Account</button>
             </div>
           </div>
         );
       case "General Settings":
         return <div><h3>General Settings</h3><p>Update your general preferences here.</p></div>;
       case "User Preferences":
-        return <div><h3>User Preferences</h3><p>Set your preferences here.</p></div>;
+        return (
+          <div>
+            <h3 style={{ marginTop: "20px" }}>User Preferences</h3>
+            <div className="preferences">
+              <div>
+                <h3 style={{ marginTop: "20px" }}>Two-Factor Authentication</h3>
+                
+                {/* Displaying the status of 2FA */}
+                <p style={{ marginTop: "20px" }}> Your account is protected with 2FA to enhance security.</p>
+                <p style={{ marginTop: "20px" }}>Choose your preferred method of authentication:</p>
+                
+                <div>
+                  <p style={{ marginTop: "20px", marginBottom: "10px" }}>Select Authentication Method:</p>
+                  <select>
+                    <option value="authenticator">Authenticator App (Recommended)</option>
+                    <option value="sms">SMS (Text Message)</option>
+                    <option value="email">Email Verification</option>
+                  </select>
+                </div>
+
+                <div>
+                  <p style={{ marginTop: "20px" }}>Current 2FA Method:</p>
+                  <p style={{ marginTop: "10px", fontSize: "14px", marginBottom: "10px" }}>Google Authenticator</p> {/* This would be dynamic based on current method */}
+                </div>
+
+                <div>
+                  <button className="btn reg-button-btn">Change 2FA Method</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        
       case "Advanced Settings":
         return <div><h3>Advanced Settings</h3><p>Configure advanced options.</p></div>;
       case "Data Management":

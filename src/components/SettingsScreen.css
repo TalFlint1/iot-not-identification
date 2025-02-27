@@ -1,0 +1,49 @@
+.account-buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .change-password-btn {
+    background-color: #B3B3B3; /* Green for Change Password */
+    color: white;
+  }
+  
+  .change-password-btn:hover {
+    background-color: #808080; /* Darker green on hover */
+    transform: scale(1.03);
+  }
+
+  .reg-button-btn {
+    background-color: #ccc; /* Green for Change Password */
+    color: white;
+  }
+  
+  .reg-button-btn:hover {
+    background-color: #808080 ; /* Darker green on hover */
+    transform: scale(1.03);
+  }
+  
+  .delete-account-btn {
+    background-color: #f44336; /* Red for Delete Account */
+    color: white;
+  }
+  
+  .delete-account-btn:hover {
+    background-color: #e53935; /* Darker red on hover */
+    transform: scale(1.03);
+  }
+  
+  .delete-account-btn:focus {
+    outline: 3px solid #e53935; /* Red outline when focused */
+  }
+  
