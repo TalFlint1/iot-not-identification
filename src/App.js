@@ -7,7 +7,7 @@ import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 
 function App() {
-  return <HistoryScreen />;
+  return <SettingsScreen />;
 }
 
 export default App;

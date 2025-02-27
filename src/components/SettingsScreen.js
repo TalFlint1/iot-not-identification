@@ -6,6 +6,10 @@ import UpperBar from "./UpperBar";
 const SettingsScreen = () => {
   const [activeTab, setActiveTab] = useState("General Settings");
   const [expandedTab, setExpandedTab] = useState(null); // For collapsible tabs
+  const [expandedFAQ, setExpandedFAQ] = useState(null);
+  const [syncStatus, setSyncStatus] = useState(false);
+  const [dataIntegrityCheckEnabled, setDataIntegrityCheckEnabled] = useState(false);
+
   const username = "Tal";
 
   const menuItems = [
@@ -15,16 +19,55 @@ const SettingsScreen = () => {
     },
     { title: "Advanced Settings" },
     { title: "Data Management" },
-    { title: "Help & Support" },
+    {
+      title: "Help & Support",
+      children: ["FAQ", "Contact Support"],
+    },
   ];
+
+  const faqData = [
+    {
+      question: "How does device identification work?",
+      answer:
+        "Our system analyzes network traffic to determine the vendor and function of IoT devices using AI-based techniques.",
+    },
+    {
+      question: "What file formats are supported for uploading device data?",
+      answer: (
+        <>
+          Currently, we support JSON files. Ensure your file follows the correct format before uploading.
+          <br />
+          Additionally, you can manually input data through the system if you prefer.
+        </>
+      ),
+    },
+    {
+      question: "How accurate is the identification process?",
+      answer: "The system provides a confidence level with each result. Higher confidence means a more certain match.",
+    },
+    {
+      question: "What should I do if my device is not identified?",
+      answer:
+        "Try uploading different network data samples. If issues persist, contact support.",
+    },
+    {
+      question: "How can I reset my settings?",
+      answer: "Go to 'Advanced Settings' and select 'Reset to Default' to restore the original configuration.",
+    },
+  ];
+
+  const toggleFAQ = (index) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index);
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const toggleExpand = (tab) => {
-    setExpandedTab(expandedTab === tab ? null : tab);
+    setExpandedTab(expandedTab === tab ? null : tab); // Toggle for all sections
   };
+  
 
   const renderContent = () => {
     switch (activeTab) {
@@ -54,9 +97,174 @@ const SettingsScreen = () => {
       case "Advanced Settings":
         return <div><h3>Advanced Settings</h3><p>Configure advanced options.</p></div>;
       case "Data Management":
-        return <div><h3>Data Management</h3><p>Manage your data settings.</p></div>;
-      case "Help & Support":
-        return <div><h3>Help & Support</h3><p>Get help or contact support.</p></div>;
+        return (
+          <div>
+            <h3 style={{ marginTop: "20px" }}>Data Management</h3>
+            <p style={{ marginTop: "20px" }}>Manage your data settings.</p>
+  
+            {/* Sync Status */}
+            <div style={{ marginBottom: "20px" }}>
+              <h4 style={{ marginTop: "30px", marginBottom: "10px" }}>Sync Status</h4>
+              <p>
+                {syncStatus ? "Your data is currently synchronized." : "Your data is not synchronized."}
+              </p>
+              <div
+                style={{
+                  marginTop: "20px",
+                  position: "relative",
+                  width: "80px",
+                  height: "40px",
+                  borderRadius: "20px",
+                  background: syncStatus ? "#4CAF50" : "#D9D9D9",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s",
+                }}
+                onClick={() => setSyncStatus(!syncStatus)}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "2px",
+                    left: syncStatus ? "40px" : "2px",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    backgroundColor: "#fff",
+                    transition: "left 0.3s",
+                  }}
+                ></div>
+              </div>
+            </div>
+  
+            {/* Data Integrity Check */}
+              <div>
+              <h4 style={{ marginTop: "30px", marginBottom: "10px" }}>Data Integrity Check</h4>
+              <p>
+                {dataIntegrityCheckEnabled
+                  ? "Data integrity check is enabled."
+                  : "Data integrity check is disabled."}
+              </p>
+              <div
+                style={{
+                  marginTop: "20px",
+                  position: "relative",
+                  width: "80px",
+                  height: "40px",
+                  borderRadius: "20px",
+                  background: dataIntegrityCheckEnabled ? "#4CAF50" : "#D9D9D9",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s",
+                }}
+                onClick={() => setDataIntegrityCheckEnabled(!dataIntegrityCheckEnabled)}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "2px",
+                    left: dataIntegrityCheckEnabled ? "40px" : "2px",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    backgroundColor: "#fff",
+                    transition: "left 0.3s",  // This is the key part for the sliding effect
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        );
+      case "FAQ":
+        return (
+          <div>
+            <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>Frequently Asked Questions</h3>
+            {faqData.map((item, index) => (
+              <div key={index} style={{ marginBottom: "15px", borderBottom: "1px solid #ddd", paddingBottom: "10px" }}>
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    width: "100%",
+                    fontSize: "16px",
+                    display: "block",
+                    padding: "10px 0",
+                    marginBottom: "10px", // Add more space after the question
+                  }}
+                >
+                  {item.question} {expandedFAQ === index ? "▲" : "▼"}
+                </button>
+                {expandedFAQ === index && <p style={{ paddingLeft: "10px" }}>{item.answer}</p>}
+              </div>
+            ))}
+          </div>
+        );
+      case "Contact Support":
+        return (
+          <div>
+            <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>Contact Support</h3>
+            <p style={{ marginBottom: "20px", marginTop: "20px" }}>If you need help, feel free to reach out to our support team!</p>
+            
+            <form style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "400px" }}>
+              <label htmlFor="name">Full Name:</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Enter your name"
+                style={{
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  marginBottom: "10px",
+                }}
+              />
+      
+              <label htmlFor="email">Email Address:</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                style={{
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  marginBottom: "10px",
+                }}
+              />
+      
+              <label htmlFor="message">Your Message:</label>
+              <textarea
+                id="message"
+                placeholder="Write your message here"
+                rows="4"
+                style={{
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  marginBottom: "10px",
+                }}
+              />
+      
+              <button
+                type="submit"
+                style={{
+                  padding: "10px 15px",
+                  borderRadius: "5px",
+                  backgroundColor: "#4CAF50",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = "#45a049"}
+                onMouseLeave={(e) => e.target.style.backgroundColor = "#4CAF50"}
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        );
       default:
         return null;
     }
@@ -93,7 +301,10 @@ const SettingsScreen = () => {
             borderRadius: "10px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             overflow: "hidden",
+            width: "75%",
+            height: "55vh",
             marginTop: "20px",
+            marginLeft: "10%",
           }}
         >
           {/* Menu */}
@@ -124,7 +335,11 @@ const SettingsScreen = () => {
               <div key={item.title}>
                 <button
                   onClick={() => {
-                    item.children ? toggleExpand(item.title) : handleTabClick(item.title);
+                    if (item.children) {
+                      toggleExpand(item.title); // Toggle for sections with children
+                    } else {
+                      handleTabClick(item.title); // Regular click for non-collapsible tabs
+                    }
                   }}
                   style={{
                     width: "100%",
