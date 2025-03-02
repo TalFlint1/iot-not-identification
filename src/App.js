@@ -1,10 +1,10 @@
 import React from "react";
-import SettingsScreen from "./components/SettingsScreen";
-import InputScreen from "./components/InputScreen";
-import LoginScreen from "./components/LoginScreen";
-import RegisterScreen from "./components/RegisterScreen";
-import ResultScreen from "./components/ResultScreen";
-import HistoryScreen from "./components/HistoryScreen";
+import SettingsScreen from "./frontend/components/SettingsScreen";
+import InputScreen from "./frontend/components/InputScreen";
+import LoginScreen from "./frontend/components/LoginScreen";
+import RegisterScreen from "./frontend/components/RegisterScreen";
+import ResultScreen from "./frontend/components/ResultScreen";
+import HistoryScreen from "./frontend/components/HistoryScreen";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
