@@ -14,16 +14,11 @@ const SettingsScreen = () => {
   const username = "Tal";
 
   const menuItems = [
-    {
-      title: "General Settings",
-      children: ["User Preferences", "Account Management"],
-    },
-    { title: "Advanced Settings" },
+    { title: "User Preferences",},
+    { title: "Account Management" },
     { title: "Data Management" },
-    {
-      title: "Help & Support",
-      children: ["FAQ", "Contact Support"],
-    },
+    { title: "FAQ" },
+    { title: "Contact Support" },
   ];
 
   const faqData = [
@@ -51,10 +46,6 @@ const SettingsScreen = () => {
       answer:
         "Try uploading different network data samples. If issues persist, contact support.",
     },
-    {
-      question: "How can I reset my settings?",
-      answer: "Go to 'Advanced Settings' and select 'Reset to Default' to restore the original configuration.",
-    },
   ];
 
   const toggleFAQ = (index) => {
@@ -66,7 +57,7 @@ const SettingsScreen = () => {
   };
 
   const toggleExpand = (tab) => {
-    setExpandedTab(expandedTab === tab ? null : tab); // Toggle for all sections
+    setExpandedTab(expandedTab === tab ? null : tab);
   };
   
 
@@ -126,8 +117,6 @@ const SettingsScreen = () => {
           </div>
         );
         
-      case "Advanced Settings":
-        return <div><h3>Advanced Settings</h3><p>Configure advanced options.</p></div>;
       case "Data Management":
         return (
           <div>

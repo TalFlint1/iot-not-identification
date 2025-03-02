@@ -71,8 +71,6 @@ const UpperBar = ({ username }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                marginLeft: "3px", // Slightly adjust left margin to balance the gap
-                marginRight: "3px", // Slightly adjust right margin to balance the gap
             }}
         >
             <span
