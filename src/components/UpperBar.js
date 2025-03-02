@@ -1,15 +1,24 @@
 import React from "react";
-//import { useHistory } from "react-router-dom"; // for routing to the history page
+import { useNavigate } from "react-router-dom"; 
 import settingsIcon from "../Icons/settings.png"; // Replace with your settings icon path
 import historyIcon from "../Icons/history.png"; // Replace with your history icon path
 import logoutIcon from "../Icons/logout.png"; // Replace with your logout icon path
+import homepageIcon from "../Icons/homepage.png";
 
 const UpperBar = ({ username }) => {
-  //const history = useHistory(); // For navigation
+  const navigate = useNavigate();
 
-  // const handleHistoryClick = () => {
-  //   history.push("/history"); // Change to the actual route for the history page
-  // };
+  const handleHomeClick = () => {
+    navigate("/");
+  };
+
+  const handleHistoryClick = () => {
+    navigate("/history");
+  };
+
+  const handleSettingsClick = () => {
+    navigate("/settings"); // Navigate to the settings page
+  };
 
   const handleLogoutClick = () => {
     // Add logout functionality here (e.g., clearing tokens or redirecting)
@@ -40,13 +49,13 @@ const UpperBar = ({ username }) => {
           backgroundColor: "white",
           borderRadius: "10px", // Rounded corners
           padding: "5px 15px",  // Padding inside the box
-          width: "250px", // Adjust width as needed
+          width: "320px", // Adjust width as needed
           height: "45px",
           gap: "17px",
         }}
       >
         {/* Settings Icon */}
-        <button style={iconButtonStyle}>
+        <button onClick={handleSettingsClick} style={iconButtonStyle}>
           <img src={settingsIcon} alt="Settings" style={iconStyle} />
         </button>
 
@@ -79,9 +88,13 @@ const UpperBar = ({ username }) => {
             </span>
         </button>
 
+        {/* Home Icon */}
+        <button onClick={handleHomeClick} style={iconButtonStyle}>
+          <img src={homepageIcon} alt="Home" style={iconStyle} />
+        </button>          
 
         {/* History Icon (with fake click) */}
-        <button onClick={() => {}} style={iconButtonStyle}>
+        <button onClick={handleHistoryClick} style={iconButtonStyle}>
           <img src={historyIcon} alt="History" style={iconStyle} />
         </button>
 
