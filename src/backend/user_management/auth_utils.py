@@ -17,7 +17,7 @@ def create_user(username, password, email):
     """Creates a new user and stores it in DynamoDB."""
     hashed_password, salt = hash_password(password)
     
-    # Insert into DynamoDB
+    # Insert into DynamoDB aws
     table.put_item(
         Item={
             "username": username,
