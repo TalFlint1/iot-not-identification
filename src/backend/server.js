@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const AWS = require('aws-sdk');
-const dynamoSetup = require('./dynamoSetup'); // Import DynamoDB setup
+const dynamoSetup = require('../../dynamoSetup'); // Import DynamoDB setup
 const bodyParser = require('body-parser');
 
 // Initialize environment variables
