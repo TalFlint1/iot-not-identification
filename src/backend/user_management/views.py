@@ -6,6 +6,10 @@ import json
 import boto3
 import hashlib
 import os
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
 
 # Register Part
 def register_user(request):
@@ -46,7 +50,16 @@ def login_user(request):
             input_hash = hash_password(password, salt)
 
             if input_hash == stored_hash:
-                return JsonResponse({"message": "Login successful"})
+                # Manually create a refresh token for the user
+                refresh = RefreshToken.for_user(User(username=username))  # Manually create a dummy user
+                access_token = refresh.access_token  # Generate access token
+
+                # Return the tokens in the response
+                return JsonResponse({
+                    "message": "Login successful",
+                    "access_token": str(access_token),
+                    "refresh_token": str(refresh)
+                })
             else:
                 return JsonResponse({"message": "Invalid credentials"}, status=401)
 
@@ -54,3 +67,8 @@ def login_user(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"message": "Invalid request method"}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def protected_view(request):
+    return JsonResponse({"message": "You have access to this protected resource!"})
