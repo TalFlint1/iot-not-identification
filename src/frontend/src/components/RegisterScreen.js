@@ -16,12 +16,14 @@ const RegisterScreen = () => {
       setMessage("Passwords do not match");
       return;
     }
+    const requestBody = { username, password, email };
+    console.log("Request body being sent:", JSON.stringify(requestBody));
 
     try {
-      const response = await fetch("http://localhost:5000/register/", {
+      const response = await fetch("http://localhost:5000/user/register/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, email }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();

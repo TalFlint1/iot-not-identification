@@ -17,6 +17,7 @@ def register_user(request):
     """Handle user registration (POST only)"""
     if request.method == "POST":
         try:
+            print("Raw request body:", request.body.decode('utf-8'))
             data = json.loads(request.body)
             username = data.get("username")
             password = data.get("password")
