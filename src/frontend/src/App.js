@@ -1,0 +1,25 @@
+import React from "react";
+import SettingsScreen from "./components/SettingsScreen";
+import InputScreen from "./components/InputScreen";
+import LoginScreen from "./components/LoginScreen";
+import RegisterScreen from "./components/RegisterScreen";
+import ResultScreen from "./components/ResultScreen";
+import HistoryScreen from "./components/HistoryScreen";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginScreen  />} /> {/* Default Screen */}
+        <Route path="/settings" element={<SettingsScreen />} />
+        <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/result" element={<ResultScreen />} />
+        <Route path="/history" element={<HistoryScreen />} />
+        <Route path="/identify" element={<InputScreen />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

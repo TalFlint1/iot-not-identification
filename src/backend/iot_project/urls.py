@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to the IoT project!")
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Django admin panel
     path('user/', include('user_management.urls')),  # Include user_management URLs
+    path('', home),
 ]

@@ -12,15 +12,23 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 
 # Register Part
+@csrf_exempt
 def register_user(request):
-    """Handle user registration"""
-    # Get data from request (this could be from a POST request in real-world scenarios)
-    username = request.GET.get('username', 'test_user')
-    password = request.GET.get('password', 'securepassword')
-    email = request.GET.get('email', 'test@example.com')
+    """Handle user registration (POST only)"""
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            username = data.get("username")
+            password = data.get("password")
+            email = data.get("email")
 
-    result = create_user(username, password, email)
-    return JsonResponse(result)
+            result = create_user(username, password, email)
+            return JsonResponse(result, status=201)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"message": "Invalid request method"}, status=400)
 
 # Login Part
 # Function to hash password
@@ -50,9 +58,8 @@ def login_user(request):
             input_hash = hash_password(password, salt)
 
             if input_hash == stored_hash:
-                # Manually create a refresh token for the user
-                refresh = RefreshToken.for_user(User(username=username))  # Manually create a dummy user
-                access_token = refresh.access_token  # Generate access token
+                refresh = RefreshToken()
+                access_token = refresh.access_token
 
                 # Return the tokens in the response
                 return JsonResponse({
