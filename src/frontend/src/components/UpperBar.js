@@ -21,8 +21,12 @@ const UpperBar = ({ username }) => {
   };
 
   const handleLogoutClick = () => {
-    // Add logout functionality here (e.g., clearing tokens or redirecting)
-    console.log("Logging out...");
+    // Remove the tokens from localStorage to log the user out
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    // Navigate to the login page
+    navigate("/login");
   };
 
   return (
