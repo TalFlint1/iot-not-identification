@@ -9,7 +9,7 @@ const UpperBar = ({ username }) => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate("/");
+    navigate("/identify");
   };
 
   const handleHistoryClick = () => {

@@ -11,6 +11,10 @@ const LoginScreen = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const handleCreateAccountClick = () => {
+    navigate("/register");  // Navigate to the register screen
+  };
+
   const handleLogin = async () => {
     try {
       const response = await fetch("http://localhost:5000/user/login/", {
@@ -149,30 +153,20 @@ const LoginScreen = () => {
           </button>
 
            {/* Forgot Password and Create Account Links */}
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-            <a
-                href="#"
-                style={{
-                fontSize: "14px",
+           <div style={{ textAlign: "center", marginTop: "10px" }}>
+            <button
+              onClick={handleCreateAccountClick}
+              style={{
+                background: "none",
+                border: "none",
                 color: "#68CABE",
-                display: "block", // Make the links appear vertically
-                marginBottom: "10px", // Space between the links
-                marginTop: "20px"
-                }}
-            >
-                Forgot your password?
-            </a>
-            <a
-                href="#"
-                style={{
                 fontSize: "14px",
-                color: "#68CABE",
-                display: "block", // Make the links appear vertically
-                }}
+                cursor: "pointer",
+              }}
             >
-                Create Account
-            </a>
-        </div>
+              Create Account
+            </button>
+          </div>
         </div>
       </div>
     </div>
