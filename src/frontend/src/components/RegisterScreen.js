@@ -3,6 +3,7 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";  // Assuming this is your title component
 import UpperBar from "./UpperBar";  // Assuming this is your upper bar component
 import googleIcon from "../Icons/google.png";  // Assuming this is your Google icon
+import { useNavigate } from 'react-router-dom';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     if (password !== confirmPassword) {
@@ -28,7 +30,28 @@ const RegisterScreen = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage("Registration successful!");
+          // Registration was successful
+      setMessage("Registration successful!");
+
+      // Automatically log in after successful registration
+      const loginResponse = await fetch("http://localhost:5000/user/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const loginData = await loginResponse.json();
+
+      if (loginResponse.ok) {
+        // Store the JWT token (usually in localStorage or sessionStorage)
+        localStorage.setItem("access_token", loginData.access_token);
+        localStorage.setItem("refresh_token", loginData.refresh_token);
+
+        // Navigate to InputScreen
+        navigate("/identify");
+      } else {
+        setMessage(loginData.message || "Login after registration failed");
+      }
       } else {
         setMessage(data.message || "Registration failed");
       }
