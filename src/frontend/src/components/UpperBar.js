@@ -63,7 +63,7 @@ const UpperBar = ({ username }) => {
           <img src={settingsIcon} alt="Settings" style={iconStyle} />
         </button>
 
-        {/* User Initials */}
+        {/* User Initials
         <button
             style={{
                 ...iconButtonStyle,
@@ -88,7 +88,7 @@ const UpperBar = ({ username }) => {
             >
                 {username[0]}
             </span>
-        </button>
+        </button> */}
 
         {/* Home Icon */}
         <button onClick={handleHomeClick} style={iconButtonStyle}>

@@ -73,7 +73,6 @@ const RegisterScreen = () => {
           backgroundRepeat: "no-repeat", height: "100%", width: "14%", margin: 0, padding: 0,
         }}
       />
-      <UpperBar username={username} />
       {/* Main Content */}
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42" }}>
         <Title />

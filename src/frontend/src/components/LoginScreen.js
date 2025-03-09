@@ -54,7 +54,6 @@ const LoginScreen = () => {
           padding: 0,
         }}
       />
-      <UpperBar username={username} />
       {/* Main Content */}
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42" }}>
         <Title />
