@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<RegisterScreen  />} /> {/* Default Screen */}
         <Route path="/settings" element={<SettingsScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/login" element={<LoginScreen />} />
         <Route path="/result" element={<ResultScreen />} />
         <Route path="/history" element={<HistoryScreen />} />
         <Route path="/identify" element={<InputScreen />} />

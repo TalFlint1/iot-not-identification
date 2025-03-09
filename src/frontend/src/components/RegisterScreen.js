@@ -13,6 +13,10 @@ const RegisterScreen = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const handleSignInClick = () => {
+    navigate("/login");  // Navigate to the login page when clicked
+  };
+
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
@@ -111,7 +115,12 @@ const RegisterScreen = () => {
           {message && <p style={{ textAlign: "center", color: "red" }}>{message}</p>}
           {/* Already have an account */}
           <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <a href="/login" style={{ fontSize: "14px", color: "#68CABE" }}>Already have an account? Sign In</a>
+            <button
+              onClick={handleSignInClick}  // Use onClick handler to navigate
+              style={{ fontSize: "14px", color: "#68CABE", background: "none", border: "none", cursor: "pointer" }}
+            >
+              Already have an account? Sign In
+            </button>
           </div>
         </div>
       </div>

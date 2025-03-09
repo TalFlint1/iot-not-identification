@@ -3,9 +3,40 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";  // Assuming this is your title component
 import UpperBar from "./UpperBar";  // Assuming this is your upper bar component
 import googleIcon from "../Icons/google.png";  // Assuming this is your Google icon
+import { useNavigate } from "react-router-dom";
 
 const LoginScreen = () => {
-  const username = "Guest";  // You can set this dynamically based on login
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/user/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        setMessage("Login successful!");
+        
+        // Navigate to InputScreen
+        navigate("/identify");
+      } else {
+        setMessage(data.message || "Login failed");
+      }
+    } catch (error) {
+      setMessage("Error connecting to server");
+    }
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -76,6 +107,8 @@ const LoginScreen = () => {
           <input
             type="text"
             placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             style={{
               padding: "12px",
               marginBottom: "15px",
@@ -89,6 +122,8 @@ const LoginScreen = () => {
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             style={{
               padding: "12px",
               marginBottom: "15px",
@@ -109,6 +144,7 @@ const LoginScreen = () => {
               cursor: "pointer",
               border: "1px solid #4B5A66"
             }}
+            onClick={handleLogin}
           >
             Sign In
           </button>
