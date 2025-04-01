@@ -1,0 +1,71 @@
+{
+    "EdimaxPlug2101W_merged_sentinel.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "74:da:38:23:22:7b",
+        "origin_dataset": "sentinel",
+        "dns.qry.name": [
+            "www.google.com",
+            "pool.ntp.org",
+            "www.myedimax.com",
+            "connectivitycheck.android.com"
+        ]
+    },
+    "PiperNV_yourthings.csv": {
+        "dns.ptr.domain_name": [
+            "vbdbwl.local",
+            "_piper._tcp.local",
+            "Piper - vbdbwl._piper._tcp.local"
+        ],
+        "dhcp.option.hostname": [
+            "Piper"
+        ],
+        "x509ce.dNSName": [
+            "*.pubnub.com",
+            "*.getpiper.com",
+            "logs-01.loggly.com"
+        ],
+        "http.user_agent": [
+            "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)",
+            "Wget"
+        ],
+        "tls.handshake.extensions_server_name": [
+            "api.getpiper.com",
+            "repo.getpiper.com",
+            "relay6.getpiper.com",
+            "relay7.getpiper.com",
+            "relay3.getpiper.com",
+            "relay5.getpiper.com",
+            "relay8.getpiper.com"
+        ],
+        "mac_address": "ac:3f:a4:70:4a:d6",
+        "origin_dataset": "yourthings",
+        "dns.qry.name": [
+            "pubsub.pubnub.com",
+            "api.getpiper.com",
+            "repo.getpiper.com",
+            "1.0.0.127.IN-ADDR.ARPA",
+            "31.0.168.192.in-addr.arpa",
+            "_services._dns-sd._udp.local",
+            "_piper._tcp.local",
+            "vbdbwl.local",
+            "logs-01.loggly.com",
+            "Piper - vbdbwl._piper._tcp.local",
+            "0.pool.ntp.org",
+            "1.pool.ntp.org",
+            "2.pool.ntp.org",
+            "3.pool.ntp.org",
+            "eventgateway.getpiper.com",
+            "relay6.getpiper.com",
+            "relay7.getpiper.com",
+            "relay3.getpiper.com",
+            "relay5.getpiper.com",
+            "static.getPiper.com",
+            "relay8.getpiper.com"
+        ]
+    }
+  }
+  
