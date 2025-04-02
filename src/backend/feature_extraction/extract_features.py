@@ -76,7 +76,7 @@ for device, details in data.items():
     user_agents = details.get("http.user_agent", [])
     
     # Enrich relevant fields
-    enriched_dns_queries = [search_google(q) for q in dns_queries] if dns_queries else None
+    enriched_dns_queries = [search_google(q) for q in dns_queries] if dns_queries else print("hi")
     enriched_reverse_dns = [search_google(ptr) for ptr in reverse_dns] if reverse_dns else None
     enriched_hostnames = [search_google(host) for host in dhcp_hostnames] if dhcp_hostnames else None
     enriched_tls_domains = [search_google(domain) for domain in tls_cert_domains] if tls_cert_domains else None
