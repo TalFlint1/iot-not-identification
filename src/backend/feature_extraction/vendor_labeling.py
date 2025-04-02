@@ -40,60 +40,33 @@
 #####################
 #TEST EXACT MATCHING#
 #####################
-import csv
-from vendor_catalog import vendors  # Assuming vendors are imported from the vendor_catalog.py file
+import pandas as pd
+from collections import Counter
+from vendor_catalog import vendors
+def label_vendor(enriched_data_path, vendor_catalog_path):
+    # Load enriched dataset
+    enriched_data = pd.read_csv(enriched_data_path, dtype=str).fillna("")
+    
+    # Initialize counter for vendor occurrences
+    vendor_counts = Counter()
 
-# Function to match the vendor using exact string matching
-def match_vendor_exact(feature, vendors):
-    for vendor in vendors:
-        if vendor in feature:  # Exact string match
-            return vendor
-    return None  # Return None if no exact match is found
-
-# Load enriched dataset
-def load_enriched_data(file_path):
-    enriched_data = []
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip header row
-        for row in reader:
-            enriched_data.append(row)  # Assuming each row is a list of feature values
-    return enriched_data
-
-# Perform vendor labeling and count the occurrences of each vendor
-def label_vendor_with_exact_match_and_count(enriched_data, vendors):
-    vendor_count = {vendor: 0 for vendor in vendors}  # Initialize a count for each vendor
-    labeled_data = []
-
-    for row in enriched_data:
-        feature_values = row  # Assuming each row contains multiple feature values
-        vendor = None
-        for feature in feature_values:
-            matched_vendor = match_vendor_exact(feature, vendors)
-            if matched_vendor:
-                vendor_count[matched_vendor] += 1  # Increment the count for this vendor
-                vendor = matched_vendor  # Label the row with this vendor
-                break  # If a match is found, stop checking other features
+    # Iterate over each row in the enriched dataset
+    for _, row in enriched_data.iterrows():
+        row_text = " ".join(row.astype(str)).lower()  # Convert entire row to lowercase and join as a single string
         
-        labeled_data.append((row, vendor))  # Store the row along with the matched vendor
+        # Count occurrences of each vendor in the row
+        for vendor in vendors:
+            if vendor in row_text:
+                vendor_counts[vendor] += row_text.count(vendor)
+                print("vendor: ", vendor)
 
-    return labeled_data, vendor_count
+    # Find the vendor with the highest count
+    if vendor_counts:
+        most_likely_vendor = max(vendor_counts, key=vendor_counts.get)
+        return most_likely_vendor, vendor_counts[most_likely_vendor]
+    else:
+        return None, 0
 
-# Path to the enriched dataset
-enriched_data_path = 'data/enriched_dataset.csv'
-
-# Load the enriched dataset
-enriched_data = load_enriched_data(enriched_data_path)
-
-# Perform the vendor labeling and count occurrences
-labeled_data, vendor_count = label_vendor_with_exact_match_and_count(enriched_data, vendors)
-
-# Print the results
-for row, vendor in labeled_data:
-    print(f"Features: {row} => Vendor: {vendor}")
-
-# Print the vendor counts (how many times each vendor appeared)
-print("\nVendor Occurrences Count:")
-for vendor, count in vendor_count.items():
-    print(f"{vendor}: {count}")
-
+# Example usage
+vendor_label, count = label_vendor("data/enriched_dataset.csv", "vendor_catalog.py")
+print(f"Identified Vendor: {vendor_label} (Occurrences: {count})")
