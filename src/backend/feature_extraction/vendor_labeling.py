@@ -41,24 +41,34 @@
 #TEST EXACT MATCHING#
 #####################
 import pandas as pd
+import re
 from collections import Counter
 from vendor_catalog import vendors
-def label_vendor(enriched_data_path, vendor_catalog_path):
+
+def label_vendor(enriched_data_path):
     # Load enriched dataset
     enriched_data = pd.read_csv(enriched_data_path, dtype=str).fillna("")
     
     # Initialize counter for vendor occurrences
     vendor_counts = Counter()
 
+    # List of irrelevant phrases to remove
+    irrelevant_phrases = ["google play", "google account", "google.com"]
+
     # Iterate over each row in the enriched dataset
     for _, row in enriched_data.iterrows():
         row_text = " ".join(row.astype(str)).lower()  # Convert entire row to lowercase and join as a single string
+
+        # Remove irrelevant phrases
+        for phrase in irrelevant_phrases:
+            row_text = row_text.replace(phrase, "")
         
-        # Count occurrences of each vendor in the row
+        # Count occurrences of each vendor using regex for whole-word matching
         for vendor in vendors:
-            if vendor in row_text:
-                vendor_counts[vendor] += row_text.count(vendor)
-                print("vendor: ", vendor)
+            matches = re.findall(rf'\b{re.escape(vendor)}\b', row_text, re.IGNORECASE)  # Find all matches
+            if matches:
+                vendor_counts[vendor] += len(matches)
+                print("vendor:", vendor)
 
     # Find the vendor with the highest count
     if vendor_counts:
@@ -68,5 +78,6 @@ def label_vendor(enriched_data_path, vendor_catalog_path):
         return None, 0
 
 # Example usage
-vendor_label, count = label_vendor("data/enriched_dataset.csv", "vendor_catalog.py")
+vendor_label, count = label_vendor("data/enriched_dataset.csv")
 print(f"Identified Vendor: {vendor_label} (Occurrences: {count})")
+
