@@ -45,6 +45,17 @@ import re
 from collections import Counter
 from vendor_catalog import vendors
 
+# Only special cases that need normalization
+vendor_normalization = {
+    "hewlett packard": "hpe",
+    "hp enterprise": "hpe",
+    "hewlett-packard": "hpe",
+    "tyco electronics": "te connectivity"
+}
+
+def normalize_vendor(vendor):
+    return vendor_normalization.get(vendor.lower(), vendor.lower())  # Use mapped name if exists, otherwise original
+
 def label_vendor(enriched_data_path):
     enriched_data = pd.read_csv(enriched_data_path, dtype=str).fillna("")
 
@@ -65,13 +76,14 @@ def label_vendor(enriched_data_path):
 
         # Count occurrences and print matches for debugging
         for vendor in vendors:
+            normalized_vendor = normalize_vendor(vendor)  # Normalize before checking
             matches = re.findall(rf'\b{re.escape(vendor)}\b', row_text, re.IGNORECASE)
             if matches:
                 count = len(matches)
-                vendor_counts[vendor] += count
+                vendor_counts[normalized_vendor] += count  # Store under normalized name
 
                 # 🔍 Debugging: Print vendor and the number of occurrences
-                print(f"[DEBUG] Device: {device_name}, Vendor: {vendor}, Occurrences: {count}")
+                print(f"[DEBUG] Device: {device_name}, Vendor: {normalized_vendor}, Occurrences: {count}")
 
         print(f"\n[DEBUG] Final counts for {device_name}: {dict(vendor_counts)}")
 

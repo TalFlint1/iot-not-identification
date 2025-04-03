@@ -1,13 +1,13 @@
-vendors = ['siemens', 'ptc', 'abb', 'intel', 'schneider electric', 'honeywell', 'huawei', 'sap', 'advantech', 'bosch', 'cisco', 
-           'amazon web services', 'ibm', 'texas instruments', 'c3 iot', 'nxp semiconductors', 'microsoft', 'micron technology', 
-           'ericsson', 'samsung electronics', 'digi', 'rockwell automation', 'broadcom', 'telefonica', 'mitsubishi electric', 
-           'mitsubishi', 'dell technologies', 'dell', 'nvidia', 'qualcomm', 'analog devices', 'ni', 'general electric', 'infineon', 
-           'at&t', 'stmicroelectronics', 'emerson', 'airtel', 'relayr', 'vodafone', '2lemetry', 'aws', 'phoenix contact', 
+vendors = ['siemens', 'ptc', 'abb', 'intel', 'schneider electric', 'honeywell', 'huawei', 'sap', 'advantech', 'bosch', 'cisco'
+           , 'ibm', 'texas instruments', 'c3 iot', 'nxp semiconductors', 'microsoft', 'micron technology', 
+           'ericsson', 'samsung', 'digi', 'rockwell automation', 'broadcom', 'telefonica', 
+           'mitsubishi', 'dell', 'nvidia', 'qualcomm', 'analog devices', 'ni', 'general electric', 'infineon', 
+           'at&t', 'stmicroelectronics', 'emerson', 'airtel', 'relayr', 'vodafone', '2lemetry', 'phoenix contact', 
            '3m company', 'arm', 'google', 'eaton', 'accenture', 'omron industrial automation', 'ayla networks', 'juniper networks', 
-           'nokia', 'hitachi', 'silicon labs', 'dxc technology', 'john deere', 'infor', 'microchip technology', 'hewlett packard enterprise', 
-           'hpe', 'telit', 'silver spring networks', 'cognizant', 'lantronix', 'vantiq', 'dji enterprise', 'sparkcognition', 'zscaler', 
+           'nokia', 'hitachi', 'silicon labs', 'dxc technology', 'john deere', 'infor', 'microchip technology', 'hewlett packard', 
+           'hpe', 'hewlett-packard', 'telit', 'silver spring networks', 'cognizant', 'lantronix', 'vantiq', 'dji enterprise', 'sparkcognition', 'zscaler', 
            'wibu-systems', 'particle', 'on semiconductor', 'nec', 'caterpillar inc.', 'impinj', 'johnson controls', 'inductive automation', 
            'ingenu', 'panasonic', 'auvesy-mdt', 'toshiba', 'raytheon technologies', 'amd', 'tesla', 'autodesk', 'cree', 'telstra', 
-           'deutsche telekom', 'te connectivity', 'eseye', 'osisoft', 'china mobile', 'zebra technologies', 'moxa', 'proglove', 'axoom', 
+           'deutsche telekom', 'te connectivity', 'tyco electronics', 'eseye', 'osisoft', 'china mobile', 'zebra technologies', 'moxa', 'proglove', 'axoom', 
            'trumpf', 'worldsensing', 'microsemi corporation', 'sigfox', 'cypress semiconductor', 'alibaba cloud', 'samsara', 'sierra wireless', 
-           'pulse electronics corporation', 'gemalto', 'edimax', 'piper']
+           'pulse electronics', 'gemalto', 'edimax', 'piper', 'amazon' ]
