@@ -46,38 +46,59 @@ from collections import Counter
 from vendor_catalog import vendors
 
 def label_vendor(enriched_data_path):
-    # Load enriched dataset
     enriched_data = pd.read_csv(enriched_data_path, dtype=str).fillna("")
-    
-    # Initialize counter for vendor occurrences
-    vendor_counts = Counter()
 
-    # List of irrelevant phrases to remove
-    irrelevant_phrases = ["google play", "google account", "google.com"]
+    irrelevant_phrases = ["google play", "google account", "google.com", "google:"]  # Keeping "Google" in vendors
 
-    # Iterate over each row in the enriched dataset
-    for _, row in enriched_data.iterrows():
-        row_text = " ".join(row.astype(str)).lower()  # Convert entire row to lowercase and join as a single string
+    device_vendors = {}
 
-        # Remove irrelevant phrases
+    for index, row in enriched_data.iterrows():
+        # Assuming the device name is in a column called "device_name"
+        device_name = row.get('device_name', enriched_data_path.split("/")[-1])  # Use the 'device_name' column if it exists, otherwise fallback to the filename
+        row_text = " ".join(row.astype(str)).lower()
+
+        # Remove irrelevant phrases from the text
         for phrase in irrelevant_phrases:
             row_text = row_text.replace(phrase, "")
-        
-        # Count occurrences of each vendor using regex for whole-word matching
-        for vendor in vendors:
-            matches = re.findall(rf'\b{re.escape(vendor)}\b', row_text, re.IGNORECASE)  # Find all matches
-            if matches:
-                vendor_counts[vendor] += len(matches)
-                print("vendor:", vendor)
 
-    # Find the vendor with the highest count
-    if vendor_counts:
-        most_likely_vendor = max(vendor_counts, key=vendor_counts.get)
-        return most_likely_vendor, vendor_counts[most_likely_vendor]
-    else:
-        return None, 0
+        vendor_counts = Counter()
+
+        # Count occurrences and print matches for debugging
+        for vendor in vendors:
+            matches = re.findall(rf'\b{re.escape(vendor)}\b', row_text, re.IGNORECASE)
+            if matches:
+                count = len(matches)
+                vendor_counts[vendor] += count
+
+                # 🔍 Debugging: Print vendor and the number of occurrences
+                print(f"[DEBUG] Device: {device_name}, Vendor: {vendor}, Occurrences: {count}")
+
+        print(f"\n[DEBUG] Final counts for {device_name}: {dict(vendor_counts)}")
+
+        if vendor_counts:
+            # Get the maximum occurrence count
+            max_count = max(vendor_counts.values())
+            # Find all vendors with the maximum count
+            max_vendors = [vendor for vendor, count in vendor_counts.items() if count == max_count]
+
+            # If "google" is one of the max vendors, remove it from the list
+            if "google" in max_vendors:
+                max_vendors.remove("google")
+
+            # If there are still vendors left after removing Google, choose the one with the highest count
+            if max_vendors:
+                most_likely_vendor = max_vendors[0]  # This assumes that all remaining vendors have the same count
+                device_vendors[device_name] = (most_likely_vendor, max_count)
+            else:
+                # If only "google" remains in the tie, return None (or choose another tie-breaking logic)
+                device_vendors[device_name] = (None, 0)
+        else:
+            device_vendors[device_name] = (None, 0)
+
+    return device_vendors
 
 # Example usage
-vendor_label, count = label_vendor("data/enriched_dataset.csv")
-print(f"Identified Vendor: {vendor_label} (Occurrences: {count})")
+results = label_vendor("data/enriched_dataset.csv")
 
+for device, (vendor, count) in results.items():
+    print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")
