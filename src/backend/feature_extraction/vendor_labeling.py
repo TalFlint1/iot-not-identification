@@ -8,7 +8,8 @@ vendor_normalization = {
     "hewlett packard": "hpe",
     "hp enterprise": "hpe",
     "hewlett-packard": "hpe",
-    "tyco electronics": "te connectivity"
+    "tyco electronics": "te connectivity",
+    "smartthings": "samsung"
 }
 
 def normalize_vendor(vendor):
