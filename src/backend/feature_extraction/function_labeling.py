@@ -66,6 +66,7 @@ import pandas as pd
 from function_catalog import functions as master_functions
 from vendor_function_map import vendor_function_map
 from vendor_labeling import label_vendor
+import ast
 
 # Load RoBERTa Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
@@ -85,7 +86,29 @@ def classify_function(feature, candidate_labels):
     Classifies a single enriched feature using RoBERTa and returns top label and its score.
     """
     result = classifier(feature, candidate_labels)
+    print(f"[DEBUG] All label scores: {result['labels']} -> {result['scores']}")
     return result["labels"][0], result["scores"][0]
+
+def clean_feature(feature):
+    if not feature or (isinstance(feature, str) and not feature.strip()):
+        return None
+
+    # Flatten nested lists into a single readable paragraph
+    if isinstance(feature, list):
+        flat = []
+
+        def flatten(item):
+            if isinstance(item, list):
+                for sub in item:
+                    flatten(sub)
+            else:
+                flat.append(str(item))
+
+        flatten(feature)
+        return " ".join(flat)  # You can also join with ". " if you want more structure
+
+    return str(feature)
+
 
 def function_labeling(enriched_features, vendor=None):
     """
@@ -95,20 +118,21 @@ def function_labeling(enriched_features, vendor=None):
     candidate_labels = get_candidate_labels(vendor)
     confidence_scores = {label: [] for label in candidate_labels}
 
-    # Run classification for each feature and label
+    # For each label (outer loop)
     for feature in enriched_features:
-        if not feature.strip():  # Skip empty features
+        cleaned = clean_feature(feature)
+        if not cleaned:
             continue
-        for label in candidate_labels:
-            _, confidence = classify_function(feature, [label])
-            confidence_scores[label].append(confidence)
+        print("the cleaned feature is: ", cleaned)
+        result = classifier(cleaned, candidate_labels)  # ONE call per feature
+        for label, score in zip(result["labels"], result["scores"]):
+            confidence_scores[label].append(score)
 
     # Average the scores
     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
-
-    # Select the label with the highest average score
     final_label = max(aggregated_scores, key=aggregated_scores.get)
     return final_label, aggregated_scores[final_label]
+
 
 # === Example usage from enriched CSV ===
 def run_function_labeling_from_csv(csv_path):
@@ -121,7 +145,14 @@ def run_function_labeling_from_csv(csv_path):
     for index, row in df.iterrows():
         device_name = row.get("device_name", f"row_{index}")
         vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
-        enriched_features = list(row.astype(str))
+        enriched_features = []
+        for val in row.astype(str):
+            try:
+                parsed = ast.literal_eval(val)
+                enriched_features.append(parsed)
+            except (ValueError, SyntaxError):
+                enriched_features.append(val)
+
 
         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
         final_label, score = function_labeling(enriched_features, vendor)
