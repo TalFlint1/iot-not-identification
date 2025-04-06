@@ -1,52 +1,133 @@
+# from transformers import pipeline
+# import numpy as np
+# from feature_extraction.function_catalog import functions
+# from feature_extraction.vendor_function_map import vendor_function_map
+
+# # === Initialize RoBERTa Zero-Shot Classifier === #
+# classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
+
+# def normalize(text):
+#     return text.strip().lower()
+
+# def get_candidate_labels(vendor=None):
+#     """
+#     Returns a list of candidate labels based on the vendor.
+#     Soft restriction: if vendor is known and mapped, use its functions; else use full list.
+#     """
+#     if vendor:
+#         normalized_vendor = normalize(vendor)
+#         if normalized_vendor in vendor_function_map:
+#             return vendor_function_map[normalized_vendor]
+#     return functions
+
+# def classify_function(feature, candidate_labels):
+#     """
+#     Classifies a single enriched feature using RoBERTa and returns top label and its score.
+#     """
+#     result = classifier(feature, candidate_labels)
+#     return result["labels"][0], result["scores"][0]
+
+# def function_labeling(enriched_features, vendor=None):
+#     """
+#     Implements the function labeling algorithm with soft vendor-based restriction.
+#     """
+#     candidate_labels = get_candidate_labels(vendor)
+#     confidence_scores = {label: [] for label in candidate_labels}
+
+#     # Step 1: Run zero-shot classification for each enriched feature
+#     for feature in enriched_features:
+#         for label in candidate_labels:
+#             _, confidence = classify_function(feature, [label])
+#             confidence_scores[label].append(confidence)
+
+#     # Step 2: Aggregate the scores (average)
+#     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
+
+#     # Step 3: Pick the label with the highest average score
+#     final_label = max(aggregated_scores, key=aggregated_scores.get)
+#     return final_label, aggregated_scores[final_label]
+
+# # === Example usage === #
+# if __name__ == "__main__":
+#     enriched_features = [
+#         "Smart lock that connects to the internet and secures doors.",
+#         "Wearable health monitoring device that tracks steps and heart rate.",
+#     ]
+#     vendor = "Samsung"  # Optional: test with or without vendor
+#     final_label, confidence = function_labeling(enriched_features, vendor)
+#     print(f"Predicted Function: {final_label}, Confidence: {confidence:.2f}")
+
+#################
+# First Attempt #
+#################
 from transformers import pipeline
 import numpy as np
+import pandas as pd
+from function_catalog import functions as master_functions
+from vendor_function_map import vendor_function_map
+from vendor_labeling import label_vendor
 
-# Initialize the zero-shot classifier with RoBERTa
+# Load RoBERTa Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
 
-# Catalog of IoT functions (same as in function_catalog.py)
-candidate_labels = [
-    "Voice Assistant", "Smart Lighting", "Smart Thermostat", "Plug",
-    "Security Cameras", "Health Wearables", "Smart Lock", "Smart Appliance",
-    "Smart Refrigerator", "Smart Washing Machine", "Smart TV",
-    "Smart Speakers", "Connected Vehicle", "Smart Home Hub", "Smart Kitchen Devices",
-    "Smart Blinds", "Smart Faucets", "Smoke and CO Detectors", "Robot Vacuums",
-    "Smart Fans", "Smart Pet Devices", "Amazon Echo", "Nest", "NETGEAR"
-    # Include all your function labels here
-]
+def normalize(text):
+    return text.strip().lower() if text else ""
 
-# Example enriched feature values (replace with actual enriched values)
-enriched_features = [
-    "This device controls lighting and brightness with voice commands.",
-    "Smart lock that connects to the internet and secures doors.",
-    "Wearable health monitoring device that tracks steps and heart rate."
-]
+def get_candidate_labels(vendor=None):
+    normalized_vendor = normalize(vendor)
+    candidate_labels = vendor_function_map.get(normalized_vendor, master_functions)
+    if not candidate_labels:  # Ensure labels are available
+        raise ValueError(f"No candidate labels found for vendor: {vendor}")
+    return candidate_labels
 
-# Function to classify each enriched feature value with zero-shot classification
-def classify_function(enriched_feature, candidate_labels):
-    # Run zero-shot classification with RoBERTa
-    result = classifier(enriched_feature, candidate_labels)
-    return result["labels"][0], result["scores"][0]  # Return function label and confidence score
+def classify_function(feature, candidate_labels):
+    """
+    Classifies a single enriched feature using RoBERTa and returns top label and its score.
+    """
+    result = classifier(feature, candidate_labels)
+    return result["labels"][0], result["scores"][0]
 
-# Algorithm for function labeling based on the pseudo-code
-def function_labeling(enriched_features, candidate_labels):
-    # Initialize a dictionary to store the aggregated confidence scores for each function label
+def function_labeling(enriched_features, vendor=None):
+    """
+    Implements the function labeling algorithm with soft vendor-based restriction
+    and feature-by-feature score aggregation.
+    """
+    candidate_labels = get_candidate_labels(vendor)
     confidence_scores = {label: [] for label in candidate_labels}
 
-    # Step 1: Classify each enriched feature and collect confidence scores
+    # Run classification for each feature and label
     for feature in enriched_features:
+        if not feature.strip():  # Skip empty features
+            continue
         for label in candidate_labels:
-            function_label, confidence = classify_function(feature, [label])
+            _, confidence = classify_function(feature, [label])
             confidence_scores[label].append(confidence)
 
-    # Step 2: Aggregate confidence scores for each function label (average in this case)
+    # Average the scores
     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
 
-    # Step 3: Select the label with the highest aggregated confidence score
+    # Select the label with the highest average score
     final_label = max(aggregated_scores, key=aggregated_scores.get)
     return final_label, aggregated_scores[final_label]
 
-# Example usage of the function labeling algorithm
-final_function_label, confidence = function_labeling(enriched_features, candidate_labels)
+# === Example usage from enriched CSV ===
+def run_function_labeling_from_csv(csv_path):
+    # Get vendor labels dynamically from vendor_labeling.py
+    vendor_labels = label_vendor(csv_path)  # This will give a dictionary of device_name -> (vendor, count)
+    
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+    function_results = {}
 
-print(f"Final Function Label: {final_function_label}, Confidence: {confidence}")
+    for index, row in df.iterrows():
+        device_name = row.get("device_name", f"row_{index}")
+        vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
+        enriched_features = list(row.astype(str))
+
+        print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
+        final_label, score = function_labeling(enriched_features, vendor)
+        print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
+        function_results[device_name] = (final_label, score)
+
+    return function_results
+
+run_function_labeling_from_csv("data/enriched_dataset.csv")
