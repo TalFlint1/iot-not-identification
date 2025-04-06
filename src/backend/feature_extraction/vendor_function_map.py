@@ -29,5 +29,4 @@ vendor_function_map = {
     "advantech": ["Industrial Sensors", "IoT Gateway"],
     "general electric": ["Smart Meters", "Industrial Equipment Monitoring"],
     "edimax": ["Smart Outlets", "Smart Cameras", "Smart Sensors", "Smart Home Hub"]
-
 }

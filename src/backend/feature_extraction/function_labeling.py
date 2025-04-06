@@ -109,6 +109,27 @@ def clean_feature(feature):
 
     return str(feature)
 
+def detect_feature_type(col, val):
+    """
+    Detects the feature type (e.g., domain, description, mac) based on column name.
+    Prioritizes enriched features with a higher weight.
+    """
+    val = str(val).lower()
+    if 'enriched' in col:  # Give higher priority to enriched fields
+        if 'dns' in col or 'host' in col:
+            return "domain"
+        if 'user_agent' in col:
+            return "description"
+        if 'mac' in col:
+            return "mac"
+        return "other"
+    if 'dns' in col or 'host' in col:
+        return "domain"
+    if 'user_agent' in col:
+        return "description"
+    if 'mac' in col:
+        return "mac"
+    return "other"
 
 def function_labeling(enriched_features, vendor=None):
     """
@@ -118,21 +139,27 @@ def function_labeling(enriched_features, vendor=None):
     candidate_labels = get_candidate_labels(vendor)
     confidence_scores = {label: [] for label in candidate_labels}
 
-    # For each label (outer loop)
-    for feature in enriched_features:
+    # For each feature (loop through the enriched features)
+    for feature, col in enriched_features:
         cleaned = clean_feature(feature)
         if not cleaned:
             continue
-        print("the cleaned feature is: ", cleaned)
-        result = classifier(cleaned, candidate_labels)  # ONE call per feature
+        print(f"Cleaning and classifying: {col}: {cleaned}")
+        feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
+        print(f"Detected feature type: {feature_type}")
+        
+        result = classifier(cleaned, candidate_labels)  # Classify the cleaned feature
+
+        # Apply weight based on feature type (higher weight for enriched fields)
+        weight = 1.0 if 'enriched' in col else 0.5
+
         for label, score in zip(result["labels"], result["scores"]):
-            confidence_scores[label].append(score)
+            confidence_scores[label].append(score * weight)
 
     # Average the scores
     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
     final_label = max(aggregated_scores, key=aggregated_scores.get)
     return final_label, aggregated_scores[final_label]
-
 
 # === Example usage from enriched CSV ===
 def run_function_labeling_from_csv(csv_path):
@@ -140,19 +167,21 @@ def run_function_labeling_from_csv(csv_path):
     vendor_labels = label_vendor(csv_path)  # This will give a dictionary of device_name -> (vendor, count)
     
     df = pd.read_csv(csv_path, dtype=str).fillna("")
+
     function_results = {}
 
     for index, row in df.iterrows():
         device_name = row.get("device_name", f"row_{index}")
         vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
         enriched_features = []
-        for val in row.astype(str):
+
+        # Prepare enriched features and detect their types
+        for col, val in row.items():
             try:
                 parsed = ast.literal_eval(val)
-                enriched_features.append(parsed)
+                enriched_features.append((parsed, col))  # Store feature and column name for later type detection
             except (ValueError, SyntaxError):
-                enriched_features.append(val)
-
+                enriched_features.append((val, col))
 
         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
         final_label, score = function_labeling(enriched_features, vendor)
@@ -161,4 +190,5 @@ def run_function_labeling_from_csv(csv_path):
 
     return function_results
 
+# Run the function labeling from the enriched dataset CSV
 run_function_labeling_from_csv("data/enriched_dataset.csv")
