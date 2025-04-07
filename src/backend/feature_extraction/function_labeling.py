@@ -97,7 +97,7 @@ def clean_feature(feature):
                 flat.append(str(item))
 
         flatten(feature)
-        return " ".join(flat)  # You can also join with ". " if you want more structure
+        return ". ".join(flat)
 
     return str(feature)
 
@@ -128,7 +128,12 @@ def function_labeling(enriched_features, vendor=None):
     Implements the function labeling algorithm with soft vendor-based restriction
     and feature-by-feature score aggregation.
     """
-    candidate_labels = get_candidate_labels(vendor)
+    # Get candidate labels from vendor_function_map if vendor exists, else use master_functions
+    if vendor and vendor.lower() in vendor_function_map:
+        candidate_labels = vendor_function_map[vendor.lower()]
+    else:
+        candidate_labels = master_functions  # Fallback to general functions if vendor is not found
+    
     confidence_scores = {label: [] for label in candidate_labels}
 
     # Define which columns to allow
@@ -148,18 +153,30 @@ def function_labeling(enriched_features, vendor=None):
         feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
         print(f"Detected feature type: {feature_type}")
         
-        result = classifier(cleaned, candidate_labels)  # Classify the cleaned feature
+        hypothesis_template = "This feature belongs to an IoT device and can perform the function of a {}."
+        result = classifier(cleaned, candidate_labels, hypothesis_template=hypothesis_template)
+
+        print("this is result: ", result)
 
         # Apply weight based on feature type (higher weight for enriched fields)
         weight = 1.0 if 'enriched' in col else 0.5
 
         for label, score in zip(result["labels"], result["scores"]):
             confidence_scores[label].append(score * weight)
+        
+        # === Print per-feature probabilities if vendor has a defined function map
+        normalized_vendor = normalize(vendor)
+        if normalized_vendor in vendor_function_map:
+            print(f"[PROBABILITIES] {col} | Vendor: {vendor}")
+            for label, score in zip(result["labels"], result["scores"]):
+                print(f"  - {label}: {score:.4f}")
+            print("---")
 
     # Average the scores
     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
     final_label = max(aggregated_scores, key=aggregated_scores.get)
     return final_label, aggregated_scores[final_label]
+
 
 # === Example usage from enriched CSV ===
 def run_function_labeling_from_csv(csv_path):

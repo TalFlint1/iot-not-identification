@@ -28,5 +28,7 @@ vendor_function_map = {
     "hpe": ["IoT Edge Gateway", "Analytics Gateway"],
     "advantech": ["Industrial Sensors", "IoT Gateway"],
     "general electric": ["Smart Meters", "Industrial Equipment Monitoring"],
-    "edimax": ["Outlets", "Cameras", "Sensors", "Home Hub"]
+    #"edimax": ["Outlets", "Cameras", "Sensors", "Home Hub"]
+    "edimax": ["Smart Home Security Camera", "Smart Power Outlet", "Smart Home Hub", "Robotic Vacuum Cleaner"]
+
 }
