@@ -81,14 +81,6 @@ def get_candidate_labels(vendor=None):
         raise ValueError(f"No candidate labels found for vendor: {vendor}")
     return candidate_labels
 
-def classify_function(feature, candidate_labels):
-    """
-    Classifies a single enriched feature using RoBERTa and returns top label and its score.
-    """
-    result = classifier(feature, candidate_labels)
-    print(f"[DEBUG] All label scores: {result['labels']} -> {result['scores']}")
-    return result["labels"][0], result["scores"][0]
-
 def clean_feature(feature):
     if not feature or (isinstance(feature, str) and not feature.strip()):
         return None
@@ -139,10 +131,18 @@ def function_labeling(enriched_features, vendor=None):
     candidate_labels = get_candidate_labels(vendor)
     confidence_scores = {label: [] for label in candidate_labels}
 
+    # Define which columns to allow
+    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names"]
+
     # For each feature (loop through the enriched features)
     for feature, col in enriched_features:
+        if not any(col.lower().startswith(allowed) for allowed in allowed_cols):
+            print(f"[SKIPPED] Not an allowed column: {col}")
+            continue
+
         cleaned = clean_feature(feature)
         if not cleaned:
+            print(f"[SKIPPED] Empty feature in column: {col}")
             continue
         print(f"Cleaning and classifying: {col}: {cleaned}")
         feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
@@ -184,6 +184,12 @@ def run_function_labeling_from_csv(csv_path):
                 enriched_features.append((val, col))
 
         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
+        print("hi")
+        # Print enriched DNS and hostname for this device
+        for feature, col in enriched_features:
+            if "enriched_dns" in col.lower() or "enriched_hostname" in col.lower():
+                print(f"[DEBUG] {device_name} - {col}: {feature}")
+        print("bye")
         final_label, score = function_labeling(enriched_features, vendor)
         print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
         function_results[device_name] = (final_label, score)
