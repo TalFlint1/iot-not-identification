@@ -57,9 +57,9 @@
 #     final_label, confidence = function_labeling(enriched_features, vendor)
 #     print(f"Predicted Function: {final_label}, Confidence: {confidence:.2f}")
 
-#################
-# First Attempt #
-#################
+################################
+# Iterate by chunks w. Roberta #
+################################
 from transformers import pipeline
 import numpy as np
 import pandas as pd
