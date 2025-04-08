@@ -28,4 +28,8 @@ yarn-error.log*
 
 .env
 
+venv/
 
+# Ignore large files
+*.dll
+*.lib
