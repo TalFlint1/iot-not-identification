@@ -1,17 +1,17 @@
 vendor_function_map = {
-    "amazon": ["Smart Speakers", "Smart Outlets", "Smart Home Hub", "Voice Assistant", "Amazon Echo", "Smart TV"],
-    "google": ["Smart Speakers", "Voice Assistant", "Google Home voice Controller", "Smart TV"],
+    "amazon": ["Smart Speakers", "Smart Outlets", "Smart Home Hub", "Voice Assistant", "Smart TV"],
+    "google": ["Smart Speakers", "Voice Assistant", "Smart TV"],
     "samsung": ["Smart TV", "Smart Refrigerator", "Smart Washing Machine", "Smart Home Hub", "Smartwatch"],
     "apple": ["Smartwatch", "Health Wearables", "Smart Speakers"],
-    "bosch": ["Smart Appliances", "Smart Sensor", "Smart Thermostat"],
+    "bosch": ["Smart Kitchen Appliances", "Smart Sensor", "Smart Thermostat"],
     "honeywell": ["Smart Thermostat", "Smoke and CO Detectors", "Air Quality Monitoring", "Smart Lock"],
-    "philips": ["Smart Lighting", "Philips Hue bulbs and lighting system"],
+    "philips": ["Smart Lighting"],
     "nest": ["Smart Thermostat", "Security Cameras", "Smart Smoke Detectors"],
     "netgear": ["Security Cameras", "Smart Router", "Smart Home Hub"],
-    "dji enterprise": ["Camera", "Drone"],
-    "canary": ["Security Cameras", "Home Security"],
-    "fitbit": ["Fitness Band", "Health Wearables", "Smartwatch"],
-    "tesla": ["Connected Vehicle", "Smart Car"],
+    "dji enterprise": ["Drone"],
+    "canary": ["Security Cameras"],
+    "fitbit": ["Health Wearables", "Smartwatch"],
+    "tesla": ["Smart Car"],
     "johnson controls": ["Smart Thermostat", "Smart Building Systems"],
     "cisco": ["Smart Router", "IoT Network Gateway"],
     "siemens": ["Industrial Sensor", "Smart Meters", "Automation Devices"],
@@ -28,7 +28,6 @@ vendor_function_map = {
     "hpe": ["IoT Edge Gateway", "Analytics Gateway"],
     "advantech": ["Industrial Sensors", "IoT Gateway"],
     "general electric": ["Smart Meters", "Industrial Equipment Monitoring"],
-    #"edimax": ["Outlets", "Cameras", "Sensors", "Home Hub"]
-    "edimax": ["Smart Home Security Camera", "Smart Power Outlet", "Smart Home Hub", "Robotic Vacuum Cleaner"]
-
+    "edimax": ["Plug", "Camera", "Motion Sensor", "Hub"],
+    "piper": ["Security Camera", "Home Monitoring", "Motion Detection", "Environmental Sensor", "Smart Home Hub"]
 }

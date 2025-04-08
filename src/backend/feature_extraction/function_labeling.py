@@ -177,16 +177,16 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     # For each feature (loop through the enriched features)
     for feature, col in enriched_features:
         if not any(col.lower().startswith(allowed) for allowed in allowed_cols):
-            print(f"[SKIPPED] Not an allowed column: {col}")
+            #print(f"[SKIPPED] Not an allowed column: {col}")
             continue
 
         cleaned = clean_feature(feature)
         if not cleaned:
             print(f"[SKIPPED] Empty feature in column: {col}")
             continue
-        print(f"Cleaning and classifying: {col}: {cleaned}")
+        #print(f"Cleaning and classifying: {col}: {cleaned}")
         feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
-        print(f"Detected feature type: {feature_type}")
+        #print(f"Detected feature type: {feature_type}")
 
         # Split large text features into chunks (if applicable)
         chunks = split_into_chunks(cleaned, max_tokens=max_tokens)
