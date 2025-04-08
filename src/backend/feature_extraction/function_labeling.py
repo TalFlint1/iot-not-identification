@@ -195,6 +195,18 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             result = classifier(chunk, candidate_labels, hypothesis_template=hypothesis_template)
             print("this is result: ", result)
 
+            # === Check if the prediction is meaningful ===
+            scores = result["scores"]
+            top_score = scores[0]
+            second_score = scores[1] if len(scores) > 1 else 0
+            score_diff = top_score - second_score
+
+            # Only continue if the chunk is meaningful (customizable thresholds)
+            #if top_score < 0.4 or score_diff < 0.2:
+            if top_score < 0.4:
+                print(f"[SKIPPED CHUNK] Not confident enough — top score: {top_score:.2f}, diff: {score_diff:.2f}")
+                continue  # Skip this chunk
+
             # Apply weight based on feature type (higher weight for enriched fields)
             weight = 1.0 if 'enriched' in col else 0.5
 
