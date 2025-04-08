@@ -67,9 +67,44 @@ from function_catalog import functions as master_functions
 from vendor_function_map import vendor_function_map
 from vendor_labeling import label_vendor
 import ast
+from nltk.tokenize import sent_tokenize
+from transformers import AutoTokenizer
+import nltk
+nltk.download("punkt")
 
 # Load RoBERTa Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
+
+tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
+
+def split_into_chunks(text, max_tokens=50):
+    """
+    Splits the text into chunks based on sentence boundaries,
+    ensuring each chunk doesn't exceed the max token count.
+    """
+    if not text:
+        return []
+
+    sentences = sent_tokenize(text)
+    chunks = []
+    current_chunk = ""
+    current_tokens = 0
+
+    for sentence in sentences:
+        token_count = len(tokenizer.tokenize(sentence))
+        if current_tokens + token_count <= max_tokens:
+            current_chunk += " " + sentence
+            current_tokens += token_count
+        else:
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+            current_chunk = sentence
+            current_tokens = token_count
+
+    if current_chunk:
+        chunks.append(current_chunk.strip())
+
+    return chunks
 
 def normalize(text):
     return text.strip().lower() if text else ""
@@ -123,10 +158,10 @@ def detect_feature_type(col, val):
         return "mac"
     return "other"
 
-def function_labeling(enriched_features, vendor=None):
+def function_labeling(enriched_features, vendor=None, max_tokens=50):
     """
     Implements the function labeling algorithm with soft vendor-based restriction
-    and feature-by-feature score aggregation.
+    and feature-by-feature score aggregation, integrating text chunking logic.
     """
     # Get candidate labels from vendor_function_map if vendor exists, else use master_functions
     if vendor and vendor.lower() in vendor_function_map:
@@ -152,17 +187,19 @@ def function_labeling(enriched_features, vendor=None):
         print(f"Cleaning and classifying: {col}: {cleaned}")
         feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
         print(f"Detected feature type: {feature_type}")
-        
-        hypothesis_template = "This feature belongs to an IoT device and can perform the function of a {}."
-        result = classifier(cleaned, candidate_labels, hypothesis_template=hypothesis_template)
 
-        print("this is result: ", result)
+        # Split large text features into chunks (if applicable)
+        chunks = split_into_chunks(cleaned, max_tokens=max_tokens)
+        for chunk in chunks:
+            hypothesis_template = "This feature belongs to an IoT device and can perform the function of a {}."
+            result = classifier(chunk, candidate_labels, hypothesis_template=hypothesis_template)
+            print("this is result: ", result)
 
-        # Apply weight based on feature type (higher weight for enriched fields)
-        weight = 1.0 if 'enriched' in col else 0.5
+            # Apply weight based on feature type (higher weight for enriched fields)
+            weight = 1.0 if 'enriched' in col else 0.5
 
-        for label, score in zip(result["labels"], result["scores"]):
-            confidence_scores[label].append(score * weight)
+            for label, score in zip(result["labels"], result["scores"]):
+                confidence_scores[label].append(score * weight)
         
         # === Print per-feature probabilities if vendor has a defined function map
         normalized_vendor = normalize(vendor)
