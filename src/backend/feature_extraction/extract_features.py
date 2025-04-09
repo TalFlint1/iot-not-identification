@@ -57,7 +57,7 @@ def search_google(query):
     return enriched_data if enriched_data else None
 
 # Load dataset
-with open("data/test_dataset.json", "r") as f:
+with open("data/test2_dataset.json", "r") as f:
     data = json.load(f)
 
 # Extract and enrich features
@@ -106,7 +106,7 @@ for device, details in data.items():
 df = pd.DataFrame(extracted_data)
 
 # Save enriched dataset
-df.to_csv("data/enriched_dataset.csv", index=False)
+df.to_csv("data/enriched_dataset2.csv", index=False)
 
-print("Data extraction and enrichment completed! Saved as 'data/enriched_dataset.csv'")
+print("Data extraction and enrichment completed! Saved as 'data/enriched_dataset2.csv'")
 
