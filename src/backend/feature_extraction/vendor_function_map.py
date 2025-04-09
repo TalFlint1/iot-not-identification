@@ -29,5 +29,8 @@ vendor_function_map = {
     "advantech": ["Industrial Sensors", "IoT Gateway"],
     "general electric": ["Smart Meters", "Industrial Equipment Monitoring"],
     "edimax": ["Plug", "Camera", "Motion Sensor", "Hub"],
-    "piper": ["Security Camera", "Home Monitoring", "Motion Detection", "Environmental Sensor", "Smart Home Hub"]
+    "piper": ["Security Camera", "Home Monitoring", "Motion Detection", "Environmental Sensor", "Smart Home Hub"],
+    "insteon": ["Hub", "Plug", "Door Sensor", "Motion Sensor", "Light switch"],
+    "xiaomi": ["Camera", "bulb", "plug", "thermostat", "vacuum cleaner", "smartwatch", "smart tv", "air purifier"],
+    "roku": ["smart tv", "streaming device", "camera", "plug", "lights", "video doorbell", "home monitoring"],
 }

@@ -1,0 +1,46 @@
+{
+    "xiaomi-cleaner_merged_us_IMC19.csv": {
+        "dns.ptr.domain_name": [
+            "roborock-vacuum-s5_miio11670639._miio._udp.local"
+        ],
+        "dhcp.option.hostname": [
+            "rockrobo"
+        ],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "f0:b4:29:41:ec:d7",
+        "origin_dataset": "IMC19",
+        "dns.qry.name": [
+            "us.ot.io.mi.com",
+            "us.ott.io.mi.com"
+        ]
+    },
+    "smartthings-hub_merged_uk_IMC19.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [
+            "hubv2-d052a8a4e6960001"
+        ],
+        "x509ce.dNSName": [],
+        "http.user_agent": [
+            "curl/7.60.0",
+            "CyberGarage-HTTP/1.0",
+            "ConnMan/1.36 wispr"
+        ],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "d0:52:a8:a4:e6:46",
+        "origin_dataset": "IMC19",
+        "dns.qry.name": [
+            "api.smartthings.com",
+            "fw-update2.smartthings.com",
+            "wpad.unctrl.dada.lab",
+            "wpad.dada.lab",
+            "DC.ConNEcT.smaRTthIngs.COM",
+            "DC-eu01-eUwesT1.cONNeCT.smArTtHings.COM",
+            "Dc.COnnEcT.SmarTThInGS.COM",
+            "dc-eu01-EUwESt1.connEcT.SmArTThINgs.CoM",
+            "dc.cOnnECt.SmartThINgS.coM",
+            "Dc-Eu01-EUWesT1.coNnecT.sMaRTThinGs.cOm"
+        ]
+    }
+}

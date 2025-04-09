@@ -10,4 +10,4 @@ vendors = ['siemens', 'ptc', 'abb', 'intel', 'schneider electric', 'honeywell', 
            'ingenu', 'panasonic', 'auvesy-mdt', 'toshiba', 'raytheon technologies', 'amd', 'tesla', 'autodesk', 'cree', 'telstra', 
            'deutsche telekom', 'te connectivity', 'tyco electronics', 'eseye', 'osisoft', 'china mobile', 'zebra technologies', 'moxa', 'proglove', 'axoom', 
            'trumpf', 'worldsensing', 'microsemi corporation', 'sigfox', 'cypress semiconductor', 'alibaba cloud', 'samsara', 'sierra wireless', 
-           'pulse electronics', 'gemalto', 'edimax', 'piper', 'amazon', 'smartthings' ]
+           'pulse electronics', 'gemalto', 'edimax', 'piper', 'amazon', 'smartthings', 'insteon', 'xiaomi', 'roku' ]
