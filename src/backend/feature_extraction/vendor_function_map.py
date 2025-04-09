@@ -1,5 +1,5 @@
 vendor_function_map = {
-    "amazon": ["Smart Speakers", "Smart Outlets", "Smart Home Hub", "Voice Assistant", "Smart TV"],
+    "amazon": ["Smart Speakers", "Smart Outlets", "Smart Home Hub", "Voice Assistant", "Smart TV", "media streamer"],
     "google": ["Smart Speakers", "Voice Assistant", "Smart TV"],
     "samsung": ["Smart TV", "Smart Refrigerator", "Smart Washing Machine", "Smart Home Hub", "Smartwatch"],
     "apple": ["Smartwatch", "Health Wearables", "Smart Speakers"],
@@ -33,4 +33,14 @@ vendor_function_map = {
     "insteon": ["Hub", "Plug", "Door Sensor", "Motion Sensor", "Light switch"],
     "xiaomi": ["Camera", "bulb", "plug", "thermostat", "vacuum cleaner", "smartwatch", "smart tv", "air purifier"],
     "roku": ["smart tv", "streaming device", "camera", "plug", "lights", "video doorbell", "home monitoring"],
+    "belkin": ["plug", "smart switch", "bulb", "motion sensor", "camera", "hub"],
+    "d-link": ["router", "switch", "camera", "plug", "wi-fi extender"],
+    "caseta": ["plug", "switch", "motion sensor", "smart remote", "hub"],
+    "wansview": ["camera", "automatic pet feeder", "bulb"],
+    "wyze": ["camera", "video doorbell", "smart lock", "smart lighting"],
+    "netatmo": ["video doorbell", "air monitor", "door sensor"],
+    "hp": ["printer", "hub"], #later add laptop for NoT (?)
+    "irobot": ["robot vacuum"],
+    "blink": ["video doorbell", "camera"],
+    "sonos": ["smart speaker", "multi room audio", "home theater system", "voice assistant"]
 }
