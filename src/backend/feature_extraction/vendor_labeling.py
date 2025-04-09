@@ -69,7 +69,7 @@ def label_vendor(enriched_data_path):
     return device_vendors
 
 # Example usage
-results = label_vendor("data/enriched_dataset.csv")
+results = label_vendor("data/enriched_dataset2.csv")
 
 for device, (vendor, count) in results.items():
     print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")
