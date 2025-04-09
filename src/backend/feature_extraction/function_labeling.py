@@ -170,6 +170,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
         candidate_labels = master_functions  # Fallback to general functions if vendor is not found
     
     confidence_scores = {label: [] for label in candidate_labels}
+    best_chunks = {}
 
     # Define which columns to allow
     allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names"]
@@ -210,8 +211,12 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             # Apply weight based on feature type (higher weight for enriched fields)
             weight = 1.0 if 'enriched' in col else 0.5
 
+            # Track both max score and its sequence
             for label, score in zip(result["labels"], result["scores"]):
-                confidence_scores[label].append(score * weight)
+                weighted_score = score * weight
+                if not confidence_scores[label] or weighted_score > max(confidence_scores[label]):
+                    confidence_scores[label].append(weighted_score)
+                    best_chunks[label] = chunk  # NEW: Save best chunk for this label
         
         # === Print per-feature probabilities if vendor has a defined function map
         normalized_vendor = normalize(vendor)
@@ -220,10 +225,12 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             for label, score in zip(result["labels"], result["scores"]):
                 print(f"  - {label}: {score:.4f}")
             print("---")
-
-    # Average the scores
-    aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
+    
+    #Use the maximum score per label instead of the mean
+    aggregated_scores = {label: max(scores) if scores else 0 for label, scores in confidence_scores.items()}
     final_label = max(aggregated_scores, key=aggregated_scores.get)
+    best_sequence = best_chunks.get(final_label, "[No best sequence found]")
+    print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
     return final_label, aggregated_scores[final_label]
 
 
