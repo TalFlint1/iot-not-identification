@@ -5,9 +5,6 @@ from vendor_catalog import vendors
 
 # Only special cases that need normalization
 vendor_normalization = {
-    "hewlett packard": "hpe",
-    "hp enterprise": "hpe",
-    "hewlett-packard": "hpe",
     "tyco electronics": "te connectivity",
     "smartthings": "samsung",
     "dlink": "d-link",
