@@ -10,7 +10,8 @@ vendor_normalization = {
     "hewlett-packard": "hpe",
     "tyco electronics": "te connectivity",
     "smartthings": "samsung",
-    "dlink": "d-link"
+    "dlink": "d-link",
+    "cypress semiconductor": "infineon",
 }
 
 def normalize_vendor(vendor):
