@@ -11,4 +11,4 @@ vendors = ['siemens', 'ptc', 'abb', 'intel', 'schneider electric', 'honeywell', 
            'deutsche telekom', 'te connectivity', 'tyco electronics', 'eseye', 'osisoft', 'china mobile', 'zebra technologies', 'moxa', 'proglove', 'axoom', 
            'trumpf', 'worldsensing', 'microsemi corporation', 'sigfox', 'cypress semiconductor', 'alibaba cloud', 'samsara', 'sierra wireless', 
            'pulse electronics', 'gemalto', 'edimax', 'piper', 'amazon', 'smartthings', 'insteon', 'xiaomi', 'roku', 'belkin', 'nest',
-            'dlink', 'd-link', 'caseta', 'philips', 'apple', 'canary', 'wansview', 'wyze', 'netatmo', 'hp', 'irobot', 'blink', 'sonos' ]
+            'dlink', 'd-link', 'caseta', 'philips', 'apple', 'canary', 'wansview', 'wyze', 'netatmo', 'hp', 'irobot', 'blink', 'sonos', 'netgear', 'fitbit' ]
