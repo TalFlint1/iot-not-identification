@@ -52,4 +52,13 @@ vendor_function_map = {
     "wyze": ['camera', 'video doorbell', 'smart lock', 'smart lighting'],
     "xiaomi": ['Camera', 'bulb', 'plug', 'thermostat', 'vacuum cleaner', 'smartwatch', 'smart tv', 'air purifier'],
     "zebra technologies": ['Barcode Scanner', 'Radio Frequency Identification Reader', 'Tablet', 'Inventory Management System', 'Location Tracking Device', 'Printer', 'Mobile Computer'],
+    "lg": ['Smart TV', 'Smart Monitor', 'smart refrigerator', 'Smart Microwave', 'Smart Gas', 'Smart Oven', 'Laptop', 'Smart Air Conditioner'],
+    "tp-link": ['Wi-Fi Router', 'Smart Plug', 'Smart Bulb', 'Smart Camera', 'Smart Switch', 'Hub', 'Robot Vacuum', 'Sensor'],
+    "lifx": ['Smart Switch', 'Smart Bulb'],
+    "august home": ['Smart Lock', 'Smart Door Bundle'],
+    "vizio": ['Smart TV', 'Smart Soundbar'],
+    "ecovacs": ['Robot Vacuum'],
+    "withings": ['Smartwatch', 'Smart Scale'],
+    "logitech": ['Camera'],
+    "neato": ['Robot Vacuum']
 }
