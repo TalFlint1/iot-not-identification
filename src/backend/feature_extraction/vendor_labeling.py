@@ -5,7 +5,6 @@ from vendor_catalog import vendors
 
 # Only special cases that need normalization
 vendor_normalization = {
-    "tyco electronics": "te connectivity",
     "smartthings": "samsung",
     "dlink": "d-link",
     "cypress semiconductor": "infineon",
