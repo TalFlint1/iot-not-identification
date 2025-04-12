@@ -75,7 +75,7 @@ nltk.download("punkt")
 # Load RoBERTa Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
-tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
+tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
 def split_into_chunks(text, max_tokens=50):
     """
