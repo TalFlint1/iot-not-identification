@@ -1,65 +1,6 @@
-# from transformers import pipeline
-# import numpy as np
-# from feature_extraction.function_catalog import functions
-# from feature_extraction.vendor_function_map import vendor_function_map
-
-# # === Initialize RoBERTa Zero-Shot Classifier === #
-# classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
-
-# def normalize(text):
-#     return text.strip().lower()
-
-# def get_candidate_labels(vendor=None):
-#     """
-#     Returns a list of candidate labels based on the vendor.
-#     Soft restriction: if vendor is known and mapped, use its functions; else use full list.
-#     """
-#     if vendor:
-#         normalized_vendor = normalize(vendor)
-#         if normalized_vendor in vendor_function_map:
-#             return vendor_function_map[normalized_vendor]
-#     return functions
-
-# def classify_function(feature, candidate_labels):
-#     """
-#     Classifies a single enriched feature using RoBERTa and returns top label and its score.
-#     """
-#     result = classifier(feature, candidate_labels)
-#     return result["labels"][0], result["scores"][0]
-
-# def function_labeling(enriched_features, vendor=None):
-#     """
-#     Implements the function labeling algorithm with soft vendor-based restriction.
-#     """
-#     candidate_labels = get_candidate_labels(vendor)
-#     confidence_scores = {label: [] for label in candidate_labels}
-
-#     # Step 1: Run zero-shot classification for each enriched feature
-#     for feature in enriched_features:
-#         for label in candidate_labels:
-#             _, confidence = classify_function(feature, [label])
-#             confidence_scores[label].append(confidence)
-
-#     # Step 2: Aggregate the scores (average)
-#     aggregated_scores = {label: np.mean(scores) for label, scores in confidence_scores.items()}
-
-#     # Step 3: Pick the label with the highest average score
-#     final_label = max(aggregated_scores, key=aggregated_scores.get)
-#     return final_label, aggregated_scores[final_label]
-
-# # === Example usage === #
-# if __name__ == "__main__":
-#     enriched_features = [
-#         "Smart lock that connects to the internet and secures doors.",
-#         "Wearable health monitoring device that tracks steps and heart rate.",
-#     ]
-#     vendor = "Samsung"  # Optional: test with or without vendor
-#     final_label, confidence = function_labeling(enriched_features, vendor)
-#     print(f"Predicted Function: {final_label}, Confidence: {confidence:.2f}")
-
-################################
-# Iterate by chunks w. Roberta #
-################################
+#############################
+# Iterate by chunks w. BART #
+#############################
 from transformers import pipeline
 import numpy as np
 import pandas as pd
@@ -270,4 +211,4 @@ def run_function_labeling_from_csv(csv_path):
     return function_results
 
 # Run the function labeling from the enriched dataset CSV
-run_function_labeling_from_csv("data/enriched_dataset2.csv")
+run_function_labeling_from_csv("data/enriched_dataset3.csv")
