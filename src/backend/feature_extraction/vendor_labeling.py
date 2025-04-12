@@ -5,7 +5,7 @@ from vendor_catalog import vendors
 
 # Only special cases that need normalization
 vendor_normalization = {
-    "smartthings": "samsung",
+    #"smartthings": "samsung",
     "dlink": "d-link",
     "cypress semiconductor": "infineon",
     "nest": "google",
@@ -70,7 +70,7 @@ def label_vendor(enriched_data_path):
     return device_vendors
 
 # Example usage
-results = label_vendor("data/enriched_dataset3.csv")
+results = label_vendor("data/enriched_dataset2.csv")
 
 for device, (vendor, count) in results.items():
     print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")

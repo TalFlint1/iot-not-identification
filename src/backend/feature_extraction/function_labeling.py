@@ -73,7 +73,7 @@ import nltk
 nltk.download("punkt")
 
 # Load RoBERTa Zero-Shot Classifier
-classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 tokenizer = AutoTokenizer.from_pretrained("roberta-large-mnli")
 
@@ -173,7 +173,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     best_chunks = {}
 
     # Define which columns to allow
-    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names"]
+    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names", "enriched_tls_cert_domains", "enriched_user_agents"]
 
     # For each feature (loop through the enriched features)
     for feature, col in enriched_features:

@@ -34,3 +34,23 @@ functions = [
     "Fitness Band",
     "Chiller Monitor"
 ]
+
+from transformers import pipeline
+
+# Define your labels
+labels = ["clean", "eat", "sleep"]
+
+# Load zero-shot-classification pipeline with RoBERTa
+classifier = pipeline("zero-shot-classification", model="roberta-large-mnli")
+
+# Sentence to classify
+sentence = "i am going to clean.com"
+#Index of /wemo/switchsensor - xbcs.net
+# Run classification
+result = classifier(sentence, candidate_labels=labels)
+
+# Print results
+print(f"Sentence: {sentence}")
+for label, score in zip(result["labels"], result["scores"]):
+    print(f"{label}: {score:.4f}")
+
