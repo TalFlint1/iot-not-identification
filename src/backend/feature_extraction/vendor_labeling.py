@@ -52,9 +52,10 @@ def label_vendor(enriched_data_path):
             # Find all vendors with the maximum count
             max_vendors = [vendor for vendor, count in vendor_counts.items() if count == max_count]
 
-            # If "google" is one of the max vendors, remove it from the list
+            # If "google" is one of the max vendors, check if it's the only one
             if "google" in max_vendors:
-                max_vendors.remove("google")
+                if len(max_vendors) > 1:
+                    max_vendors.remove("google")
 
             # If there are still vendors left after removing Google, choose the one with the highest count
             if max_vendors:
@@ -69,7 +70,7 @@ def label_vendor(enriched_data_path):
     return device_vendors
 
 # Example usage
-results = label_vendor("data/enriched_dataset2.csv")
+results = label_vendor("data/enriched_dataset3.csv")
 
 for device, (vendor, count) in results.items():
     print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")
