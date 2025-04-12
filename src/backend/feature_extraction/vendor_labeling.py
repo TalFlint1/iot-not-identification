@@ -8,7 +8,8 @@ vendor_normalization = {
     "smartthings": "samsung",
     "dlink": "d-link",
     "cypress semiconductor": "infineon",
-    "nest": "google"
+    "nest": "google",
+    "wemo": "belkin"
 }
 
 def normalize_vendor(vendor):

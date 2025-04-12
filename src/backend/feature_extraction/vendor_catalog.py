@@ -4,4 +4,4 @@ vendors = ['honeywell', 'huawei', 'bosch', 'cisco' ,'samsung', 'digi', 'rockwell
            'telstra', 'xiaoyi', 'eseye', 'zebra technologies', 'moxa', 'proglove', 'worldsensing', 'cypress semiconductor', 
            'samsara', 'sierra wireless', 'edimax', 'piper', 'amazon', 'smartthings', 'insteon', 'xiaomi', 'roku', 'belkin', 'nest',
             'dlink', 'd-link', 'caseta', 'philips', 'apple', 'canary', 'wansview', 'wyze', 'netatmo', 'hp', 'irobot', 'blink', 'sonos', 'netgear', 'fitbit',
-             'neato', 'logitech', 'withings', 'ecovacs', 'vizio', 'august home', 'lifx', 'tp-link', 'lg' ]
+             'neato', 'logitech', 'withings', 'ecovacs', 'vizio', 'august home', 'lifx', 'tp-link', 'lg', 'wemo' ]

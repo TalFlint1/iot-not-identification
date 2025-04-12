@@ -1,0 +1,54 @@
+{
+    "Nest_Dropcam_Wireless_sivanathan.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [
+            "oculus690-vir.dropcam.com",
+            "oculus1170-vir.dropcam.com",
+            "oculus1396-vir.dropcam.com",
+            "oculus391-vir.dropcam.com",
+            "oculus305-vir.dropcam.com",
+            "oculus1121-vir.dropcam.com",
+            "oculus1160-vir.dropcam.com"
+        ],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "30:8c:fb:b6:ea:45",
+        "origin_dataset": "sivanathan",
+        "dns.qry.name": [
+            "nexus.dropcam.com",
+            "oculus1170-vir.dropcam.com",
+            "files.dropcam.com",
+            "pool.ntp.org"
+        ]
+    },
+    "WeMoSwitch2_merged_sentinel.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [
+            "xbcs.net"
+        ],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "94:10:3e:34:0c:b5",
+        "origin_dataset": "sentinel",
+        "dns.qry.name": [
+            "www.belkin.com",
+            "d3gjecg2uu2eaq.cloudfront.net",
+            "gw",
+            "alt7-mtalk.google.com.Belkin",
+            "analytics.localytics.com",
+            "xbcs.net",
+            "api.samsungosp.com",
+            "mtalk4.google.com",
+            "devices.xbcs.net",
+            "android.googleapis.com",
+            "connectivitycheck.android.com",
+            "alt7-mtalk.google.com",
+            "tunnel.xbcs.net",
+            "api.xbcs.net",
+            "alt4-mtalk.google.com",
+            "alt5-mtalk.google.com"
+        ]
+    }
+}
