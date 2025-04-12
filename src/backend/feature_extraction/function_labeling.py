@@ -144,7 +144,6 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             score_diff = top_score - second_score
 
             # Only continue if the chunk is meaningful (customizable thresholds)
-            #if top_score < 0.4 or score_diff < 0.2:
             if top_score < 0.4:
                 print(f"[SKIPPED CHUNK] Not confident enough — top score: {top_score:.2f}, diff: {score_diff:.2f}")
                 continue  # Skip this chunk
@@ -158,14 +157,6 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
                 if not confidence_scores[label] or weighted_score > max(confidence_scores[label]):
                     confidence_scores[label].append(weighted_score)
                     best_chunks[label] = chunk  # NEW: Save best chunk for this label
-        
-        # === Print per-feature probabilities if vendor has a defined function map
-        normalized_vendor = normalize(vendor)
-        if normalized_vendor in vendor_function_map:
-            print(f"[PROBABILITIES] {col} | Vendor: {vendor}")
-            for label, score in zip(result["labels"], result["scores"]):
-                print(f"  - {label}: {score:.4f}")
-            print("---")
     
     #Use the maximum score per label instead of the mean
     aggregated_scores = {label: max(scores) if scores else 0 for label, scores in confidence_scores.items()}
@@ -211,4 +202,4 @@ def run_function_labeling_from_csv(csv_path):
     return function_results
 
 # Run the function labeling from the enriched dataset CSV
-run_function_labeling_from_csv("data/enriched_dataset3.csv")
+run_function_labeling_from_csv("data/enriched_dataset2.csv")
