@@ -212,5 +212,6 @@ def run_function_labeling_from_csv(csv_path):
 
     return final_results[0]
 
-# Run the function labeling from the enriched dataset CSV
-run_function_labeling_from_csv("feature_extraction/data/enriched_dataset2.csv")
+if __name__ == "__main__":
+    # Run the function labeling from the enriched dataset CSV
+    run_function_labeling_from_csv("feature_extraction/data/enriched_dataset2.csv")
