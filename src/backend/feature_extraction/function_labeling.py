@@ -12,6 +12,7 @@ from nltk.tokenize import sent_tokenize
 from transformers import AutoTokenizer
 import nltk
 nltk.download("punkt")
+import io
 
 # Load RoBERTa Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
@@ -167,16 +168,70 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
 
 
 # === Example usage from enriched CSV ===
-def run_function_labeling_from_csv(csv_path):
-    # Get vendor labels dynamically from vendor_labeling.py
-    vendor_labels = label_vendor(csv_path)  # This will give a dictionary of device_name -> (vendor, count)
+# def run_function_labeling_from_csv(csv_path):
+#     # Get vendor labels dynamically from vendor_labeling.py
+#     vendor_labels = label_vendor(csv_path)  # This will give a dictionary of device_name -> (vendor, count)
     
-    df = pd.read_csv(csv_path, dtype=str).fillna("")
+#     df = pd.read_csv(csv_path, dtype=str).fillna("")
+
+#     function_results = {}
+
+#     for index, row in df.iterrows():
+#         device_name = row.get("device_name", f"row_{index}")
+#         vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
+#         enriched_features = []
+
+#         # Prepare enriched features and detect their types
+#         for col, val in row.items():
+#             try:
+#                 parsed = ast.literal_eval(val)
+#                 enriched_features.append((parsed, col))  # Store feature and column name for later type detection
+#             except (ValueError, SyntaxError):
+#                 enriched_features.append((val, col))
+
+#         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
+#         # Print enriched DNS and hostname for this device
+#         for feature, col in enriched_features:
+#             if "enriched_dns" in col.lower() or "enriched_hostname" in col.lower():
+#                 print(f"[DEBUG] {device_name} - {col}: {feature}")
+#         final_label, score, justification = function_labeling(enriched_features, vendor)
+#         print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
+#         function_results[device_name] = (final_label, score)
+
+#     final_results = []
+
+#     for device_name in function_results:
+#         function, score = function_results[device_name]
+#         vendor, _ = vendor_labels.get(device_name, ("Unknown", 0))
+        
+#         result = {
+#             "device": f"{vendor} {function}".strip(),
+#             "confidence": round(score * 100, 2),  # turn into percentage
+#             "justification": justification
+#         }
+#         final_results.append(result)
+
+    # return final_results[0]
+def run_function_labeling_from_csv(csv_input):
+    if isinstance(csv_input, str):
+        csv_data = csv_input
+        is_file_path = True
+    elif hasattr(csv_input, 'read'):  # It's an uploaded file or other file-like object
+        csv_data = csv_input
+        is_file_path = False
+    else:
+        raise TypeError("Invalid input: expected a file path, string, or file-like object.")
+
+    vendor_labels = label_vendor(csv_input)  # Pass the same input as-is
+    if hasattr(csv_data, 'seek'):
+        csv_data.seek(0)
+    df = pd.read_csv(csv_data, dtype=str).fillna("")
 
     function_results = {}
 
     for index, row in df.iterrows():
-        device_name = row.get("device_name", f"row_{index}")
+        default_name = csv_input.split("/")[-1] if is_file_path else f"row_{index}"
+        device_name = row.get("device_name", default_name)
         vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
         enriched_features = []
 
@@ -189,20 +244,19 @@ def run_function_labeling_from_csv(csv_path):
                 enriched_features.append((val, col))
 
         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
-        # Print enriched DNS and hostname for this device
         for feature, col in enriched_features:
             if "enriched_dns" in col.lower() or "enriched_hostname" in col.lower():
                 print(f"[DEBUG] {device_name} - {col}: {feature}")
         final_label, score, justification = function_labeling(enriched_features, vendor)
         print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
-        function_results[device_name] = (final_label, score)
+        function_results[device_name] = (final_label, score, justification)
 
     final_results = []
 
     for device_name in function_results:
-        function, score = function_results[device_name]
+        function, score, justification = function_results[device_name]
         vendor, _ = vendor_labels.get(device_name, ("Unknown", 0))
-        
+
         result = {
             "device": f"{vendor} {function}".strip(),
             "confidence": round(score * 100, 2),  # turn into percentage
