@@ -24,5 +24,6 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),  # Django admin panel
     path('user/', include('user_management.urls')),  # Include user_management URLs
+    path('feature_extraction/', include('feature_extraction.urls')),
     path('', home),
 ]
