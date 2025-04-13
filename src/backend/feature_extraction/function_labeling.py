@@ -4,9 +4,9 @@
 from transformers import pipeline
 import numpy as np
 import pandas as pd
-from function_catalog import functions as master_functions
-from vendor_function_map import vendor_function_map
-from vendor_labeling import label_vendor
+from .function_catalog import functions as master_functions
+from .vendor_function_map import vendor_function_map
+from .vendor_labeling import label_vendor
 import ast
 from nltk.tokenize import sent_tokenize
 from transformers import AutoTokenizer
@@ -213,4 +213,4 @@ def run_function_labeling_from_csv(csv_path):
     return final_results[0]
 
 # Run the function labeling from the enriched dataset CSV
-run_function_labeling_from_csv("data/enriched_dataset2.csv")
+run_function_labeling_from_csv("feature_extraction/data/enriched_dataset2.csv")
