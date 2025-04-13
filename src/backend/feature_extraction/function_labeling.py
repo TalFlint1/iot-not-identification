@@ -163,7 +163,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     final_label = max(aggregated_scores, key=aggregated_scores.get)
     best_sequence = best_chunks.get(final_label, "[No best sequence found]")
     print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
-    return final_label, aggregated_scores[final_label]
+    return final_label, aggregated_scores[final_label], best_sequence
 
 
 # === Example usage from enriched CSV ===
@@ -189,17 +189,28 @@ def run_function_labeling_from_csv(csv_path):
                 enriched_features.append((val, col))
 
         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
-        print("hi")
         # Print enriched DNS and hostname for this device
         for feature, col in enriched_features:
             if "enriched_dns" in col.lower() or "enriched_hostname" in col.lower():
                 print(f"[DEBUG] {device_name} - {col}: {feature}")
-        print("bye")
-        final_label, score = function_labeling(enriched_features, vendor)
+        final_label, score, justification = function_labeling(enriched_features, vendor)
         print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
         function_results[device_name] = (final_label, score)
 
-    return function_results
+    final_results = []
+
+    for device_name in function_results:
+        function, score = function_results[device_name]
+        vendor, _ = vendor_labels.get(device_name, ("Unknown", 0))
+        
+        result = {
+            "device": f"{vendor} {function}".strip(),
+            "confidence": round(score * 100, 2),  # turn into percentage
+            "justification": justification
+        }
+        final_results.append(result)
+
+    return final_results[0]
 
 # Run the function labeling from the enriched dataset CSV
 run_function_labeling_from_csv("data/enriched_dataset2.csv")
