@@ -4,12 +4,52 @@ import sidebarImage from "../Icons/sidebar.png";
 import './InputScreen.css'; // Make sure the path is correct
 import attachmentIcon from "../Icons/attachment.png"; // Adjust path if needed
 import UpperBar from "./UpperBar";
-
+import { useNavigate } from "react-router-dom";
 
 const InputScreen = () => {
+  const navigate = useNavigate();
   const [inputType, setInputType] = useState("json"); // Default to JSON file
-  const [selectedFile, setSelectedFile] = useState(null); // State for file name
+  const [selectedFile, setSelectedFile] = useState(null);
   const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
+
+  const handleMockAnalyze = async () => {
+    try {
+      const response = await fetch("/mock_results.json");
+      const data = await response.json();
+      navigate("/result", { state: { resultData: data[0] } }); // Assuming we want the first device result
+    } catch (error) {
+      console.error("Failed to load mock results:", error);
+    }
+  };
+
+  const handleRealAnalyze = async () => {
+    if (!selectedFile) {
+      alert("Please select a CSV file before identifying.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+  
+    try {
+      const response = await fetch("http://localhost:5000/analyze_device", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to analyze device");
+      }
+  
+      const data = await response.json();
+      // Navigate to result with the first device (assuming only one row for now)
+      navigate("/result", { state: { resultData: data[0] } });
+    } catch (error) {
+      console.error("Error during analysis:", error);
+      alert("Something went wrong while identifying the device.");
+    }
+  };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -134,14 +174,16 @@ const InputScreen = () => {
                     id="file-upload"
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e) => setSelectedFile(e.target.files[0]?.name || "")}
+                    onChange={(e) => setSelectedFile(e.target.files[0] || null)}
                   />
                 </label>
               
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
                   <button style={{ ...buttonStyle, backgroundColor: "#CBF0DB" }}>CONFIRM UPLOAD</button>
-                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>IDENTIFY</button>
+                  <button onClick={handleMockAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>
+                    IDENTIFY
+                  </button>
                 </div>
               </div>
               

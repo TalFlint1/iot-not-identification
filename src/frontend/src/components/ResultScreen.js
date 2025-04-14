@@ -2,12 +2,17 @@ import React from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
+import { useLocation } from "react-router-dom";
 
 const ResultScreen = () => {
   const username = "Tal";
-  const deviceResult = "Verkada Security Camera";
-  const confidencePercentage = 82;
-  const justificationText = "\"Verkada cameras can automatically sync their local storage to the cloud\"";
+  const location = useLocation();
+  const { vendor, func, confidence, justification } = location.state || {};
+
+  // Create the displayed values
+  const deviceResult = vendor && func ? `${vendor} ${func}` : "Unknown Device";
+  const confidencePercentage = confidence ? Math.round(confidence * 100) : 0;
+  const justificationText = justification || "No justification available.";
 
   // Determine color based on confidence percentage
   const getColor = (percentage) => {
