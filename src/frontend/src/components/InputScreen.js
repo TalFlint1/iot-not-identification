@@ -171,8 +171,7 @@ const InputScreen = () => {
               
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
-                  <button style={{ ...buttonStyle, backgroundColor: "#CBF0DB" }}>CONFIRM UPLOAD</button>
-                  <button onClick={handleRealAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>
+                  <button onClick={handleRealAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "0px" }}>
                     IDENTIFY
                   </button>
                 </div>
