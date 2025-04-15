@@ -32,7 +32,7 @@ const InputScreen = () => {
     formData.append("file", selectedFile);
   
     try {
-      const response = await fetch("http://localhost:5000/analyze_device", {
+      const response = await fetch("http://localhost:5000/analyze_device/", {
         method: "POST",
         body: formData,
       });
@@ -42,8 +42,9 @@ const InputScreen = () => {
       }
   
       const data = await response.json();
+      console.log("Response data:", data);
       // Navigate to result with the first device (assuming only one row for now)
-      navigate("/result", { state: { resultData: data[0] } });
+      navigate("/result", { state: { resultData: data } });
     } catch (error) {
       console.error("Error during analysis:", error);
       alert("Something went wrong while identifying the device.");
@@ -166,7 +167,7 @@ const InputScreen = () => {
                   {selectedFile && (
                     <p style={{ position: "absolute", bottom: "10px", fontSize: "16px", textAlign: "center", 
                     marginLeft: "20px", marginBottom: "20px" }}>
-                      Selected file: {selectedFile}
+                      Selected file: {selectedFile.name}
                     </p>
                   )}
               
@@ -181,7 +182,7 @@ const InputScreen = () => {
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
                   <button style={{ ...buttonStyle, backgroundColor: "#CBF0DB" }}>CONFIRM UPLOAD</button>
-                  <button onClick={handleMockAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>
+                  <button onClick={handleRealAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "40px" }}>
                     IDENTIFY
                   </button>
                 </div>

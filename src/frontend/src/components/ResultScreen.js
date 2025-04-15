@@ -7,12 +7,19 @@ import { useLocation } from "react-router-dom";
 const ResultScreen = () => {
   const username = "Tal";
   const location = useLocation();
-  const { vendor, func, confidence, justification } = location.state || {};
+  console.log("Location:", location);
+  const { resultData } = location.state || {};
+  console.log("Result Data:", resultData);
+  // const { vendor, func, confidence, justification } = resultData || {};
 
   // Create the displayed values
-  const deviceResult = vendor && func ? `${vendor} ${func}` : "Unknown Device";
-  const confidencePercentage = confidence ? Math.round(confidence * 100) : 0;
-  const justificationText = justification || "No justification available.";
+  // const deviceResult = vendor && func ? `${vendor} ${func}` : "Unknown Device";
+  // const confidencePercentage = confidence ? Math.round(confidence * 100) : 0;
+  // const justificationText = justification || "No justification available.";
+
+  const deviceResult = resultData?.device || "Unknown Device";
+  const confidencePercentage = resultData?.confidence || 0;
+  const justificationText = resultData?.justification || "No justification available.";
 
   // Determine color based on confidence percentage
   const getColor = (percentage) => {
