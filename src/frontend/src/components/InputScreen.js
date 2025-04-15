@@ -12,16 +12,6 @@ const InputScreen = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
 
-  const handleMockAnalyze = async () => {
-    try {
-      const response = await fetch("/mock_results.json");
-      const data = await response.json();
-      navigate("/result", { state: { resultData: data[0] } }); // Assuming we want the first device result
-    } catch (error) {
-      console.error("Failed to load mock results:", error);
-    }
-  };
-
   const handleRealAnalyze = async () => {
     if (!selectedFile) {
       alert("Please select a CSV file before identifying.");

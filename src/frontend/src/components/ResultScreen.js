@@ -3,9 +3,11 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ResultScreen = () => {
   const username = "Tal";
+  const navigate = useNavigate();
   const location = useLocation();
   const { resultData } = location.state || {};
 
@@ -18,6 +20,10 @@ const ResultScreen = () => {
     if (percentage >= 80) return "#17B95B"; // Green
     if (percentage >= 50) return "#FFA500"; // Orange
     return "#FF0000"; // Red
+  };
+
+  const handleAnalyzeAnother = () => {
+    navigate("/identify");
   };
 
   const ringColor = getColor(confidencePercentage);
@@ -101,7 +107,7 @@ const ResultScreen = () => {
               padding: "20px",
               borderRadius: "30px",
               height: "200px",
-              width: "270px",
+              width: "400px",
               textAlign: "center",
               marginLeft: "120px",
               marginBottom: "-80px",
@@ -110,7 +116,7 @@ const ResultScreen = () => {
               justifyContent: "center"
             }}
           >
-            <p style={{ color: "black", fontSize: "26px", fontStyle: "italic" }}>{justificationText}</p>
+            <p style={{ color: "black", fontSize: "20px", fontStyle: "italic" }}>{justificationText}</p>
           </div>
           </div>
         </div>
@@ -119,6 +125,7 @@ const ResultScreen = () => {
         <div style={{ textAlign: "center", marginTop: "130px" }}>
           <p style={{ color: "white", fontSize: "24px" }}>Analyze Another Device</p>
           <button
+            onClick={handleAnalyzeAnother}
             style={{
               width: "200px",
               height: "40px",
@@ -130,7 +137,7 @@ const ResultScreen = () => {
               marginTop: "20px",
             }}
           >
-            IDENTIFY
+            New Device
           </button>
         </div>
       </div>
