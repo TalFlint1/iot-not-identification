@@ -1,0 +1,27 @@
+{
+    "Lifx_bulb_our_lab.csv": {
+        "dns.ptr.domain_name": [
+            "LIFX-A19-2365C0.local",
+            "LIFX A19 2365C0._hap._tcp.local",
+            "Shister Lamp._hap._tcp.local",
+            "_hap._tcp.local",
+            "Shister 2._hap._tcp.local"
+        ],
+        "dhcp.option.hostname": [
+            "LIFX A19 2365C0",
+            "Shister 2",
+            "LIFX-A19-2365C0"
+        ],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "d0:73:d5:23:65:c0",
+        "origin_dataset": "lab",
+        "dns.qry.name": [
+            "LIFX A19 2365C0._hap._tcp.local",
+            "v2.broker.lifx.co",
+            "Shister Lamp._hap._tcp.local",
+            "Shister 2._hap._tcp.local"
+        ]
+    }
+}
