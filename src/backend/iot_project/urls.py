@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
-from feature_extraction.views import analyze_device
+from feature_extraction.views import analyze_device, get_user_history
 
 def home(request):
     return HttpResponse("Welcome to the IoT project!")
@@ -27,5 +27,6 @@ urlpatterns = [
     path('user/', include('user_management.urls')),  # Include user_management URLs
     path('feature_extraction/', include('feature_extraction.urls')),
     path('analyze_device/', analyze_device),
+    path('history/', get_user_history),
     path('', home),
 ]

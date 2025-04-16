@@ -1,22 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
 
 const HistoryScreen = () => {
-  const username = "Tal";
+  const [historyData, setHistoryData] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [filter, setFilter] = useState("all"); // Filtering by confidence level
   const [showUnsuccessful, setShowUnsuccessful] = useState(false); // Toggle for unsuccessful identifications
 
-  const historyData = [
-    { id: 1, device: "Verkada Security Camera", confidence: 82, justification: "Partial match with Nest device behaviors", date: "2025-02-05" },
-    { id: 2, device: "Ring Doorbell", confidence: 75, justification: "Partial match with Nest device behaviors", date: "2025-02-03" },
-    { id: 3, device: "Amazon Echo", confidence: 90, justification: "Partial match with Nest device behaviors", date: "2025-02-01" },
-    { id: 4, device: "Verkada Camera", confidence: 82, justification: "Matches known Verkada patterns", date: "2025-02-01" },
-    { id: 5, device: "Unknown", confidence: 0, justification: "No matching patterns found", date: "2025-02-01" },
-    { id: 6, device: "Nest Thermostat", confidence: 45, justification: "Partial match with Nest device behaviors", date: "2025-02-01" },
-  ];
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) {
+        console.error("No access token found.");
+        return;
+      }
+  
+      try {
+        const response = await fetch("http://localhost:5000/history/", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setHistoryData(data); // assuming you're using useState for historyData
+      } catch (error) {
+        console.error("Error fetching history:", error);
+      }
+    };
+  
+    fetchHistory();
+  }, []);
+  
 
   // Filter data based on selection
   const filteredData = historyData.filter((item) => {
@@ -41,7 +62,7 @@ const HistoryScreen = () => {
           width: "14%",
         }}
       />
-      <UpperBar username={username} />
+      <UpperBar/>
 
       {/* Main Content */}
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42", textAlign: "center" }}>

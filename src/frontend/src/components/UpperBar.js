@@ -63,33 +63,6 @@ const UpperBar = ({ username }) => {
           <img src={settingsIcon} alt="Settings" style={iconStyle} />
         </button>
 
-        {/* User Initials
-        <button
-            style={{
-                ...iconButtonStyle,
-                backgroundColor: "green",
-                borderRadius: "50%",
-                width: "35px",
-                height: "35px",
-                padding: "0px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
-            <span
-                style={{
-                    color: "white",
-                    fontWeight: "bold",
-                    fontSize: "20px",
-                    width: "35px", // Ensure it takes up the same space as the button
-                    textAlign: "center", // Center the text horizontally
-                }}
-            >
-                {username[0]}
-            </span>
-        </button> */}
-
         {/* Home Icon */}
         <button onClick={handleHomeClick} style={iconButtonStyle}>
           <img src={homepageIcon} alt="Home" style={iconStyle} />
