@@ -11,7 +11,7 @@ def get_user_history_from_db(user_id):
 
 def add_history_item(user_id, history_item):
     table.update_item(
-        Key={'user_id': user_id},
+        Key={'username': user_id},
         UpdateExpression='SET history = list_append(if_not_exists(history, :empty), :new_item)',
         ExpressionAttributeValues={
             ':new_item': [history_item],

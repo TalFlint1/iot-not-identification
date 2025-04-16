@@ -20,10 +20,19 @@ const InputScreen = () => {
   
     const formData = new FormData();
     formData.append("file", selectedFile);
+
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Authorization token is missing.");
+      return;
+    }
   
     try {
       const response = await fetch("http://localhost:5000/analyze_device/", {
         method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`,  // Adding Authorization header
+        },
         body: formData,
       });
   
