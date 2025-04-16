@@ -1,6 +1,7 @@
 import boto3
 import hashlib
 import os
+import jwt
 
 # Initialize DynamoDB
 dynamodb = boto3.resource('dynamodb', region_name="eu-north-1")
@@ -27,3 +28,11 @@ def create_user(username, password, email):
         }
     )
     return {"message": "User created successfully"}
+
+def get_user_id_from_token(token):
+    try:
+        payload = jwt.decode(token, options={"verify_signature": False})
+        return payload.get("user_id")
+    except Exception as e:
+        print("Failed to decode token:", e)
+        return None
