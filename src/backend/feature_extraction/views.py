@@ -71,12 +71,15 @@ def analyze_device(request):
 @csrf_exempt
 def get_user_history(request):
     if request.method == 'GET':
+        print("Authorization header:", request.headers.get('Authorization'))
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
 
         token = auth_header.split(' ')[1]
+        print("this is token: ", token)
         user_id = get_user_id_from_token(token)
+        print("this is user_id:", user_id)
 
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)

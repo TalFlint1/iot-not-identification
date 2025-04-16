@@ -32,6 +32,7 @@ def create_user(username, password, email):
 def get_user_id_from_token(token):
     try:
         payload = jwt.decode(token, options={"verify_signature": False})
+        print("Decoded Token Payload:", payload)
         return payload.get("user_id")
     except Exception as e:
         print("Failed to decode token:", e)

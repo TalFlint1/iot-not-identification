@@ -16,7 +16,7 @@ const HistoryScreen = () => {
         console.error("No access token found.");
         return;
       }
-  
+      
       try {
         const response = await fetch("http://localhost:5000/history/", {
           headers: {
@@ -29,7 +29,8 @@ const HistoryScreen = () => {
         }
   
         const data = await response.json();
-        setHistoryData(data); // assuming you're using useState for historyData
+        console.log("Fetched history data:", data);
+        setHistoryData(data.history); // assuming you're using useState for historyData
       } catch (error) {
         console.error("Error fetching history:", error);
       }
