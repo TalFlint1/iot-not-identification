@@ -34,7 +34,7 @@
   
   .input-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Define three equal-width columns */
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* Define three equal-width columns */
     gap: 20px;  /* Adjust the space between each grid item */
     margin-top: 10px;
     margin-bottom: 50px;

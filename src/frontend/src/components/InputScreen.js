@@ -12,6 +12,15 @@ const InputScreen = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
 
+  // For Manual Entry
+  const [macAddress, setMacAddress] = useState("");
+  const [dhcpHostname, setDhcpHostname] = useState("");
+  const [httpUserAgent, setHttpUserAgent] = useState("");
+  const [certificateDnsNames, setCertificateDnsNames] = useState("");
+  const [domains, setDomains] = useState("");
+  const [dnsPtr, setDnsPtr] = useState("");
+  const [tlsServerName, setTlsServerName] = useState("");
+
   const handleRealAnalyze = async () => {
     if (!selectedFile) {
       alert("Please select a CSV file before identifying.");
@@ -49,14 +58,47 @@ const InputScreen = () => {
       alert("Something went wrong while identifying the device.");
     }
   };
-  
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file.name); // Update state with file name
+  const handleManualAnalyze = async () => {
+    const manualData = {
+      mac_address: macAddress,
+      "dhcp.option.hostname": dhcpHostname ? dhcpHostname.split(",").map(name => name.trim()) : [],
+      "http.user_agent": httpUserAgent ? httpUserAgent.split(",").map(agent => agent.trim()) : [],
+      "x509ce.dNSName": certificateDnsNames ? certificateDnsNames.split(",").map(name => name.trim()) : [],
+      "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
+      "dns.ptr.domain_name": dnsPtr ? dnsPtr.split(",").map(name => name.trim()) : [],
+      "tls.handshake.extensions_server_name": tlsServerName ? tlsServerName.split(",").map(name => name.trim()) : [],
+    };    
+  
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Authorization token is missing.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5000/analyze_manual_json/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ devices: [manualData] }), // Wrap inside 'devices' array
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to analyze device");
+      }
+  
+      const data = await response.json();
+      console.log("Response data:", data);
+      navigate("/result", { state: { resultData: data } });
+    } catch (error) {
+      console.error("Error during manual analysis:", error);
+      alert("Something went wrong while identifying the device.");
     }
   };
+  
 
   const buttonStyle = {
     width: "200px", height: "40px", borderRadius: "5px", border: "1px solid #000000", fontSize: "18px",
@@ -132,7 +174,7 @@ const InputScreen = () => {
             className="bg-gray-800 p-6 shadow-lg"
             style={{
                 marginTop: "20px", marginLeft: "300px", backgroundColor: "#EDEDED", borderRadius: "10px", height: "300px",
-                width: inputType === "json" ? "750px" : "800px", maxWidth: "1200px", border: "1px solid #000000", display: "flex",
+                width: inputType === "json" ? "750px" : "1050px", maxWidth: "1200px", border: "1px solid #000000", display: "flex",
             }}
             >
             {inputType === "json" ? (
@@ -191,28 +233,43 @@ const InputScreen = () => {
                 {/* First row */}
                 <div className="input-box">
                   <h3>MAC Address</h3>
-                  <input className="input-box input" placeholder="Example: 00-B0-D0-63-C2-26" />
+                  <input className="input-box input" placeholder="Example: 00-B0-D0-63-C2-26" value={macAddress} onChange={(e) => setMacAddress(e.target.value)} />
                 </div>
                 <div className="input-box">
                   <h3>DHCP Hostname</h3>
-                  <input className="input-box input" placeholder="Example: host1" />
+                  <input className="input-box input" placeholder="Example: host1" value={dhcpHostname} onChange={(e) => setDhcpHostname(e.target.value)} />
                 </div>
                 <div className="input-box">
                   <h3>HTTP User Agent</h3>
-                  <input className="input-box input" placeholder="Example: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0)" />
+                  <input className="input-box input" placeholder="Example: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0)"
+                  value={httpUserAgent} onChange={(e) => setHttpUserAgent(e.target.value)} />
+                </div>
+                <div className="input-box">
+                  <h3>Certificate DNS Names</h3>
+                  <input className="input-box input" placeholder="Example: *.tplinkcloud.com, *.tplinkra.com" 
+                  value={certificateDnsNames} onChange={(e) => setCertificateDnsNames(e.target.value)} />
                 </div>
 
                 {/* Second row */}
                 <div className="input-box">
                   <h3>Domains</h3>
-                  <input className="input-box input" placeholder="Example: example.com" />
+                  <input className="input-box input" placeholder="Example: example.com" value={domains} onChange={(e) => setDomains(e.target.value)} />
                 </div>
                 <div className="input-box">
                   <h3>DNS PTR</h3>
-                  <input className="input-box input" placeholder="Example: mailserver.example.org" />
+                  <input className="input-box input" placeholder="Example: mailserver.example.org" value={dnsPtr} onChange={(e) => setDnsPtr(e.target.value)} />
                 </div>
                 <div className="input-box">
-                  <button style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginTop: "40px" }}>IDENTIFY</button>
+                  <h3>TLS Server Name</h3>
+                  <input className="input-box input" placeholder="Example: use1-api.tplinkra.com" value={tlsServerName} onChange={(e) => setTlsServerName(e.target.value)} />
+                </div>
+                <div className="input-box">
+                <button
+                  style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginTop: "40px" }}
+                  onClick={handleManualAnalyze}
+                >
+                  IDENTIFY
+                </button>
                 </div>
               </div>
             )}
