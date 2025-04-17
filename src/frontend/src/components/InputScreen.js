@@ -11,6 +11,7 @@ const InputScreen = () => {
   const [inputType, setInputType] = useState("json"); // Default to JSON file
   const [selectedFile, setSelectedFile] = useState(null);
   const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
+  const [loading, setLoading] = useState(false);
 
   // For Manual Entry
   const [macAddress, setMacAddress] = useState("");
@@ -20,6 +21,44 @@ const InputScreen = () => {
   const [domains, setDomains] = useState("");
   const [dnsPtr, setDnsPtr] = useState("");
   const [tlsServerName, setTlsServerName] = useState("");
+
+  // const handleRealAnalyze = async () => {
+  //   if (!selectedFile) {
+  //     alert("Please select a CSV file before identifying.");
+  //     return;
+  //   }
+  
+  //   const formData = new FormData();
+  //   formData.append("file", selectedFile);
+
+  //   const token = localStorage.getItem("access_token");
+  //   if (!token) {
+  //     alert("Authorization token is missing.");
+  //     return;
+  //   }
+  
+  //   try {
+  //     const response = await fetch("http://localhost:5000/analyze_enriched_csv/", {
+  //       method: "POST",
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,  // Adding Authorization header
+  //       },
+  //       body: formData,
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error("Failed to analyze device");
+  //     }
+  
+  //     const data = await response.json();
+  //     console.log("Response data:", data);
+  //     // Navigate to result with the first device (assuming only one row for now)
+  //     navigate("/result", { state: { resultData: data } });
+  //   } catch (error) {
+  //     console.error("Error during analysis:", error);
+  //     alert("Something went wrong while identifying the device.");
+  //   }
+  // };
 
   const handleRealAnalyze = async () => {
     if (!selectedFile) {
@@ -35,6 +74,8 @@ const InputScreen = () => {
       alert("Authorization token is missing.");
       return;
     }
+    
+    setLoading(true);
   
     try {
       const response = await fetch("http://localhost:5000/analyze_enriched_csv/", {
@@ -53,7 +94,9 @@ const InputScreen = () => {
       console.log("Response data:", data);
       // Navigate to result with the first device (assuming only one row for now)
       navigate("/result", { state: { resultData: data } });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error during analysis:", error);
       alert("Something went wrong while identifying the device.");
     }
@@ -76,6 +119,8 @@ const InputScreen = () => {
       alert("Authorization token is missing.");
       return;
     }
+
+    setLoading(true);
   
     try {
       // 1. Create a Blob with the JSON string
@@ -103,8 +148,9 @@ const InputScreen = () => {
       const data = await response.json();
       console.log("Response data:", data);
       navigate("/result", { state: { resultData: data } });
-  
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Error during manual analysis:", error);
       alert("Something went wrong while identifying the device.");
     }
@@ -242,6 +288,7 @@ const InputScreen = () => {
                     <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
                     Choose file or drag it here
                   </div>
+                  
               
                   {/* Show file name directly under the gray box */}
                   {selectedFile && (
@@ -258,6 +305,18 @@ const InputScreen = () => {
                     onChange={(e) => setSelectedFile(e.target.files[0] || null)}
                   />
                 </label>
+                {/* Show loader spinner if loading */}
+                {loading && (
+                  <div
+                    className="loader"
+                    style={{
+                      position: "absolute", // Position it over the same container
+                      top: "50%", // Vertically centered
+                      left: "50%", // Adjusted to move it a bit right of the box (smaller offset)
+                      transform: "translate(-50%, -50%)", // Adjust the positioning to center vertically
+                    }}
+                  ></div>
+                )}
               
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
@@ -268,6 +327,7 @@ const InputScreen = () => {
               </div>
               
             ) : (
+              <div style={{ position: "relative", width: "100%", height: "100%" }}>
               <div className="input-grid">
                 {/* First row */}
                 <div className="input-box">
@@ -314,6 +374,19 @@ const InputScreen = () => {
                 </button> */}
                 </div>
               </div>
+              {/* Loader - OVERLAY the entire input-grid */}
+              {loading && (
+                <div
+                  className="loader"
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                ></div>
+              )}
+            </div>
             )}
             </div>
         </div>
