@@ -28,7 +28,7 @@ const InputScreen = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/analyze_device/", {
+      const response = await fetch("http://localhost:5000/analyze_enriched_csv/", {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,  // Adding Authorization header

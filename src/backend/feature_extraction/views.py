@@ -69,6 +69,60 @@ def analyze_device(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @csrf_exempt
+def analyze_enriched_csv(request):
+    if request.method == 'POST':
+        # 1. Extract token from header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        print("User ID:", user_id)  # For debugging purposes
+
+        # 2. Get the uploaded CSV file
+        uploaded_file = request.FILES.get('file')
+        if not uploaded_file:
+            return JsonResponse({'error': 'No file provided'}, status=400)
+
+        try:
+            # 3. Define data folder path
+            data_folder = os.path.join("feature_extraction", "data")
+            os.makedirs(data_folder, exist_ok=True)
+
+            # 4. Generate temp file path for the CSV
+            unique_id = uuid.uuid4().hex
+            input_csv_path = os.path.join(data_folder, f"temp_enriched_{unique_id}.csv")
+
+            # 5. Save uploaded file
+            with open(input_csv_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+
+            # 6. Run function labeling directly (no extraction+enrichment)
+            result = run_function_labeling_from_csv(input_csv_path)
+
+            # 7. Upload result to S3 and Save S3 info to user history
+            s3_info = upload_result_to_s3(result, user_id)
+            add_history_item(user_id, s3_info)
+
+            # 8. Optional cleanup
+            os.remove(input_csv_path)
+
+            return JsonResponse(result)
+
+        except Exception as e:
+            print("[ERROR]", str(e))
+            traceback.print_exc()
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
 def get_user_history(request):
     if request.method == 'GET':
         print("Authorization header:", request.headers.get('Authorization'))
