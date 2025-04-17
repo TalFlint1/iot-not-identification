@@ -61,14 +61,15 @@ const InputScreen = () => {
 
   const handleManualAnalyze = async () => {
     const manualData = {
-      mac_address: macAddress,
-      "dhcp.option.hostname": dhcpHostname ? dhcpHostname.split(",").map(name => name.trim()) : [],
-      "http.user_agent": httpUserAgent ? httpUserAgent.split(",").map(agent => agent.trim()) : [],
-      "x509ce.dNSName": certificateDnsNames ? certificateDnsNames.split(",").map(name => name.trim()) : [],
-      "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
       "dns.ptr.domain_name": dnsPtr ? dnsPtr.split(",").map(name => name.trim()) : [],
+      "dhcp.option.hostname": dhcpHostname ? dhcpHostname.split(",").map(name => name.trim()) : [],
+      "x509ce.dNSName": certificateDnsNames ? certificateDnsNames.split(",").map(name => name.trim()) : [],
+      "http.user_agent": httpUserAgent ? httpUserAgent.split(",").map(agent => agent.trim()) : [],
       "tls.handshake.extensions_server_name": tlsServerName ? tlsServerName.split(",").map(name => name.trim()) : [],
-    };    
+      "mac_address": macAddress,
+      "origin_dataset": "manual",
+      "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
+    };     
   
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -77,13 +78,22 @@ const InputScreen = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/analyze_manual_json/", {
+      // 1. Create a Blob with the JSON string
+      const jsonBlob = new Blob([JSON.stringify({ devices: [manualData] }, null, 2)], {
+        type: "application/json",
+      });
+  
+      // 2. Prepare FormData
+      const formData = new FormData();
+      formData.append("file", jsonBlob, "manual_input.json");
+  
+      // 3. Send request to /analyze_device/
+      const response = await fetch("http://localhost:5000/analyze_device/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ devices: [manualData] }), // Wrap inside 'devices' array
+        body: formData,
       });
   
       if (!response.ok) {
@@ -93,11 +103,40 @@ const InputScreen = () => {
       const data = await response.json();
       console.log("Response data:", data);
       navigate("/result", { state: { resultData: data } });
+  
     } catch (error) {
       console.error("Error during manual analysis:", error);
       alert("Something went wrong while identifying the device.");
     }
   };
+
+  const downloadManualJson = () => {
+    const manualData = {
+      "dns.ptr.domain_name": dnsPtr ? dnsPtr.split(",").map(name => name.trim()) : [],
+      "dhcp.option.hostname": dhcpHostname ? dhcpHostname.split(",").map(name => name.trim()) : [],
+      "x509ce.dNSName": certificateDnsNames ? certificateDnsNames.split(",").map(name => name.trim()) : [],
+      "http.user_agent": httpUserAgent ? httpUserAgent.split(",").map(agent => agent.trim()) : [],
+      "tls.handshake.extensions_server_name": tlsServerName ? tlsServerName.split(",").map(name => name.trim()) : [],
+      "mac_address": macAddress,
+      "origin_dataset": "manual",
+      "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
+    };    
+  
+    const blob = new Blob(
+      [JSON.stringify({ devices: [manualData] }, null, 2)], 
+      { type: "application/json" }
+    );
+  
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'manual_input_test.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+  
   
 
   const buttonStyle = {
@@ -270,6 +309,9 @@ const InputScreen = () => {
                 >
                   IDENTIFY
                 </button>
+                {/* <button onClick={downloadManualJson}>
+                  Download Manual JSON
+                </button> */}
                 </div>
               </div>
             )}
