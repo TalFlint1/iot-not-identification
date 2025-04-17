@@ -56,7 +56,20 @@ def analyze_device(request):
 
             # 8. Upload result to S3 and Save S3 info to user history
             s3_info = upload_result_to_s3(result, user_id)
-            add_history_item(user_id, s3_info)
+            
+            confidence = result.get('confidence', '')
+            if isinstance(confidence, float):
+                confidence = Decimal(str(confidence))
+
+            history_item = {
+                'device': result.get('device', ''),
+                'confidence': confidence,
+                'justification': result.get('justification', ''),
+                's3_path': s3_info.get('s3_path', ''),
+                'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
+            }
+            add_history_item(user_id, history_item)
+
 
             # 9. Optional cleanup (only JSON, keeping CSV)
             os.remove(input_json_path)
