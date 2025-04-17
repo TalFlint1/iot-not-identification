@@ -9,6 +9,8 @@ from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3
 from utils.history_utils import add_history_item
 from utils.history_utils import get_user_history_from_db
+from datetime import datetime, timezone
+from decimal import Decimal
 
 @csrf_exempt
 def analyze_device(request):
@@ -108,7 +110,20 @@ def analyze_enriched_csv(request):
 
             # 7. Upload result to S3 and Save S3 info to user history
             s3_info = upload_result_to_s3(result, user_id)
-            add_history_item(user_id, s3_info)
+
+            confidence = result.get('confidence', '')
+            if isinstance(confidence, float):
+                confidence = Decimal(str(confidence))
+            
+            # 7.5 Build full history item  <-- updated
+            history_item = {
+                'device': result.get('device', ''),
+                'confidence': confidence,
+                'justification': result.get('justification', ''),
+                's3_path': s3_info.get('s3_path', ''),
+                'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
+            }
+            add_history_item(user_id, history_item)  # <-- updated
 
             # 8. Optional cleanup
             os.remove(input_csv_path)
