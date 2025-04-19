@@ -274,7 +274,7 @@ const InputScreen = () => {
                   className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer relative"
                   style={{
                     display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
-                    height: "150px", width: "200px", color: "#333", position: "relative", borderRadius: "8px",
+                    height: "150px", width: "300px", color: "#333", position: "relative", borderRadius: "8px",
                   }}
                 >
                   {/* Small gray box inside the input box */}
@@ -282,7 +282,7 @@ const InputScreen = () => {
                     style={{
                       backgroundColor: "#D9D9D9", padding: "10px", borderRadius: "8px", textAlign: "left", fontSize: "16px", color: "#333",
                       width: "200px", border: "2px dashed #4C484E", display: "flex", alignItems: "center", justifyContent: "center",
-                      gap: "8px", marginLeft: "60px", marginTop: "-40px", cursor: "pointer"
+                      gap: "8px", marginLeft: "-40px", marginTop: "-40px", cursor: "pointer"
                     }}
                   >
                     <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
@@ -292,8 +292,13 @@ const InputScreen = () => {
               
                   {/* Show file name directly under the gray box */}
                   {selectedFile && (
-                    <p style={{ position: "absolute", bottom: "10px", fontSize: "16px", textAlign: "center", 
-                    marginLeft: "20px", marginBottom: "20px" }}>
+                    <p style={{ position: "absolute", bottom: "10px", fontSize: "16px", textAlign: "left", 
+                      marginLeft: "40px", // smaller margin
+                      marginBottom: "20px",
+                      width: "calc(100% - 5px)", // make sure it takes the width inside margins
+                      overflow: "hidden", // optional: hide overflow
+                      textOverflow: "ellipsis", // optional: "..." if too long
+                      whiteSpace: "nowrap" }}>
                       Selected file: {selectedFile.name}
                     </p>
                   )}
