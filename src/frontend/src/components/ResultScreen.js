@@ -4,6 +4,7 @@ import Title from "./Title";
 import UpperBar from "./UpperBar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "./ResultScreen.css";
 
 const ResultScreen = () => {
   const username = "Tal";
@@ -102,6 +103,7 @@ const ResultScreen = () => {
           <div style={{ textAlign: "center" }}>
           <p style={{ color: "white", fontSize: "20px", marginBottom: "10px", fontSize: "28px", marginLeft: "100px" }}>Justification</p>
           <div
+            className="justification-box"
             style={{
               backgroundColor: "#E0E0E0",
               padding: "20px",
@@ -111,12 +113,14 @@ const ResultScreen = () => {
               textAlign: "center",
               marginLeft: "120px",
               marginBottom: "-80px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
+              overflowY: "auto",
+              overflowX: "hidden",
+              // display: "flex",
+              // alignItems: "flex-start",
+              // justifyContent: "flex-start",
             }}
           >
-            <p style={{ color: "black", fontSize: "20px", fontStyle: "italic" }}>{justificationText}</p>
+            <p style={{ color: "black", fontSize: "18px", fontStyle: "italic" }}>{justificationText}</p>
           </div>
           </div>
         </div>

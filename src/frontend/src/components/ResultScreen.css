@@ -1,0 +1,22 @@
+/* Styling ONLY the scrollbar inside the justification box */
+.justification-box::-webkit-scrollbar {
+    width: 8px; /* Thin scrollbar */
+}
+
+.justification-box::-webkit-scrollbar-thumb {
+    background-color: #7f7f7f; /* Your theme color */
+    border-radius: 25px; /* Rounded */
+    border-top: 25px solid transparent; /* Add transparent padding */
+    border-bottom: 25px solid transparent;
+    background-clip: padding-box; /* Make sure background doesn't cover the border */
+    overflow: hidden;
+}
+
+.justification-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Little trick to push scrollbar more "inside" visually */
+.justification-box {
+    padding-right: 30px; /* Give space for scrollbar */
+}
