@@ -30,7 +30,15 @@ const HistoryScreen = () => {
   
         const data = await response.json();
         console.log("Fetched history data:", data);
-        setHistoryData(data.history); // assuming you're using useState for historyData
+        console.log("History array:", data.history); // <-- Add this line
+        console.log("First item:", data.history[0]);  // <-- And maybe this too
+
+        const historyWithIds = data.history.map((item, index) => ({
+          ...item,
+          id: index,  // Add id based on index
+        }));
+
+        setHistoryData(historyWithIds); // assuming you're using useState for historyData
       } catch (error) {
         console.error("Error fetching history:", error);
       }
@@ -100,9 +108,22 @@ const HistoryScreen = () => {
                 width: "50%",
                 marginLeft: "auto",
                 marginRight: "auto",
+                transition: "background-color 0.3s ease",
+                ...(selectedItem?.id === item.id ? { backgroundColor: "#D9D9D9" } : {}),
               }}
             >
-              {item.device} ({item.confidence}%) - {item.date}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  {item.device} ({item.confidence}%) - {item.date}
+                </div>
+                <div style={{
+                  transform: selectedItem?.id === item.id ? "rotate(90deg)" : "rotate(0deg)",
+                  transition: "transform 0.3s ease",
+                  fontSize: "20px",
+                }}>
+                  ▶
+                </div>
+              </div>
               {selectedItem?.id === item.id && (
                 <div style={{ backgroundColor: "#fff", padding: "10px", borderRadius: "10px", marginTop: "10px", color: "black",border: "1px solid #D9D9D9", }}>
                   <p>Confidence: {item.confidence}%</p>
