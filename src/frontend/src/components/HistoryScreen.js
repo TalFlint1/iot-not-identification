@@ -8,6 +8,8 @@ const HistoryScreen = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [filter, setFilter] = useState("all"); // Filtering by confidence level
   const [showUnsuccessful, setShowUnsuccessful] = useState(false); // Toggle for unsuccessful identifications
+  const [showReidentifyModal, setShowReidentifyModal] = useState(false);
+  const [itemToReidentify, setItemToReidentify] = useState(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -133,16 +135,20 @@ const HistoryScreen = () => {
                     {/* Buttons for Re-identify and Export */}
                     <div style={{ marginTop: "20px" }}>
                     <button
-                        style={{
-                        backgroundColor: "#68CABE",
-                        color: "white",
-                        border: "none",
-                        padding: "10px 20px",
-                        margin: "5px",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        borderRadius: "5px",
-                        }}
+                      onClick={() => {
+                        setItemToReidentify(item); 
+                        setShowReidentifyModal(true);
+                      }}
+                      style={{
+                      backgroundColor: "#68CABE",
+                      color: "white",
+                      border: "none",
+                      padding: "10px 20px",
+                      margin: "5px",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      borderRadius: "5px",
+                      }}
                     >
                         Re-Identify
                     </button>
@@ -167,6 +173,61 @@ const HistoryScreen = () => {
           ))}
         </div>
       </div>
+      {showReidentifyModal && (
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        display: "flex", justifyContent: "center", alignItems: "center",
+        zIndex: 1000
+      }}>
+        <div style={{
+          backgroundColor: "white",
+          padding: "30px",
+          borderRadius: "10px",
+          textAlign: "center",
+          width: "400px",
+        }}>
+          <p style={{ fontSize: "18px", marginBottom: "20px" }}>
+            This will perform a new analysis based on the original input you provided.<br/>
+            Are you sure you want to re-identify this device?
+          </p>
+          <button 
+            onClick={() => {
+              console.log("User confirmed re-identification for:", itemToReidentify);
+              setShowReidentifyModal(false);
+              // later we will call the backend here
+            }}
+            style={{
+              backgroundColor: "#68CABE",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              margin: "10px",
+              cursor: "pointer",
+              fontSize: "16px",
+              borderRadius: "5px",
+            }}
+          >
+            Yes, Re-Identify
+          </button>
+          <button 
+            onClick={() => setShowReidentifyModal(false)}
+            style={{
+              backgroundColor: "#ccc",
+              color: "black",
+              border: "none",
+              padding: "10px 20px",
+              margin: "10px",
+              cursor: "pointer",
+              fontSize: "16px",
+              borderRadius: "5px",
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 };
