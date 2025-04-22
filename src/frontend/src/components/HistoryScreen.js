@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
+import { useNavigate } from "react-router-dom";
 
 const HistoryScreen = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -10,6 +11,7 @@ const HistoryScreen = () => {
   const [showUnsuccessful, setShowUnsuccessful] = useState(false); // Toggle for unsuccessful identifications
   const [showReidentifyModal, setShowReidentifyModal] = useState(false);
   const [itemToReidentify, setItemToReidentify] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -48,7 +50,48 @@ const HistoryScreen = () => {
   
     fetchHistory();
   }, []);
+
+  const handleReidentify = async () => {
+    if (!itemToReidentify || !itemToReidentify.input_s3_path) {
+      alert("Missing original input file information.");
+      return;
+    }
   
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Authorization token is missing.");
+      return;
+    }
+  
+    setShowReidentifyModal(false); // Close the modal
+    // (you can optionally add a loading state if you want to show a spinner too)
+  
+    try {
+      const response = await fetch("http://localhost:5000/cheap_reidentify/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          input_s3_path: itemToReidentify.input_s3_path,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to re-identify device");
+      }
+  
+      const data = await response.json();
+      console.log("Re-identify response:", data);
+  
+      // Navigate to result screen with the new data
+      navigate("/result", { state: { resultData: data } });
+    } catch (error) {
+      console.error("Error during re-identification:", error);
+      alert("Something went wrong while re-identifying the device.");
+    }
+  };  
 
   // Filter data based on selection
   const filteredData = historyData.filter((item) => {
@@ -192,11 +235,7 @@ const HistoryScreen = () => {
             Are you sure you want to re-identify this device?
           </p>
           <button 
-            onClick={() => {
-              console.log("User confirmed re-identification for:", itemToReidentify);
-              setShowReidentifyModal(false);
-              // later we will call the backend here
-            }}
+            onClick={handleReidentify}
             style={{
               backgroundColor: "#68CABE",
               color: "white",

@@ -11,6 +11,10 @@ from utils.history_utils import add_history_item
 from utils.history_utils import get_user_history_from_db
 from datetime import datetime, timezone
 from decimal import Decimal
+import boto3
+import json
+
+s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
 
 @csrf_exempt
 def analyze_device(request):
@@ -173,5 +177,103 @@ def get_user_history(request):
         # Get history from DynamoDB
         history = get_user_history_from_db(user_id)
         return JsonResponse({'history': history})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    
+@csrf_exempt
+def reidentify_device(request):
+    if request.method == 'POST':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        try:
+            body = json.loads(request.body)
+            input_s3_path = body.get('input_s3_path')
+
+            if not input_s3_path:
+                return JsonResponse({'error': 'Missing input_s3_path'}, status=400)
+            
+            # Clean leading slash if exists
+            if input_s3_path.startswith('/'):
+                input_s3_path = input_s3_path[1:]
+
+            # Download the file from S3
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            local_filename = '/tmp/temp_input.json'
+
+            s3.download_file(bucket_name, input_s3_path, local_filename)
+
+            enriched_csv_path = extract_and_enrich(local_filename)
+            result = run_function_labeling_from_csv(enriched_csv_path)
+
+            # Clean up
+            if os.path.exists(local_filename):
+                os.remove(local_filename)
+
+            return JsonResponse(result, status=200)
+
+        except Exception as e:
+            print("Error during reidentification:", e)
+            traceback.print_exc()
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def cheap_reidentify_device(request):
+    if request.method == 'POST':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        # Define the path to save the file under your 'data' folder
+        data_folder = os.path.join("feature_extraction", "data")
+        os.makedirs(data_folder, exist_ok=True)
+
+        # Dynamically generate a unique filename using UUID
+        local_filename = os.path.join(data_folder, f'temp_input_{uuid.uuid4().hex}.csv')
+        try:
+            body = json.loads(request.body)
+            input_s3_path = body.get('input_s3_path')
+
+            if not input_s3_path:
+                return JsonResponse({'error': 'Missing input_s3_path'}, status=400)
+            
+            # Clean leading slash if exists
+            if input_s3_path.startswith('/'):
+                input_s3_path = input_s3_path[1:]
+
+            # Download the file from S3
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            s3.download_file(bucket_name, input_s3_path, local_filename)
+
+            # --- HERE'S THE DIFFERENCE ---
+            result = run_function_labeling_from_csv(local_filename)
+            # instead of enriching, we just run the function labeling directly
+
+            return JsonResponse(result, status=200)
+
+        except Exception as e:
+            print("Error during cheap reidentification:", e)
+            traceback.print_exc()
+            return JsonResponse({'error': str(e)}, status=500)
+
+        finally:
+            # Always clean up the temporary file
+            if os.path.exists(local_filename):
+                os.remove(local_filename)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
