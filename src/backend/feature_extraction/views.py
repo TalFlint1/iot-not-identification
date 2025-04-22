@@ -239,30 +239,50 @@ def cheap_reidentify_device(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        # Define the path to save the file under your 'data' folder
+        # 1. Define the path to save the file under your 'data' folder
         data_folder = os.path.join("feature_extraction", "data")
         os.makedirs(data_folder, exist_ok=True)
 
-        # Dynamically generate a unique filename using UUID
+        # 2. Dynamically generate a unique filename using UUID
         local_filename = os.path.join(data_folder, f'temp_input_{uuid.uuid4().hex}.csv')
+
         try:
+            # 3. Parse the request body
             body = json.loads(request.body)
             input_s3_path = body.get('input_s3_path')
 
             if not input_s3_path:
                 return JsonResponse({'error': 'Missing input_s3_path'}, status=400)
             
-            # Clean leading slash if exists
+            # 4. Clean leading slash if exists
             if input_s3_path.startswith('/'):
                 input_s3_path = input_s3_path[1:]
 
-            # Download the file from S3
+            # 5. Download the file from S3
             bucket_name = os.getenv('S3_BUCKET_NAME')
             s3.download_file(bucket_name, input_s3_path, local_filename)
 
-            # --- HERE'S THE DIFFERENCE ---
+            # 6. Run function labeling directly (no extraction+enrichment)
             result = run_function_labeling_from_csv(local_filename)
-            # instead of enriching, we just run the function labeling directly
+
+            # 7. Upload the result to S3
+            result_s3_info = upload_result_to_s3(result, user_id)
+
+            # 8. Save the result in user history
+            confidence = result.get('confidence', '')
+            if isinstance(confidence, float):
+                confidence = Decimal(str(confidence))
+
+            history_item = {
+                'device': result.get('device', ''),
+                'confidence': confidence,
+                'justification': result.get('justification', ''),
+                'input_s3_path': input_s3_path,  # <- NOTICE: we already have input_s3_path, no need to upload input again
+                'result_s3_path': result_s3_info.get('s3_key', ''),
+                'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
+                'reidentify': True  # <-- Optional: add a "reidentify" flag if you want!
+            }
+            add_history_item(user_id, history_item)
 
             return JsonResponse(result, status=200)
 
@@ -271,9 +291,10 @@ def cheap_reidentify_device(request):
             traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
 
-        finally:
-            # Always clean up the temporary file
-            if os.path.exists(local_filename):
-                os.remove(local_filename)
+        # finally:
+        #     # Always clean up the temporary file
+        #     if os.path.exists(local_filename):
+        #         os.remove(local_filename)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
