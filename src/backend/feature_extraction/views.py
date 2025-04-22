@@ -193,29 +193,51 @@ def reidentify_device(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
+        # 1. Define paths
+        data_folder = os.path.join("feature_extraction", "data")
+        os.makedirs(data_folder, exist_ok=True)
+
+        local_json_path = os.path.join(data_folder, f'temp_input_{uuid.uuid4().hex}.json')
+
         try:
+            # 2. Parse the request body
             body = json.loads(request.body)
             input_s3_path = body.get('input_s3_path')
 
             if not input_s3_path:
                 return JsonResponse({'error': 'Missing input_s3_path'}, status=400)
             
-            # Clean leading slash if exists
             if input_s3_path.startswith('/'):
                 input_s3_path = input_s3_path[1:]
 
-            # Download the file from S3
+            # 3. Download JSON file from S3
             bucket_name = os.getenv('S3_BUCKET_NAME')
-            local_filename = '/tmp/temp_input.json'
+            s3.download_file(bucket_name, input_s3_path, local_json_path)
 
-            s3.download_file(bucket_name, input_s3_path, local_filename)
+            # 4. Extract and enrich
+            enriched_csv_path = extract_and_enrich(local_json_path)
 
-            enriched_csv_path = extract_and_enrich(local_filename)
+            # 5. Run function labeling
             result = run_function_labeling_from_csv(enriched_csv_path)
 
-            # Clean up
-            if os.path.exists(local_filename):
-                os.remove(local_filename)
+            # 6. Upload result to S3
+            result_s3_info = upload_result_to_s3(result, user_id)
+
+            # 7. Save history
+            confidence = result.get('confidence', '')
+            if isinstance(confidence, float):
+                confidence = Decimal(str(confidence))
+
+            history_item = {
+                'device': result.get('device', ''),
+                'confidence': confidence,
+                'justification': result.get('justification', ''),
+                'input_s3_path': input_s3_path,
+                'result_s3_path': result_s3_info.get('s3_key', ''),
+                'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
+                'reidentify': True
+            }
+            add_history_item(user_id, history_item)
 
             return JsonResponse(result, status=200)
 
@@ -223,6 +245,11 @@ def reidentify_device(request):
             print("Error during reidentification:", e)
             traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
+
+        finally:
+            # Always clean up temp files
+            if os.path.exists(local_json_path):
+                os.remove(local_json_path)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
@@ -277,10 +304,10 @@ def cheap_reidentify_device(request):
                 'device': result.get('device', ''),
                 'confidence': confidence,
                 'justification': result.get('justification', ''),
-                'input_s3_path': input_s3_path,  # <- NOTICE: we already have input_s3_path, no need to upload input again
+                'input_s3_path': input_s3_path,
                 'result_s3_path': result_s3_info.get('s3_key', ''),
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
-                'reidentify': True  # <-- Optional: add a "reidentify" flag if you want!
+                'reidentify': True
             }
             add_history_item(user_id, history_item)
 
@@ -291,10 +318,10 @@ def cheap_reidentify_device(request):
             traceback.print_exc()
             return JsonResponse({'error': str(e)}, status=500)
 
-        # finally:
-        #     # Always clean up the temporary file
-        #     if os.path.exists(local_filename):
-        #         os.remove(local_filename)
+        finally:
+            # Always clean up the temporary file
+            if os.path.exists(local_filename):
+                os.remove(local_filename)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
