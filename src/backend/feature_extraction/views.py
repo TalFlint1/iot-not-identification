@@ -6,7 +6,7 @@ import traceback
 from .function_labeling import run_function_labeling_from_csv
 from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
-from utils.s3_utils import upload_result_to_s3
+from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
 from utils.history_utils import add_history_item
 from utils.history_utils import get_user_history_from_db
 from datetime import datetime, timezone
@@ -65,7 +65,7 @@ def analyze_device(request):
                 'device': result.get('device', ''),
                 'confidence': confidence,
                 'justification': result.get('justification', ''),
-                's3_path': s3_info.get('s3_path', ''),
+                's3_path': s3_info.get('s3_key', ''),
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
             }
             add_history_item(user_id, history_item)
@@ -118,27 +118,31 @@ def analyze_enriched_csv(request):
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
 
-            # 6. Run function labeling directly (no extraction+enrichment)
+            # 6. Upload the input file to S3
+            input_s3_info = upload_input_to_s3(input_csv_path, user_id)
+
+            # 7. Run function labeling directly (no extraction+enrichment)
             result = run_function_labeling_from_csv(input_csv_path)
 
-            # 7. Upload result to S3 and Save S3 info to user history
-            s3_info = upload_result_to_s3(result, user_id)
+            # 8. Upload result to S3 and Save S3 info to user history
+            result_s3_info = upload_result_to_s3(result, user_id)
 
             confidence = result.get('confidence', '')
             if isinstance(confidence, float):
                 confidence = Decimal(str(confidence))
             
-            # 7.5 Build full history item  <-- updated
+            # 8.5 Build full history item  <-- updated to include both input and result paths
             history_item = {
                 'device': result.get('device', ''),
                 'confidence': confidence,
                 'justification': result.get('justification', ''),
-                's3_path': s3_info.get('s3_path', ''),
+                'input_s3_path': input_s3_info.get('s3_key', ''),  # Include input file S3 path
+                'result_s3_path': result_s3_info.get('s3_key', ''),  # Include result file S3 path
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
             }
-            add_history_item(user_id, history_item)  # <-- updated
+            add_history_item(user_id, history_item)
 
-            # 8. Optional cleanup
+            # 9. Optional cleanup
             os.remove(input_csv_path)
 
             return JsonResponse(result)
