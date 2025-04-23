@@ -11,6 +11,8 @@ const HistoryScreen = () => {
   const [showUnsuccessful, setShowUnsuccessful] = useState(false); // Toggle for unsuccessful identifications
   const [showReidentifyModal, setShowReidentifyModal] = useState(false);
   const [itemToReidentify, setItemToReidentify] = useState(null);
+  const [exportMode, setExportMode] = useState(false);  // If user clicked "Export"
+  const [selectedExports, setSelectedExports] = useState([]);  // Which items are checked
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,16 +35,13 @@ const HistoryScreen = () => {
         }
   
         const data = await response.json();
-        console.log("Fetched history data:", data);
-        console.log("History array:", data.history); // <-- Add this line
-        console.log("First item:", data.history[0]);  // <-- And maybe this too
 
         const historyWithIds = data.history.map((item, index) => ({
           ...item,
           id: index,  // Add id based on index
         }));
 
-        setHistoryData(historyWithIds); // assuming you're using useState for historyData
+        setHistoryData(historyWithIds);
       } catch (error) {
         console.error("Error fetching history:", error);
       }
@@ -64,7 +63,6 @@ const HistoryScreen = () => {
     }
   
     setShowReidentifyModal(false); // Close the modal
-    // (you can optionally add a loading state if you want to show a spinner too)
   
     try {
       const response = await fetch("http://localhost:5000/cheap_reidentify/", {
@@ -91,7 +89,31 @@ const HistoryScreen = () => {
       console.error("Error during re-identification:", error);
       alert("Something went wrong while re-identifying the device.");
     }
-  };  
+  };
+  const handleExportCSV = () => {
+    if (selectedExports.length === 0) return;
+  
+    const headers = ["Device", "Confidence", "Date", "Justification"];
+    const rows = selectedExports.map(item => [
+      item.device,
+      item.confidence,
+      item.date,
+      item.justification,
+    ]);
+  
+    let csvContent = "data:text/csv;charset=utf-8," 
+      + headers.join(",") + "\n" 
+      + rows.map(e => e.map(field => `"${field}"`).join(",")).join("\n");
+  
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "exported_history.csv");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link);
+  };
+    
 
   // Filter data based on selection
   const filteredData = historyData.filter((item) => {
@@ -106,15 +128,8 @@ const HistoryScreen = () => {
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
       <div
-        style={{
-          backgroundImage: `url(${sidebarImage})`,
-          backgroundColor: "#343C42",
-          backgroundSize: "contain",
-          backgroundPosition: "left",
-          backgroundRepeat: "no-repeat",
-          height: "100%",
-          width: "14%",
-        }}
+        style={{ backgroundImage: `url(${sidebarImage})`, backgroundColor: "#343C42", backgroundSize: "contain", 
+        backgroundPosition: "left", backgroundRepeat: "no-repeat", height: "100%", width: "14%", }}
       />
       <UpperBar/>
 
@@ -125,16 +140,48 @@ const HistoryScreen = () => {
 
         {/* Filters */}
         <div style={{ marginBottom: "20px" }}>
+          
           <label style={{ color: "white", marginRight: "10px" }}>Filter by confidence:</label>
+          
           <select value={filter} onChange={(e) => setFilter(e.target.value)} style={{ padding: "5px", fontSize: "16px" }}>
             <option value="all">All</option>
             <option value="high">High Confidence (80%+)</option>
             <option value="medium">Medium Confidence (50-79%)</option>
             <option value="low">Low Confidence (1-49%)</option>
           </select>
+          <button
+  onClick={() => setExportMode(!exportMode)}
+  style={{
+    backgroundColor: exportMode ? "#FFA500" : "#68CABE",  // Orange if active, green if not
+    color: "white", border: "none", padding: "10px 20px", marginTop: "10px", cursor: "pointer",
+    fontSize: "18px", borderRadius: "5px", marginLeft: "40px"
+  }}
+>
+  {exportMode ? "Cancel Export" : "Export"}
+</button>
+
+{exportMode && selectedExports.length > 0 && (
+  <button
+    onClick={handleExportCSV}
+    style={{
+      backgroundColor: "#68CABE",
+      color: "white",
+      border: "none",
+      padding: "10px 20px",
+      marginTop: "10px", // match the export button's marginTop
+      marginLeft: "20px", // space between Export and Download
+      cursor: "pointer",
+      fontSize: "18px",
+      borderRadius: "5px",
+    }}
+  >
+    Download Selected as CSV
+  </button>
+)}
           <br />
           <label style={{ color: "white", marginRight: "10px", }}>Show only unsuccessful identifications:</label>
           <input type="checkbox" checked={showUnsuccessful} onChange={() => setShowUnsuccessful(!showUnsuccessful)} />
+          
         </div>
 
         {/* History List */}
@@ -143,32 +190,38 @@ const HistoryScreen = () => {
             <div
               key={item.id}
               onClick={() => setSelectedItem(selectedItem?.id === item.id ? null : item)}
-              style={{
-                backgroundColor: "#EDEDED",
-                color: "black",
-                padding: "15px",
-                borderRadius: "10px",
-                cursor: "pointer",
-                marginBottom: "10px",
-                width: "50%",
-                marginLeft: "auto",
-                marginRight: "auto",
-                transition: "background-color 0.3s ease",
-                ...(selectedItem?.id === item.id ? { backgroundColor: "#D9D9D9" } : {}),
-              }}
+              style={{ backgroundColor: "#EDEDED", color: "black", padding: "15px", borderRadius: "10px", cursor: "pointer",
+                marginBottom: "10px", width: "50%", marginLeft: "auto", marginRight: "auto", transition: "background-color 0.3s ease",
+                ...(selectedItem?.id === item.id ? { backgroundColor: "#D9D9D9" } : {}), }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {exportMode && (
+                  <input
+                    type="checkbox"
+                    checked={selectedExports.includes(item)}
+                    onChange={() => {
+                      if (selectedExports.includes(item)) {
+                        setSelectedExports(selectedExports.filter(i => i !== item));
+                      } else {
+                        setSelectedExports([...selectedExports, item]);
+                      }
+                    }}
+                    style={{ marginRight: "10px" }}
+                  />
+                )}
                 <div>
                   {item.device} ({item.confidence}%) - {item.date}
                 </div>
-                <div style={{
-                  transform: selectedItem?.id === item.id ? "rotate(90deg)" : "rotate(0deg)",
-                  transition: "transform 0.3s ease",
-                  fontSize: "20px",
-                }}>
-                  ▶
-                </div>
               </div>
+              <div style={{
+                transform: selectedItem?.id === item.id ? "rotate(90deg)" : "rotate(0deg)",
+                transition: "transform 0.3s ease",
+                fontSize: "20px",
+              }}>
+                ▶
+              </div>
+            </div>
               {selectedItem?.id === item.id && (
                 <div style={{ backgroundColor: "#fff", padding: "10px", borderRadius: "10px", marginTop: "10px", color: "black",border: "1px solid #D9D9D9", }}>
                   <p>Confidence: {item.confidence}%</p>
@@ -183,29 +236,14 @@ const HistoryScreen = () => {
                         setShowReidentifyModal(true);
                       }}
                       style={{
-                      backgroundColor: "#68CABE",
-                      color: "white",
-                      border: "none",
-                      padding: "10px 20px",
-                      margin: "5px",
-                      cursor: "pointer",
-                      fontSize: "18px",
-                      borderRadius: "5px",
-                      }}
+                      backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", margin: "5px", cursor: "pointer",
+                      fontSize: "18px", borderRadius: "5px", }}
                     >
                         Re-Identify
                     </button>
                     <button
-                        style={{
-                        backgroundColor: "#FFA500",
-                        color: "white",
-                        border: "none",
-                        padding: "10px 20px",
-                        margin: "5px",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        borderRadius: "5px",
-                        }}
+                        style={{ backgroundColor: "#FFA500", color: "white", border: "none", padding: "10px 20px", margin: "5px",
+                        cursor: "pointer", fontSize: "18px", borderRadius: "5px", }}
                     >
                         Export Data
                     </button>
@@ -223,44 +261,22 @@ const HistoryScreen = () => {
         display: "flex", justifyContent: "center", alignItems: "center",
         zIndex: 1000
       }}>
-        <div style={{
-          backgroundColor: "white",
-          padding: "30px",
-          borderRadius: "10px",
-          textAlign: "center",
-          width: "400px",
-        }}>
+        <div style={{ backgroundColor: "white", padding: "30px", borderRadius: "10px", textAlign: "center", width: "400px",}}>
           <p style={{ fontSize: "18px", marginBottom: "20px" }}>
             This will perform a new analysis based on the original input you provided.<br/>
             Are you sure you want to re-identify this device?
           </p>
           <button 
             onClick={handleReidentify}
-            style={{
-              backgroundColor: "#68CABE",
-              color: "white",
-              border: "none",
-              padding: "10px 20px",
-              margin: "10px",
-              cursor: "pointer",
-              fontSize: "16px",
-              borderRadius: "5px",
-            }}
+            style={{ backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
+              fontSize: "16px", borderRadius: "5px", }}
           >
             Yes, Re-Identify
           </button>
           <button 
             onClick={() => setShowReidentifyModal(false)}
-            style={{
-              backgroundColor: "#ccc",
-              color: "black",
-              border: "none",
-              padding: "10px 20px",
-              margin: "10px",
-              cursor: "pointer",
-              fontSize: "16px",
-              borderRadius: "5px",
-            }}
+            style={{ backgroundColor: "#ccc", color: "black", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
+              fontSize: "16px", borderRadius: "5px", }}
           >
             Cancel
           </button>
