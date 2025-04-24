@@ -241,12 +241,6 @@ const HistoryScreen = () => {
                     >
                         Re-Identify
                     </button>
-                    <button
-                        style={{ backgroundColor: "#FFA500", color: "white", border: "none", padding: "10px 20px", margin: "5px",
-                        cursor: "pointer", fontSize: "18px", borderRadius: "5px", }}
-                    >
-                        Export Data
-                    </button>
                     </div>
                 </div>
               )}
