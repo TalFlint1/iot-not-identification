@@ -150,38 +150,28 @@ const HistoryScreen = () => {
             <option value="low">Low Confidence (1-49%)</option>
           </select>
           <button
-  onClick={() => setExportMode(!exportMode)}
-  style={{
-    backgroundColor: exportMode ? "#FFA500" : "#68CABE",  // Orange if active, green if not
-    color: "white", border: "none", padding: "10px 20px", marginTop: "10px", cursor: "pointer",
-    fontSize: "18px", borderRadius: "5px", marginLeft: "40px"
-  }}
->
-  {exportMode ? "Cancel Export" : "Export"}
-</button>
+            onClick={() => setExportMode(!exportMode)}
+            style={{
+              backgroundColor: exportMode ? "#FFA500" : "#68CABE",  // Orange if active, green if not
+              color: "white", border: "none", padding: "10px 20px", marginTop: "10px", cursor: "pointer",
+              fontSize: "18px", borderRadius: "5px", marginLeft: "40px"
+            }}
+          >
+            {exportMode ? "Cancel Export" : "Export"}
+          </button>
 
-{exportMode && selectedExports.length > 0 && (
-  <button
-    onClick={handleExportCSV}
-    style={{
-      backgroundColor: "#68CABE",
-      color: "white",
-      border: "none",
-      padding: "10px 20px",
-      marginTop: "10px", // match the export button's marginTop
-      marginLeft: "20px", // space between Export and Download
-      cursor: "pointer",
-      fontSize: "18px",
-      borderRadius: "5px",
-    }}
-  >
-    Download Selected as CSV
-  </button>
-)}
+          {exportMode && selectedExports.length > 0 && (
+            <button
+              onClick={handleExportCSV}
+              style={{ backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", marginTop: "10px",
+                marginLeft: "20px", cursor: "pointer", fontSize: "18px", borderRadius: "5px", }}
+            >
+              Download Selected as CSV
+            </button>
+          )}
           <br />
           <label style={{ color: "white", marginRight: "10px", }}>Show only unsuccessful identifications:</label>
           <input type="checkbox" checked={showUnsuccessful} onChange={() => setShowUnsuccessful(!showUnsuccessful)} />
-          
         </div>
 
         {/* History List */}
@@ -189,7 +179,11 @@ const HistoryScreen = () => {
           {filteredData.map((item) => (
             <div
               key={item.id}
-              onClick={() => setSelectedItem(selectedItem?.id === item.id ? null : item)}
+              onClick={() => {
+                if (!exportMode) {  // Only expand if export mode is off
+                  setSelectedItem(selectedItem?.id === item.id ? null : item);
+                }
+              }}
               style={{ backgroundColor: "#EDEDED", color: "black", padding: "15px", borderRadius: "10px", cursor: "pointer",
                 marginBottom: "10px", width: "50%", marginLeft: "auto", marginRight: "auto", transition: "background-color 0.3s ease",
                 ...(selectedItem?.id === item.id ? { backgroundColor: "#D9D9D9" } : {}), }}
@@ -198,17 +192,18 @@ const HistoryScreen = () => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 {exportMode && (
                   <input
-                    type="checkbox"
-                    checked={selectedExports.includes(item)}
-                    onChange={() => {
-                      if (selectedExports.includes(item)) {
-                        setSelectedExports(selectedExports.filter(i => i !== item));
-                      } else {
-                        setSelectedExports([...selectedExports, item]);
-                      }
-                    }}
-                    style={{ marginRight: "10px" }}
-                  />
+                  type="checkbox"
+                  checked={selectedExports.includes(item)}
+                  onChange={(e) => {
+                    e.stopPropagation();  // Prevent the item from expanding when checkbox is clicked
+                    if (selectedExports.includes(item)) {
+                      setSelectedExports(selectedExports.filter(i => i !== item));
+                    } else {
+                      setSelectedExports([...selectedExports, item]);
+                    }
+                  }}
+                  style={{ marginRight: "10px" }}
+                />
                 )}
                 <div>
                   {item.device} ({item.confidence}%) - {item.date}
