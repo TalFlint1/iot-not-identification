@@ -150,7 +150,14 @@ const HistoryScreen = () => {
             <option value="low">Low Confidence (1-49%)</option>
           </select>
           <button
-            onClick={() => setExportMode(!exportMode)}
+            onClick={() => {
+              if (exportMode) {
+                // If we are currently in export mode and clicking to cancel, reset the ticks
+                setSelectedExports([]);
+              }
+              setExportMode(!exportMode); // Toggle the mode
+            }}
+            
             style={{
               backgroundColor: exportMode ? "#FFA500" : "#68CABE",  // Orange if active, green if not
               color: "white", border: "none", padding: "10px 20px", marginTop: "10px", cursor: "pointer",
