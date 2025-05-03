@@ -16,8 +16,11 @@ def hash_password(password, salt=None):
 
 def create_user(username, password, email):
     """Creates a new user and stores it in DynamoDB."""
-    hashed_password, salt = hash_password(password)
-    
+    #hashed_password, salt = hash_password(password)
+    if password:
+        hashed_password, salt = hash_password(password)
+    else:
+        hashed_password, salt = None, None  # For Google users
     # Insert into DynamoDB aws
     table.put_item(
         Item={

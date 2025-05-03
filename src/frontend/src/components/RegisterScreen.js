@@ -3,6 +3,8 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import googleIcon from "../Icons/google.png";
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -63,6 +65,40 @@ const RegisterScreen = () => {
     }
   };
 
+  // Google Sign-In Handler
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+
+      // Force Google to show the account chooser every time
+      provider.setCustomParameters({
+        prompt: "select_account"
+      });
+
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("Google user:", user);
+
+      // Example: Create user in DynamoDB or handle the user data
+      const googleUserData = {
+        username: user.displayName,
+        password: null,
+        email: user.email,
+      };
+
+      await fetch("http://localhost:5000/user/register/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(googleUserData),
+      });
+
+      // Navigate to the desired screen after successful login
+      navigate("/identify");
+    } catch (error) {
+      console.error("Error during Google sign-in:", error);
+    }
+  };
+
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
@@ -89,6 +125,7 @@ const RegisterScreen = () => {
 
           {/* Google Login Button */}
           <button
+            onClick={handleGoogleSignIn}
             style={{
               display: "flex", alignItems: "center", padding: "12px", backgroundColor: "#fff", color: "black", border: "none",
               borderRadius: "5px", fontSize: "16px", marginBottom: "15px", cursor: "pointer", marginTop: "20px", border: "1px solid #ccc"

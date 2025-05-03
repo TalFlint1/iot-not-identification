@@ -4,6 +4,8 @@ import settingsIcon from "../Icons/settings.png"; // Replace with your settings 
 import historyIcon from "../Icons/history.png"; // Replace with your history icon path
 import logoutIcon from "../Icons/logout.png"; // Replace with your logout icon path
 import homepageIcon from "../Icons/homepage.png";
+import { getAuth, signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 const UpperBar = ({ username }) => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const UpperBar = ({ username }) => {
     // Navigate to the login page
     navigate("/login");
   };
-
+  
   return (
     <div
         style={{
