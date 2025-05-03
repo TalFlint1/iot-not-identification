@@ -92,8 +92,22 @@ const RegisterScreen = () => {
         body: JSON.stringify(googleUserData),
       });
 
-      // Navigate to the desired screen after successful login
-      navigate("/identify");
+      const loginResponse = await fetch("http://localhost:5000/user/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(googleUserData),
+      });
+      
+      const loginData = await loginResponse.json();
+      
+      if (loginResponse.ok) {
+        localStorage.setItem("access_token", loginData.access_token);
+        localStorage.setItem("refresh_token", loginData.refresh_token);
+        navigate("/identify");
+      } else {
+        console.error("Backend login failed:", loginData.message);
+      }
+      
     } catch (error) {
       console.error("Error during Google sign-in:", error);
     }
