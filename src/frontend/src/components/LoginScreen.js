@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import sidebarImage from "../Icons/sidebar.png";
-import Title from "./Title";  // Assuming this is your title component
-import UpperBar from "./UpperBar";  // Assuming this is your upper bar component
-import googleIcon from "../Icons/google.png";  // Assuming this is your Google icon
+import Title from "./Title";
+import googleIcon from "../Icons/google.png";
 import { useNavigate } from "react-router-dom";
+import { handleGoogleSignIn } from "../utils/googleAuthUtils";
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -83,6 +83,7 @@ const LoginScreen = () => {
 
           {/* Google Login Button */}
           <button
+          onClick={() => handleGoogleSignIn(navigate, setMessage)}
             style={{
               display: "flex",
               alignItems: "center",
