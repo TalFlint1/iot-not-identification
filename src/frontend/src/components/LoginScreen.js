@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import googleIcon from "../Icons/google.png";
@@ -10,6 +10,10 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    setMessage("");
+  }, [username, password]);
+  
 
   const handleCreateAccountClick = () => {
     navigate("/register");  // Navigate to the register screen
@@ -17,6 +21,10 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
+      if (!username || !password) {
+        setMessage("Incorrect username or password.");
+        return;
+      }
       const response = await fetch("http://localhost:5000/user/login/", {
         method: "POST",
         headers: {
@@ -152,6 +160,7 @@ const LoginScreen = () => {
           >
             Sign In
           </button>
+          {message && <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
 
            {/* Forgot Password and Create Account Links */}
            <div style={{ textAlign: "center", marginTop: "10px" }}>

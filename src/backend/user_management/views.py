@@ -168,7 +168,7 @@ def login_user(request):
             user = response.get("Item")
 
             if not user:
-                return JsonResponse({"message": "User not found"}, status=404)
+                return JsonResponse({"message": "Incorrect username or password."}, status=404)
 
             # Check if it's a Google login (password is null)
             if password is None:
