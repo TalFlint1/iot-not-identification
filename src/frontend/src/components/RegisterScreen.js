@@ -18,6 +18,10 @@ const RegisterScreen = () => {
   };
 
   const handleRegister = async () => {
+    if (!password || !confirmPassword) {
+      setMessage("Password and Confirm Password are required.");
+      return;
+    }
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
       return;
