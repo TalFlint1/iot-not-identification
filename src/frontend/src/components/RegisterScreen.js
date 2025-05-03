@@ -41,31 +41,27 @@ const RegisterScreen = () => {
       }
       
       if (response.ok) {
-          // Registration was successful
-      setMessage("Registration successful!");
-
-      // Automatically log in after successful registration
-      const loginResponse = await fetch("http://localhost:5000/user/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const loginData = await loginResponse.json();
-
-      if (loginResponse.ok) {
-        // Store the JWT token (usually in localStorage or sessionStorage)
-        localStorage.setItem("access_token", loginData.access_token);
-        localStorage.setItem("refresh_token", loginData.refresh_token);
-
-        // Navigate to InputScreen
-        navigate("/identify");
-      } else {
-        setMessage(loginData.message || "Login after registration failed");
-      }
-      } else {
-        setMessage(data.message || "Registration failed");
-      }
+        setMessage("Registration successful!");
+      
+        // Delay the login + navigation by 2 seconds
+        setTimeout(async () => {
+          const loginResponse = await fetch("http://localhost:5000/user/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+      
+          const loginData = await loginResponse.json();
+      
+          if (loginResponse.ok) {
+            localStorage.setItem("access_token", loginData.access_token);
+            localStorage.setItem("refresh_token", loginData.refresh_token);
+            navigate("/identify");
+          } else {
+            setMessage(loginData.message || "Login after registration failed");
+          }
+        }, 2000); // 2000ms = 2 seconds
+      }      
     } catch (error) {
       setMessage("Error connecting to server");
     }
