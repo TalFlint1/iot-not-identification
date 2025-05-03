@@ -16,7 +16,12 @@ def hash_password(password, salt=None):
 
 def create_user(username, password, email):
     """Creates a new user and stores it in DynamoDB."""
-    #hashed_password, salt = hash_password(password)
+    # First, check if the username already exists
+    response = table.get_item(Key={"username": username})
+    if "Item" in response:
+        # If the username exists, return an error message
+        return {"message": "Username already taken", "status": "error"}
+    
     if password:
         hashed_password, salt = hash_password(password)
     else:
@@ -30,7 +35,7 @@ def create_user(username, password, email):
             "salt": salt
         }
     )
-    return {"message": "User created successfully"}
+    return {"message": "User created successfully", "status": "success"}
 
 def get_user_id_from_token(token):
     try:

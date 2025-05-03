@@ -34,6 +34,12 @@ const RegisterScreen = () => {
       });
 
       const data = await response.json();
+
+      if (data.status === "error") {
+        setMessage(data.message || "Registration failed");
+        return;
+      }
+      
       if (response.ok) {
           // Registration was successful
       setMessage("Registration successful!");
