@@ -42,13 +42,12 @@ const UpperBar = ({ username }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: "#343C42",
             padding: "10px",
-            position: "fixed", // Fix it at the top of the screen
-            top: "2px", // Ensure it's at the top
-            left: "320px", // Align it to the left side
-            width: "100%", // Make it span the full width of the screen
-            zIndex: "1000", // Ensure it stays on top of other content
+            position: "fixed",
+            top: "2px",
+            left: "320px",
+            width: "20%",
+            zIndex: "1000",
         }}
     >
       {/* Rectangle box with rounded corners */}
@@ -58,11 +57,12 @@ const UpperBar = ({ username }) => {
           justifyContent: "space-evenly",
           alignItems: "center",
           backgroundColor: "white",
-          borderRadius: "10px", // Rounded corners
-          padding: "5px 15px",  // Padding inside the box
-          width: "320px", // Adjust width as needed
+          borderRadius: "10px",
+          padding: "5px 15px",
+          width: "320px",
           height: "45px",
           gap: "17px",
+          border: "1px solid gray"
         }}
       >
         {/* Settings Icon */}

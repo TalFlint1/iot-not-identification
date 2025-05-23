@@ -1,7 +1,7 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line } from "recharts";
 import { motion } from "framer-motion";
-import { Package, Clock, Brain } from "lucide-react";
+import { Package, Star } from "lucide-react";
 import UpperBar from "./UpperBar";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
@@ -20,7 +20,7 @@ const functionBreakdown = [
   { name: "Sensor", count: 12 },
   { name: "Lock", count: 6 },
   { name: "Bulb", count: 3 },
-  { name: "Camera", count: 4}
+  { name: "Camera", count: 4 }
 ];
 
 const monthlyDeviceData = [
@@ -30,7 +30,7 @@ const monthlyDeviceData = [
   { month: "Apr", devices: 6 },
   { month: "May", devices: 10 },
   { month: "Jun", devices: 12 },
-  { month: "Jul", devices: 5}
+  { month: "Jul", devices: 5 }
 ];
 
 const recentIdentifications = [
@@ -69,79 +69,145 @@ const DashboardScreen = () => {
       />
 
       {/* Main Content */}
-      <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42", color: "white", overflowY: "auto" }}>
+      <div
+        style={{
+          flex: 1,
+          padding: "20px",
+          backgroundColor: "#343C42",
+          color: "white",
+          overflowY: "auto",
+        }}
+      >
         <UpperBar username={username} />
         <Title />
 
         {/* Dashboard Content */}
-        <div style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "32px" }}>
+        <div
+        style={{
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "32px",
+        }}
+        >
 
-          {/* Summary Cards */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "space-between" }}>
-            <SummaryCard icon={<Package size={32} />} title="Devices Identified" value="24" />
+        {/* ROW 1: Summary Cards */}
+        <div
+            style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "20px",
+            }}
+        >
+            <SummaryCard
+            icon={<Package size={32} />}
+            title="Devices Identified"
+            value="24"
+            />
             <CircularConfidenceCard confidencePercentage={85} />
             <UsageCard used={apiUsed} limit={apiLimit} total={totalUsed} />
-          </div>
+            <SummaryCard
+            icon={<Star size={32} />}
+            title="Top Vendor"
+            value="Amazon"
+            />
+        </div>
 
-        <div style={{ display: "flex", flexDirection: "row", gap: "24px", justifyContent: "center" }}>
+        {/* ROW 2: Tables */}
+        <div
+            style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "20px",
+            }}
+        >
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             >
-                <RecentActivityTable data={recentIdentifications} />
+            <RecentActivityTable data={recentIdentifications} />
             </motion.div>
-            
+
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             >
-                <ConfidenceAlertsTable data={identificationData} />
+            <ConfidenceAlertsTable data={identificationData} />
             </motion.div>
         </div>
 
-          {/* Charts Section */}
-          <div style={{ display: "flex", flexDirection: "row", gap: "24px", justifyContent: "center" }}>
-            <div style={{ width: 350, height: 300 }}>
-              <ChartCard title="Top Vendors">
-                <BarChart width={300} height={300} data={data} margin={{ top: 20, right: 0, bottom: 0, left: -30 }}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="devices" fill="#60A5FA" />
-                </BarChart>
-                </ChartCard>
-            </div>
+        {/* ROW 3: Charts */}
+        <div
+            style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 2fr",
+            gap: "24px",
+            alignItems: "start",
+            }}
+        >
+            <ChartCard title="Top Vendors">
+            <BarChart
+                width={300}
+                height={300}
+                data={data}
+                margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
+            >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="devices" fill="#60A5FA" />
+            </BarChart>
+            </ChartCard>
 
-            <div style={{ width: 350, height: 300 }}>
-                <ChartCard title="Function Categories">
-                    <BarChart width={300} height={300} data={functionBreakdown} margin={{ top: 20, right: 0, bottom: 0, left: -30 }}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#9F7AEA" />
-                    </BarChart>
-                </ChartCard>
-            </div>
+            <ChartCard title="Function Categories">
+            <BarChart
+                width={300}
+                height={300}
+                data={functionBreakdown}
+                margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
+            >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#9F7AEA" />
+            </BarChart>
+            </ChartCard>
 
-            <div style={{ width: 720, height: 300, marginTop: 40 }}>
             <ChartCard title="Devices Identified Over Time">
-                <LineChart width={700} height={250} data={monthlyDeviceData} margin={{ top: 20, right: 30, bottom: 0, left: -30 }}>
+            <LineChart
+                width={700}
+                height={250}
+                data={monthlyDeviceData}
+                margin={{ top: 20, right: 30, bottom: 0, left: -30 }}
+            >
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="devices" stroke="#38bdf8" strokeWidth={3} dot={{ r: 4 }} />
-                </LineChart>
+                <Line
+                type="monotone"
+                dataKey="devices"
+                stroke="#38bdf8"
+                strokeWidth={3}
+                dot={{ r: 4 }}
+                />
+            </LineChart>
             </ChartCard>
-            </div>
-          </div>
+        </div>
 
-          {/* Call-To-Action Buttons */}
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "20px" }}>
+        {/* CTA Buttons */}
+        <div
+            style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "20px",
+            }}
+        >
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              style={{
+            whileHover={{ scale: 1.05 }}
+            style={{
                 backgroundColor: "#2563eb",
                 color: "white",
                 padding: "12px 24px",
@@ -149,13 +215,13 @@ const DashboardScreen = () => {
                 boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
                 border: "none",
                 cursor: "pointer",
-              }}
+            }}
             >
-              Re-Identify Devices
+            Re-Identify Devices
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              style={{
+            whileHover={{ scale: 1.05 }}
+            style={{
                 backgroundColor: "#374151",
                 color: "white",
                 padding: "12px 24px",
@@ -163,11 +229,11 @@ const DashboardScreen = () => {
                 boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
                 border: "none",
                 cursor: "pointer",
-              }}
+            }}
             >
-              Export Report
+            Export Report
             </motion.button>
-          </div>
+        </div>
         </div>
       </div>
     </div>
