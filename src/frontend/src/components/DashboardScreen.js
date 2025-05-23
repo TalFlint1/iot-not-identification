@@ -46,6 +46,11 @@ const identificationData = [
   { time: "Yesterday", vendor: "Bosch", function: "Controller", confidence: 45 },
 ];
 
+const getVendorLogoURL = (vendorName) => 
+  `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
+
+const topVendor = "Xiaomi";
+
 // Fake API usage data
 const apiUsed = 45;
 const apiLimit = 100;
@@ -108,9 +113,15 @@ const DashboardScreen = () => {
             <CircularConfidenceCard confidencePercentage={85} />
             <UsageCard used={apiUsed} limit={apiLimit} total={totalUsed} />
             <SummaryCard
-            icon={<Star size={32} />}
-            title="Top Vendor"
-            value="Amazon"
+                title="Top Vendor"
+                value={topVendor}
+                    icon={
+                    <img
+                    src={getVendorLogoURL(topVendor)}
+                    alt={`${topVendor} logo`}
+                    style={{ width: 64, height: 64, objectFit: "contain" }}
+                    />
+                }
             />
         </div>
 
