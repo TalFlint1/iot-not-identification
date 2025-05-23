@@ -35,9 +35,9 @@ const CircularConfidenceCard = ({ confidencePercentage }) => {
       <div style={{ color: "#2563eb", marginBottom: "8px" }}>
         <Brain size={32} />
       </div>
-      <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "12px" }}>Avg Confidence</p>
+      <p style={{ fontSize: "16px", color: "#6b7280", marginBottom: "12px" }}>Avg Confidence</p>
       <div style={{ position: "relative", width: "120px", height: "120px" }}>
-        <svg width="120" height="120" viewBox="0 0 100 100">
+        <svg width="130" height="130" viewBox="0 0 100 100">
           <circle
             cx="50"
             cy="50"

@@ -28,6 +28,7 @@ const RecentActivityTable = ({ data }) => {
     padding: "16px",
     minWidth: "400px",
     marginBottom: "24px",
+    height: "200px"
   };
 
   const titleStyle = {

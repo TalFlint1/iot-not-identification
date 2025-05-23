@@ -101,7 +101,7 @@ const DashboardScreen = () => {
             }}
         >
             <SummaryCard
-            icon={<Package size={32} />}
+            icon={<Package size={64} />}
             title="Devices Identified"
             value="24"
             />
@@ -223,8 +223,8 @@ const SummaryCard = ({ icon, title, value }) => (
   >
     <div style={{ color: "#2563eb" }}>{icon}</div>
     <div>
-      <div style={{ fontSize: "14px", color: "#6b7280" }}>{title}</div>
-      <div style={{ fontSize: "20px", fontWeight: "bold" }}>{value}</div>
+      <div style={{ fontSize: "28px", color: "#6b7280" }}>{title}</div>
+      <div style={{ fontSize: "42px", fontWeight: "bold" }}>{value}</div>
     </div>
   </motion.div>
 );
