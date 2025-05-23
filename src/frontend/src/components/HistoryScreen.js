@@ -3,6 +3,7 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const HistoryScreen = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -183,15 +184,18 @@ const HistoryScreen = () => {
 
         {/* History List */}
         <div style={{ marginTop: "20px" }}>
-          {filteredData.map((item) => (
-            <div
-              key={item.id}
+          {filteredData.map((item, index) => (
+            <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
               onClick={() => {
                 if (!exportMode) {  // Only expand if export mode is off
                   setSelectedItem(selectedItem?.id === item.id ? null : item);
                 }
               }}
-              style={{ backgroundColor: "#EDEDED", color: "black", padding: "15px", borderRadius: "10px", cursor: "pointer",
+              style={{ backgroundColor: "#fff", color: "black", padding: "15px", borderRadius: "10px", cursor: "pointer",
                 marginBottom: "10px", width: "50%", marginLeft: "auto", marginRight: "auto", transition: "background-color 0.3s ease",
                 ...(selectedItem?.id === item.id ? { backgroundColor: "#D9D9D9" } : {}), }}
             >
@@ -246,7 +250,7 @@ const HistoryScreen = () => {
                     </div>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
