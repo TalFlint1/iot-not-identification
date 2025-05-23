@@ -26,7 +26,7 @@ const RecentActivityTable = ({ data }) => {
     borderRadius: "16px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
     padding: "16px",
-    maxWidth: "400px",
+    minWidth: "400px",
     marginBottom: "24px",
   };
 
@@ -46,6 +46,7 @@ const RecentActivityTable = ({ data }) => {
             <th style={thStyle}>Time</th>
             <th style={thStyle}>Vendor</th>
             <th style={thStyle}>Function</th>
+            <th style={thStyle}>Conf.</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +55,7 @@ const RecentActivityTable = ({ data }) => {
               <td style={tdStyle}>{item.time}</td>
               <td style={tdStyle}>{item.vendor}</td>
               <td style={tdStyle}>{item.function}</td>
+              <td style={tdStyle}>{item.confidence}%</td>
             </tr>
           ))}
         </tbody>

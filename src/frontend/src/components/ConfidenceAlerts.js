@@ -22,7 +22,7 @@ const ConfidenceAlertsTable = ({ data }) => {
   };
 
   return (
-    <div style={{ background: "white", borderRadius: 16, padding: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.1)", width: "100%", maxWidth: 500 }}>
+    <div style={{ background: "white", borderRadius: 16, padding: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.1)", width: "100%", minWidth: "400px", }}>
       <h2 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 12, color: "#000" }}>🛡️ Confidence Alerts</h2>
       {lowConfidence.length === 0 ? (
         <p style={{ color: "#555" }}>No low-confidence results recently. You're good to go ✅</p>

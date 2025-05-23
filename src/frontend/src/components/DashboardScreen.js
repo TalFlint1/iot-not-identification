@@ -14,6 +14,7 @@ const data = [
   { name: "Amazon", devices: 10 },
   { name: "Samsung", devices: 8 },
   { name: "Cisco", devices: 5 },
+  { name: "Edimax", devices: 5 },
 ];
 
 const functionBreakdown = [
@@ -34,9 +35,9 @@ const monthlyDeviceData = [
 ];
 
 const recentIdentifications = [
-  { time: "2 minutes ago", vendor: "Samsung", function: "Sensor" },
-  { time: "1 hour ago", vendor: "Google", function: "Camera" },
-  { time: "Yesterday", vendor: "Philips", function: "Lighting" },
+  { time: "2 minutes ago", vendor: "Samsung", function: "Sensor", confidence: 85 },
+  { time: "1 hour ago", vendor: "Google", function: "Camera", confidence: 82 },
+  { time: "Yesterday", vendor: "Philips", function: "Lighting", confidence: 75 },
 ];
 
 const identificationData = [
@@ -122,6 +123,7 @@ const DashboardScreen = () => {
             }}
         >
             <motion.div
+            style={{ width: "100%" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -130,6 +132,7 @@ const DashboardScreen = () => {
             </motion.div>
 
             <motion.div
+            style={{ width: "100%" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -178,7 +181,7 @@ const DashboardScreen = () => {
             <ChartCard title="Devices Identified Over Time">
             <LineChart
                 width={700}
-                height={250}
+                height={300}
                 data={monthlyDeviceData}
                 margin={{ top: 20, right: 30, bottom: 0, left: -30 }}
             >
@@ -194,45 +197,6 @@ const DashboardScreen = () => {
                 />
             </LineChart>
             </ChartCard>
-        </div>
-
-        {/* CTA Buttons */}
-        <div
-            style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            gap: "20px",
-            }}
-        >
-            <motion.button
-            whileHover={{ scale: 1.05 }}
-            style={{
-                backgroundColor: "#2563eb",
-                color: "white",
-                padding: "12px 24px",
-                borderRadius: "12px",
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                border: "none",
-                cursor: "pointer",
-            }}
-            >
-            Re-Identify Devices
-            </motion.button>
-            <motion.button
-            whileHover={{ scale: 1.05 }}
-            style={{
-                backgroundColor: "#374151",
-                color: "white",
-                padding: "12px 24px",
-                borderRadius: "12px",
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                border: "none",
-                cursor: "pointer",
-            }}
-            >
-            Export Report
-            </motion.button>
         </div>
         </div>
       </div>
