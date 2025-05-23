@@ -5,6 +5,7 @@ import './InputScreen.css'; // Make sure the path is correct
 import attachmentIcon from "../Icons/attachment.png"; // Adjust path if needed
 import UpperBar from "./UpperBar";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const InputScreen = () => {
   const navigate = useNavigate();
@@ -255,7 +256,10 @@ const InputScreen = () => {
           </div>
           
           {/* Input Box */}
-          <div
+          <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
             className="bg-gray-800 p-6 shadow-lg"
             style={{
                 marginTop: "20px", marginLeft: "300px", backgroundColor: "#EDEDED", borderRadius: "10px", height: "300px",
@@ -393,7 +397,7 @@ const InputScreen = () => {
               )}
             </div>
             )}
-            </div>
+            </motion.div>
         </div>
       </div>
     </div>
