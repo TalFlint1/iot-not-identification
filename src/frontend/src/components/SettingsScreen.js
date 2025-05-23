@@ -3,6 +3,7 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
 import './SettingsScreen.css';
+import { motion } from "framer-motion";
 
 const SettingsScreen = () => {
   const [activeTab, setActiveTab] = useState("General Settings");
@@ -315,7 +316,10 @@ const SettingsScreen = () => {
         <Title />
 
         {/* Unified Box for Menu and Content */}
-        <div
+        <motion.div
+        initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           style={{
             display: "flex",
             backgroundColor: "#fff",
@@ -420,7 +424,7 @@ const SettingsScreen = () => {
 
           {/* Tab Content */}
           <div style={{ flex: 1, padding: "20px" }}>{renderContent()}</div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
