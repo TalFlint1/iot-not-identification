@@ -8,6 +8,7 @@ import Title from "./Title";
 import UsageCard from "./UsageCard";
 import RecentActivityTable from "./RecentActivityTable";
 import ConfidenceAlertsTable from "./ConfidenceAlerts";
+import CircularConfidenceCard from "./CircularConfidenceCard";
 
 const data = [
   { name: "Amazon", devices: 10 },
@@ -47,6 +48,7 @@ const identificationData = [
 // Fake API usage data
 const apiUsed = 45;
 const apiLimit = 100;
+const totalUsed = 150;
 
 const DashboardScreen = () => {
   const username = "Tal";
@@ -77,13 +79,27 @@ const DashboardScreen = () => {
           {/* Summary Cards */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "space-between" }}>
             <SummaryCard icon={<Package size={32} />} title="Devices Identified" value="24" />
-            <SummaryCard icon={<Brain size={32} />} title="Avg Confidence" value="91%" />
-            <UsageCard used={apiUsed} limit={apiLimit} />
+            <CircularConfidenceCard confidencePercentage={85} />
+            <UsageCard used={apiUsed} limit={apiLimit} total={totalUsed} />
           </div>
 
-          <RecentActivityTable data={recentIdentifications} />
-          <ConfidenceAlertsTable data={identificationData} />
-
+        <div style={{ display: "flex", flexDirection: "row", gap: "24px", justifyContent: "center" }}>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <RecentActivityTable data={recentIdentifications} />
+            </motion.div>
+            
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <ConfidenceAlertsTable data={identificationData} />
+            </motion.div>
+        </div>
 
           {/* Charts Section */}
           <div style={{ display: "flex", flexDirection: "row", gap: "24px", justifyContent: "center" }}>
@@ -93,7 +109,7 @@ const DashboardScreen = () => {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="devices" fill="#3b82f6" />
+                    <Bar dataKey="devices" fill="#60A5FA" />
                 </BarChart>
                 </ChartCard>
             </div>
@@ -104,7 +120,7 @@ const DashboardScreen = () => {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#10b981" />
+                    <Bar dataKey="count" fill="#9F7AEA" />
                     </BarChart>
                 </ChartCard>
             </div>

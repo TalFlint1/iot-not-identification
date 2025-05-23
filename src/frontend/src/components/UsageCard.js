@@ -1,8 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const UsageCard = ({ used, limit }) => {
-  const percentage = Math.min((used / limit) * 100, 100);
+const UsageCard = ({ used, limit, total }) => {
+  const percentage = Math.min((used / limit) * 100, 100).toFixed(0);
+
+  const divider = (
+    <div
+      style={{
+        height: "1px",
+        backgroundColor: "#e5e7eb",
+        margin: "8px 0",
+      }}
+    />
+  );
 
   return (
     <motion.div
@@ -10,37 +20,51 @@ const UsageCard = ({ used, limit }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       style={{
-        width: 250,
         backgroundColor: "white",
-        borderRadius: 24,
+        borderRadius: "16px",
+        padding: "20px",
         boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-        padding: 24,
-        display: "flex",
-        flexDirection: "column",
+        color: "black",
+        minWidth: "240px",
+        flex: 1,
       }}
     >
-      <div style={{ fontSize: 14, color: "#555", marginBottom: 8 }}>
-        API Calls Used
+      <h2 style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "12px" }}>
+        Search Activity Summary
+      </h2>
+
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+        <span>🔄Searches this month</span>
+        <span>{used}</span>
       </div>
-      <div style={{ fontWeight: "bold", fontSize: 24, marginBottom: 12, color: "#000000" }}>
-        {used} / {limit}
+
+      {divider}
+
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+        <span>📅Monthly search limit</span>
+        <span>{limit}</span>
       </div>
-      <div
-        style={{
-          backgroundColor: "#eee",
-          borderRadius: 8,
-          height: 12,
-          overflow: "hidden",
-        }}
-      >
+
+      {divider}
+
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", marginBottom: "16px" }}>
+        <span>🌐Total searches</span>
+        <span>{total}</span>
+      </div>
+
+      {/* Progress bar */}
+      <div style={{ height: "8px", backgroundColor: "#e5e7eb", borderRadius: "8px", overflow: "hidden" }}>
         <div
           style={{
-            width: `${percentage}%`,
-            backgroundColor: "#3b82f6",
             height: "100%",
-            transition: "width 0.5s ease",
+            width: `${percentage}%`,
+            backgroundColor: percentage > 85 ? "#f97316" : "#2563eb",
+            transition: "width 0.5s ease-in-out",
           }}
         />
+      </div>
+      <div style={{ textAlign: "right", fontSize: "12px", color: "#6b7280", marginTop: "4px" }}>
+        {percentage}% of limit used
       </div>
     </motion.div>
   );
