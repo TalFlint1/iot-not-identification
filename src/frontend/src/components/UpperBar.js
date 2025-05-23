@@ -6,6 +6,7 @@ import logoutIcon from "../Icons/logout.png"; // Replace with your logout icon p
 import homepageIcon from "../Icons/homepage.png";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import dashboardIcon from "../Icons/dashboard.png";
 
 const UpperBar = ({ username }) => {
   const navigate = useNavigate();
@@ -20,6 +21,10 @@ const UpperBar = ({ username }) => {
 
   const handleSettingsClick = () => {
     navigate("/settings"); // Navigate to the settings page
+  };
+
+  const handleDashboardClick = () => {
+  navigate("/dashboard");
   };
 
   const handleLogoutClick = () => {
@@ -73,6 +78,11 @@ const UpperBar = ({ username }) => {
         {/* History Icon (with fake click) */}
         <button onClick={handleHistoryClick} style={iconButtonStyle}>
           <img src={historyIcon} alt="History" style={iconStyle} />
+        </button>
+
+        {/* Dashboard Icon */}
+        <button onClick={handleDashboardClick} style={iconButtonStyle}>
+          <img src={dashboardIcon} alt="Dashboard" style={iconStyle} />
         </button>
 
         {/* Logout Icon */}

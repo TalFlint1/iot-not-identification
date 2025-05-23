@@ -6,6 +6,7 @@ import RegisterScreen from "./components/RegisterScreen";
 import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DashboardScreen from "./components/DashboardScreen";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/result" element={<ResultScreen />} />
         <Route path="/history" element={<HistoryScreen />} />
         <Route path="/identify" element={<InputScreen />} />
+        <Route path="/dashboard" element={<DashboardScreen />} />
       </Routes>
     </BrowserRouter>
   );
