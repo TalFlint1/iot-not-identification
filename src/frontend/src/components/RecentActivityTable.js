@@ -39,7 +39,7 @@ const RecentActivityTable = ({ data }) => {
 
   return (
     <div style={containerStyle}>
-      <div style={titleStyle}>Recent Identifications</div>
+      <div style={titleStyle}>🔎 Recent Identifications</div>
       <table style={tableStyle}>
         <thead>
           <tr>

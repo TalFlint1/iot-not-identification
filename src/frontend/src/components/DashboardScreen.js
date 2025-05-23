@@ -7,6 +7,8 @@ import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UsageCard from "./UsageCard";
 import RecentActivityTable from "./RecentActivityTable";
+import ConfidenceAlertsTable from "./ConfidenceAlerts";
+
 const data = [
   { name: "Amazon", devices: 10 },
   { name: "Samsung", devices: 8 },
@@ -34,6 +36,12 @@ const recentIdentifications = [
   { time: "2 minutes ago", vendor: "Samsung", function: "Sensor" },
   { time: "1 hour ago", vendor: "Google", function: "Camera" },
   { time: "Yesterday", vendor: "Philips", function: "Lighting" },
+];
+
+const identificationData = [
+  { time: "2 min ago", vendor: "Samsung", function: "Sensor", confidence: 58 },
+  { time: "10 min ago", vendor: "Google", function: "Camera", confidence: 92 },
+  { time: "Yesterday", vendor: "Bosch", function: "Controller", confidence: 45 },
 ];
 
 // Fake API usage data
@@ -74,6 +82,7 @@ const DashboardScreen = () => {
           </div>
 
           <RecentActivityTable data={recentIdentifications} />
+          <ConfidenceAlertsTable data={identificationData} />
 
 
           {/* Charts Section */}
