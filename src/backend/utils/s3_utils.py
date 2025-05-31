@@ -2,6 +2,7 @@ import boto3
 import json
 from datetime import datetime, timezone
 import os
+from botocore.exceptions import ClientError
 
 s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
 
@@ -47,3 +48,18 @@ def upload_input_to_s3(file_path, user_id):
         "s3_key": key,
         "s3_url": f"https://{bucket_name}.s3.{region}.amazonaws.com/{key}"
     }
+
+def count_identified_devices(username: str) -> int:
+    s3 = boto3.client('s3')
+    bucket_name = 'iot-identification-results'
+    prefix = f'{username}/result/'
+
+    try:
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+        files = response.get('Contents', [])
+        # Exclude folders (folders have keys ending with '/')
+        result_files = [f for f in files if not f['Key'].endswith('/')]
+        return len(result_files)
+    except ClientError as e:
+        print(f"Error accessing S3: {e}")
+        return 0

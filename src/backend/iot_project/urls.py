@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
-from feature_extraction.views import analyze_device, get_user_history, analyze_enriched_csv, reidentify_device, cheap_reidentify_device
+from feature_extraction.views import analyze_device, get_user_history, analyze_enriched_csv, reidentify_device, cheap_reidentify_device, dashboard_summary
 
 def home(request):
     return HttpResponse("Welcome to the IoT project!")
@@ -31,5 +31,6 @@ urlpatterns = [
     path('analyze_enriched_csv/', analyze_enriched_csv),
     path('reidentify/', reidentify_device),
     path('cheap_reidentify/', cheap_reidentify_device),
+    path('dashboard-summary/', dashboard_summary),
     path('', home),
 ]

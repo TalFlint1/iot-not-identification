@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
 import json
+from utils.s3_utils import count_identified_devices
 
 s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
 
@@ -325,3 +326,24 @@ def cheap_reidentify_device(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+@csrf_exempt
+def dashboard_summary(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        # Use user_id as the folder name in S3 (assuming it's the same as username)
+        device_count = count_identified_devices(user_id)
+
+        return JsonResponse({
+            'devices_identified': device_count
+        })
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

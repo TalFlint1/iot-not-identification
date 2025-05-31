@@ -9,6 +9,7 @@ import UsageCard from "./UsageCard";
 import RecentActivityTable from "./RecentActivityTable";
 import ConfidenceAlertsTable from "./ConfidenceAlerts";
 import CircularConfidenceCard from "./CircularConfidenceCard";
+import { useState, useEffect } from "react";
 
 const data = [
   { name: "Amazon", devices: 10 },
@@ -59,6 +60,34 @@ const totalUsed = 150;
 const DashboardScreen = () => {
   const username = "Tal";
 
+  const [devicesIdentified, setDevicesIdentified] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboardSummary = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch('http://localhost:5000/dashboard-summary/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setDevicesIdentified(data.devices_identified);
+      } catch (err) {
+        console.error('Failed to fetch dashboard summary:', err);
+        setError('Failed to load data');
+      }
+    };
+
+    fetchDashboardSummary();
+  }, []);
+
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
@@ -106,9 +135,9 @@ const DashboardScreen = () => {
             }}
         >
             <SummaryCard
-            icon={<Package size={64} />}
-            title="Devices Identified"
-            value="24"
+              icon={<Package size={64} />}
+              title="Devices Identified"
+              value={devicesIdentified !== null ? devicesIdentified : 'Loading...'}
             />
             <CircularConfidenceCard confidencePercentage={85} />
             <UsageCard used={apiUsed} limit={apiLimit} total={totalUsed} />
