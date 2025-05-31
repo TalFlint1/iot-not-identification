@@ -62,6 +62,7 @@ const DashboardScreen = () => {
 
   const [devicesIdentified, setDevicesIdentified] = useState(null);
   const [error, setError] = useState(null);
+  const [averageConfidence, setAverageConfidence] = useState(0);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -79,6 +80,7 @@ const DashboardScreen = () => {
 
         const data = await response.json();
         setDevicesIdentified(data.devices_identified);
+        setAverageConfidence(data.average_confidence);  // <-- new line
       } catch (err) {
         console.error('Failed to fetch dashboard summary:', err);
         setError('Failed to load data');
@@ -139,7 +141,7 @@ const DashboardScreen = () => {
               title="Devices Identified"
               value={devicesIdentified !== null ? devicesIdentified : 'Loading...'}
             />
-            <CircularConfidenceCard confidencePercentage={85} />
+            <CircularConfidenceCard confidencePercentage={averageConfidence} />
             <UsageCard used={apiUsed} limit={apiLimit} total={totalUsed} />
             <SummaryCard
                 title="Top Vendor"

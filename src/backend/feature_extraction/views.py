@@ -7,8 +7,7 @@ from .function_labeling import run_function_labeling_from_csv
 from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
-from utils.history_utils import add_history_item
-from utils.history_utils import get_user_history_from_db
+from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -339,11 +338,12 @@ def dashboard_summary(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        # Use user_id as the folder name in S3 (assuming it's the same as username)
-        device_count = count_identified_devices(user_id)
+        device_count = count_identified_devices(user_id)  # from S3
+        device_stats = get_dashboard_summary_from_dynamodb(user_id)  # from DynamoDB
 
         return JsonResponse({
-            'devices_identified': device_count
+            'devices_identified': device_count,
+            'average_confidence': device_stats['average_confidence']
         })
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
