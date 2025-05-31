@@ -53,7 +53,7 @@ const RecentActivityTable = ({ data }) => {
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
-              <td style={tdStyle}>{item.time}</td>
+              <td style={tdStyle}>{item.timestamp}</td>
               <td style={tdStyle}>{item.vendor}</td>
               <td style={tdStyle}>{item.function}</td>
               <td style={tdStyle}>{item.confidence}%</td>

@@ -41,3 +41,30 @@ def get_dashboard_summary_from_dynamodb(user_id):
         'average_confidence': average_confidence
     }
 
+def get_recent_identifications(user_id, count=3):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user or 'history' not in user:
+        return []
+
+    history = user['history']
+    # Sort descending by timestamp
+    sorted_history = sorted(history, key=lambda x: x.get('date', ''), reverse=True)
+    recent_entries = sorted_history[:count]
+
+    def split_device_label(device_label):
+        parts = device_label.strip().split()
+        vendor = parts[0] if len(parts) >= 1 else ''
+        function = " ".join(parts[1:]) if len(parts) >= 2 else ''
+        return vendor, function
+
+    formatted_entries = []
+    for entry in recent_entries:
+        vendor, function = split_device_label(entry.get('device', ''))
+        formatted_entries.append({
+            'timestamp': entry.get('date', ''),
+            'vendor': vendor,
+            'function': function,
+            'confidence': round(float(entry.get('confidence', 0.0)), 2)
+        })
+
+    return formatted_entries

@@ -35,12 +35,6 @@ const monthlyDeviceData = [
   { month: "Jul", devices: 5 }
 ];
 
-const recentIdentifications = [
-  { time: "2 minutes ago", vendor: "Samsung", function: "Sensor", confidence: 85 },
-  { time: "1 hour ago", vendor: "Google", function: "Camera", confidence: 82 },
-  { time: "Yesterday", vendor: "Philips", function: "Lighting", confidence: 75 },
-];
-
 const identificationData = [
   { time: "2 min ago", vendor: "Samsung", function: "Sensor", confidence: 58 },
   { time: "10 min ago", vendor: "Google", function: "Camera", confidence: 92 },
@@ -63,6 +57,7 @@ const DashboardScreen = () => {
   const [devicesIdentified, setDevicesIdentified] = useState(null);
   const [error, setError] = useState(null);
   const [averageConfidence, setAverageConfidence] = useState(0);
+  const [recentIdentifications, setRecentIdentifications] = useState([]);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -89,6 +84,32 @@ const DashboardScreen = () => {
 
     fetchDashboardSummary();
   }, []);
+
+  useEffect(() => {
+    const fetchRecentIdentifications = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch('http://localhost:5000/recent-identifications/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setRecentIdentifications(data.recent_identifications); // assuming your response has this field
+      } catch (err) {
+        console.error('Failed to fetch recent identifications:', err);
+        setError('Failed to load recent identifications');
+      }
+    };
+
+    fetchRecentIdentifications();
+  }, []);
+
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>

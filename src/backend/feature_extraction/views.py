@@ -7,7 +7,7 @@ from .function_labeling import run_function_labeling_from_csv
 from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
-from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb
+from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -345,5 +345,23 @@ def dashboard_summary(request):
             'devices_identified': device_count,
             'average_confidence': device_stats['average_confidence']
         })
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def recent_identifications(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        recent_data = get_recent_identifications(user_id)
+
+        return JsonResponse({'recent_identifications': recent_data})
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
