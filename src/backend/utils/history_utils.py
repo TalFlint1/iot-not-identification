@@ -68,3 +68,46 @@ def get_recent_identifications(user_id, count=3):
         })
 
     return formatted_entries
+
+def get_low_confidence_alerts(user_id, threshold=60.0, count=2):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user or 'history' not in user:
+        return []
+
+    history = user['history']
+
+    def split_device_label(device_label):
+        parts = device_label.strip().split()
+        vendor = parts[0] if len(parts) >= 1 else ''
+        function = " ".join(parts[1:]) if len(parts) >= 2 else ''
+        return vendor, function
+
+    # Filter for low confidence
+    low_confidence = [entry for entry in history if float(entry.get('confidence', 100.0)) <= threshold]
+
+    # Sort by lowest confidence
+    sorted_low = sorted(low_confidence, key=lambda x: float(x.get('confidence', 100.0)))
+
+    # Take the lowest 'count' entries
+    selected = sorted_low[:count]
+
+    formatted_entries = []
+    for entry in selected:
+        vendor, function = split_device_label(entry.get('device', ''))
+        formatted_entries.append({
+            'timestamp': entry.get('date', ''),
+            'vendor': vendor,
+            'function': function,
+            'confidence': round(float(entry.get('confidence', 0.0)), 2)
+        })
+
+    # Pad if fewer than 'count'
+    while len(formatted_entries) < count:
+        formatted_entries.append({
+            'timestamp': '',
+            'vendor': '',
+            'function': '',
+            'confidence': ''
+        })
+
+    return formatted_entries

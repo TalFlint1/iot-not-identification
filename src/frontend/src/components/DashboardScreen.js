@@ -35,12 +35,6 @@ const monthlyDeviceData = [
   { month: "Jul", devices: 5 }
 ];
 
-const identificationData = [
-  { time: "2 min ago", vendor: "Samsung", function: "Sensor", confidence: 58 },
-  { time: "10 min ago", vendor: "Google", function: "Camera", confidence: 92 },
-  { time: "Yesterday", vendor: "Bosch", function: "Controller", confidence: 45 },
-];
-
 const getVendorLogoURL = (vendorName) => 
   `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
 
@@ -58,6 +52,7 @@ const DashboardScreen = () => {
   const [error, setError] = useState(null);
   const [averageConfidence, setAverageConfidence] = useState(0);
   const [recentIdentifications, setRecentIdentifications] = useState([]);
+  const [confidenceAlerts, setConfidenceAlerts] = useState([]);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -110,6 +105,29 @@ const DashboardScreen = () => {
     fetchRecentIdentifications();
   }, []);
 
+  useEffect(() => {
+    const fetchConfidenceAlerts = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch('http://localhost:5000/confidence-alerts/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setConfidenceAlerts(data.confidence_alerts);  // set it!
+      } catch (err) {
+        console.error('Failed to fetch confidence alerts:', err);
+      }
+    };
+
+    fetchConfidenceAlerts();
+  }, []);
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -200,7 +218,7 @@ const DashboardScreen = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             >
-            <ConfidenceAlertsTable data={identificationData} />
+            <ConfidenceAlertsTable data={confidenceAlerts} />
             </motion.div>
         </div>
 

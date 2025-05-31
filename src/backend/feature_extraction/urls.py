@@ -1,7 +1,7 @@
 # feature_extraction/urls.py
 
 from django.urls import path
-from .views import analyze_device, get_user_history, analyze_enriched_csv, cheap_reidentify_device, reidentify_device, dashboard_summary, recent_identifications
+from .views import analyze_device, get_user_history, analyze_enriched_csv, cheap_reidentify_device, reidentify_device, dashboard_summary, recent_identifications, confidence_alerts
 
 urlpatterns = [
     path('analyze/', analyze_device, name='analyze_device'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('cheap_reidentify/', cheap_reidentify_device, name='cheap_reidentify_device'),
     path('dashboard-summary/', dashboard_summary, name='dashboard-summary'),
     path('recent-identifications/', recent_identifications, name='recent-identifications'),
+    path('confidence-alerts/', confidence_alerts, name='confidence-alerts'),
 ]
