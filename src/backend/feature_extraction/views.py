@@ -8,6 +8,7 @@ from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
 from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications, get_low_confidence_alerts
+from utils.history_utils import get_monthly_device_counts
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -384,3 +385,20 @@ def confidence_alerts(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+@csrf_exempt
+def devices_over_time(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        data = get_monthly_device_counts(user_id)
+        return JsonResponse({'data': data})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

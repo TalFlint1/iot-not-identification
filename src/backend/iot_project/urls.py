@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
 from feature_extraction.views import analyze_device, get_user_history, analyze_enriched_csv, reidentify_device, cheap_reidentify_device, dashboard_summary, recent_identifications, confidence_alerts
+from feature_extraction.views import devices_over_time
 
 def home(request):
     return HttpResponse("Welcome to the IoT project!")
@@ -34,5 +35,6 @@ urlpatterns = [
     path('dashboard-summary/', dashboard_summary),
     path('recent-identifications/', recent_identifications),
     path('confidence-alerts/', confidence_alerts),
+    path('monthly-devices/', devices_over_time),
     path('', home),
 ]

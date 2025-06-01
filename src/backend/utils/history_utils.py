@@ -1,6 +1,9 @@
 import boto3
 import os
 from boto3.dynamodb.conditions import Key
+import calendar
+from collections import defaultdict
+from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION'))
 table = dynamodb.Table(os.getenv('DYNAMODB_TABLE_NAME'))
@@ -111,3 +114,29 @@ def get_low_confidence_alerts(user_id, threshold=60.0, count=2):
         })
 
     return formatted_entries
+
+def get_monthly_device_counts(user_id):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user or 'history' not in user:
+        return []
+
+    history = user['history']
+    print("User history entries:", history)
+    month_counts = defaultdict(int)
+
+    for entry in history:
+        date_str = entry.get('date')
+        if not date_str:
+            continue
+
+        try:
+            dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M")
+            key = dt.strftime("%b %Y")  # e.g. "May 2025"
+            month_counts[key] += 1
+        except ValueError:
+            continue
+
+    # Sort months chronologically
+    sorted_data = sorted(month_counts.items(), key=lambda x: datetime.strptime(x[0], "%b %Y"))
+
+    return [{'month': month, 'devices': count} for month, count in sorted_data]

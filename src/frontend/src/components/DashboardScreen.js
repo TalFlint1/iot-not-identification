@@ -25,16 +25,6 @@ const functionBreakdown = [
   { name: "Camera", count: 4 }
 ];
 
-const monthlyDeviceData = [
-  { month: "Jan", devices: 3 },
-  { month: "Feb", devices: 5 },
-  { month: "Mar", devices: 8 },
-  { month: "Apr", devices: 6 },
-  { month: "May", devices: 10 },
-  { month: "Jun", devices: 12 },
-  { month: "Jul", devices: 5 }
-];
-
 const getVendorLogoURL = (vendorName) => 
   `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
 
@@ -53,6 +43,7 @@ const DashboardScreen = () => {
   const [averageConfidence, setAverageConfidence] = useState(0);
   const [recentIdentifications, setRecentIdentifications] = useState([]);
   const [confidenceAlerts, setConfidenceAlerts] = useState([]);
+  const [monthlyDeviceData, setMonthlyDeviceData] = useState([]);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -127,6 +118,34 @@ const DashboardScreen = () => {
     };
 
     fetchConfidenceAlerts();
+  }, []);
+
+  useEffect(() => {
+    const fetchDevicesOverTime = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://localhost:5000/monthly-devices/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        const transformed = result.data.map(entry => ({
+          month: entry.month,
+          devices: entry.devices
+        }));
+        setMonthlyDeviceData(transformed);
+      } catch (err) {
+        console.error("Failed to fetch devices over time:", err);
+      }
+    };
+
+    fetchDevicesOverTime();
   }, []);
 
   return (
