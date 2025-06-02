@@ -4,6 +4,7 @@ from boto3.dynamodb.conditions import Key
 import calendar
 from collections import defaultdict
 from datetime import datetime
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION'))
 table = dynamodb.Table(os.getenv('DYNAMODB_TABLE_NAME'))
@@ -121,7 +122,6 @@ def get_monthly_device_counts(user_id):
         return []
 
     history = user['history']
-    print("User history entries:", history)
     month_counts = defaultdict(int)
 
     for entry in history:
@@ -140,3 +140,45 @@ def get_monthly_device_counts(user_id):
     sorted_data = sorted(month_counts.items(), key=lambda x: datetime.strptime(x[0], "%b %Y"))
 
     return [{'month': month, 'devices': count} for month, count in sorted_data]
+
+# def get_top_vendor(user_id):
+#     user = table.get_item(Key={'username': user_id}).get('Item')
+#     if not user or 'history' not in user:
+#         return None
+
+#     history = user['history']
+#     vendor_counts = defaultdict(int)
+
+#     for entry in history:
+#         device = entry.get('device', '')
+#         vendor = device.split()[0].lower() if device else ''
+#         if vendor:
+#             vendor_counts[vendor] += 1
+
+#     if not vendor_counts:
+#         return None
+
+#     # Get the vendor with the highest count
+#     top_vendor = max(vendor_counts.items(), key=lambda x: x[1])[0]
+#     return top_vendor
+
+def get_top_vendor(user_id, top_n=1):
+    user = table.get_item(Key={"username": user_id}).get("Item")
+    if not user or "history" not in user:
+        return []
+
+    vendor_counts = defaultdict(int)
+    history = user["history"]
+
+    for entry in history:
+        device = entry.get("device")
+        if not device:
+            continue
+        vendor = device.split()[0].lower()
+        vendor_counts[vendor] += 1
+
+    sorted_vendors = sorted(
+        vendor_counts.items(), key=lambda x: x[1], reverse=True
+    )[:top_n]
+
+    return [{"vendor": vendor.title(), "count": count} for vendor, count in sorted_vendors]

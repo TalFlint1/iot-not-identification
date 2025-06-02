@@ -28,8 +28,6 @@ const functionBreakdown = [
 const getVendorLogoURL = (vendorName) => 
   `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
 
-const topVendor = "Xiaomi";
-
 // Fake API usage data
 const apiUsed = 45;
 const apiLimit = 100;
@@ -44,6 +42,8 @@ const DashboardScreen = () => {
   const [recentIdentifications, setRecentIdentifications] = useState([]);
   const [confidenceAlerts, setConfidenceAlerts] = useState([]);
   const [monthlyDeviceData, setMonthlyDeviceData] = useState([]);
+  const [topVendor, setTopVendor] = useState("");
+  const [topVendors, setTopVendors] = useState([]);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -146,6 +146,44 @@ const DashboardScreen = () => {
     };
 
     fetchDevicesOverTime();
+  }, []);
+
+  useEffect(() => {
+    const fetchTopVendor = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://localhost:5000/top-vendor/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setTopVendor(data.vendor || "N/A");
+      } catch (error) {
+        console.error("Failed to fetch top vendor:", error);
+      }
+    };
+
+    fetchTopVendor();
+  }, []);
+
+  useEffect(() => {
+    const fetchTopVendor = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://localhost:5000/top-vendors-chart/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setTopVendors(data.vendor || []);
+      } catch (error) {
+        console.error("Failed to fetch top vendor:", error);
+      }
+    };
+
+    fetchTopVendor();
   }, []);
 
   return (
@@ -254,7 +292,7 @@ const DashboardScreen = () => {
             <BarChart
                 width={300}
                 height={300}
-                data={data}
+                data={topVendors}
                 margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
             >
                 <XAxis dataKey="name" />
