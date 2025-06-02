@@ -177,7 +177,15 @@ const DashboardScreen = () => {
           },
         });
         const data = await response.json();
-        setTopVendors(data.vendor || []);
+        const rawData = data.vendor || [];
+
+        // 🔁 Transform for chart compatibility
+        const formattedData = rawData.map(item => ({
+          name: item.vendor,
+          devices: item.count,
+        }));
+
+        setTopVendors(formattedData);
       } catch (error) {
         console.error("Failed to fetch top vendor:", error);
       }
@@ -185,6 +193,7 @@ const DashboardScreen = () => {
 
     fetchTopVendor();
   }, []);
+
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -295,7 +304,7 @@ const DashboardScreen = () => {
                 data={topVendors}
                 margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
             >
-                <XAxis dataKey="name" />
+                <XAxis dataKey="name" angle={0} textAnchor="end" interval={0} style={{ fontSize: '12px' }} dx={25} />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="devices" fill="#60A5FA" />
