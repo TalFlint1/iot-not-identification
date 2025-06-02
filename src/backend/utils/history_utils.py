@@ -141,27 +141,6 @@ def get_monthly_device_counts(user_id):
 
     return [{'month': month, 'devices': count} for month, count in sorted_data]
 
-# def get_top_vendor(user_id):
-#     user = table.get_item(Key={'username': user_id}).get('Item')
-#     if not user or 'history' not in user:
-#         return None
-
-#     history = user['history']
-#     vendor_counts = defaultdict(int)
-
-#     for entry in history:
-#         device = entry.get('device', '')
-#         vendor = device.split()[0].lower() if device else ''
-#         if vendor:
-#             vendor_counts[vendor] += 1
-
-#     if not vendor_counts:
-#         return None
-
-#     # Get the vendor with the highest count
-#     top_vendor = max(vendor_counts.items(), key=lambda x: x[1])[0]
-#     return top_vendor
-
 def get_top_vendor(user_id, top_n=1):
     user = table.get_item(Key={"username": user_id}).get("Item")
     if not user or "history" not in user:
@@ -182,3 +161,28 @@ def get_top_vendor(user_id, top_n=1):
     )[:top_n]
 
     return [{"vendor": vendor.title(), "count": count} for vendor, count in sorted_vendors]
+
+def get_top_functions(user_id, top_n=4):
+    user = table.get_item(Key={"username": user_id}).get("Item")
+    if not user or "history" not in user:
+        return []
+
+    function_counts = defaultdict(int)
+    history = user["history"]
+
+    for entry in history:
+        device = entry.get("device")
+        if not device:
+            continue
+        parts = device.split()
+        if len(parts) < 2:
+            continue  # no function part present
+        function = " ".join(parts[1:]).lower()
+        function_counts[function] += 1
+
+    sorted_functions = sorted(
+        function_counts.items(), key=lambda x: x[1], reverse=True
+    )[:top_n]
+    print(sorted_functions)
+
+    return [{"function": func.title(), "count": count} for func, count in sorted_functions]

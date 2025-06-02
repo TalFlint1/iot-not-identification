@@ -44,6 +44,7 @@ const DashboardScreen = () => {
   const [monthlyDeviceData, setMonthlyDeviceData] = useState([]);
   const [topVendor, setTopVendor] = useState("");
   const [topVendors, setTopVendors] = useState([]);
+  const [topFunctions, setTopFunctions] = useState([]);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -168,7 +169,7 @@ const DashboardScreen = () => {
   }, []);
 
   useEffect(() => {
-    const fetchTopVendor = async () => {
+    const fetchTopVendors = async () => {
       try {
         const token = localStorage.getItem("access_token");
         const response = await fetch("http://localhost:5000/top-vendors-chart/", {
@@ -191,7 +192,34 @@ const DashboardScreen = () => {
       }
     };
 
-    fetchTopVendor();
+    fetchTopVendors();
+  }, []);
+
+  useEffect(() => {
+    const fetchTopFunctions = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://localhost:5000/top-functions/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        const rawData = data.function || [];
+
+        // 🔁 Transform for chart compatibility
+        const formattedData = rawData.map(item => ({
+          name: item["function"],  // safely access key named 'function'
+          devices: item.count,
+        }));
+
+        setTopFunctions(formattedData);
+      } catch (error) {
+        console.error("Failed to fetch top functions:", error);
+      }
+    };
+
+    fetchTopFunctions();
   }, []);
 
 
@@ -311,19 +339,26 @@ const DashboardScreen = () => {
             </BarChart>
             </ChartCard>
 
-            <ChartCard title="Function Categories">
-            <BarChart
-                width={300}
-                height={300}
-                data={functionBreakdown}
-                margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
-            >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" fill="#9F7AEA" />
-            </BarChart>
-            </ChartCard>
+            <ChartCard title="Top Functions">
+  <BarChart
+    width={300}
+    height={300}
+    data={topFunctions}
+    margin={{ top: 20, right: 0, bottom: 10, left: -30 }}
+  >
+    <XAxis
+      dataKey="name"
+      angle={-10}
+      textAnchor="end"
+      interval={0}
+      style={{ fontSize: '12px' }}
+      dx={15}
+    />
+    <YAxis />
+    <Tooltip />
+    <Bar dataKey="devices" fill="#9F7AEA" />
+  </BarChart>
+</ChartCard>
 
             <ChartCard title="Devices Identified Over Time">
             <LineChart
