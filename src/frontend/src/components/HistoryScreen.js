@@ -16,7 +16,7 @@ const HistoryScreen = () => {
   const [selectedExports, setSelectedExports] = useState([]);  // Which items are checked
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-
+  const [reidentifyLoading, setReidentifyLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,6 +67,7 @@ const HistoryScreen = () => {
     }
   
     setShowReidentifyModal(false); // Close the modal
+    setReidentifyLoading(true);
   
     try {
       const response = await fetch("http://localhost:5000/cheap_reidentify/", {
@@ -92,7 +93,9 @@ const HistoryScreen = () => {
     } catch (error) {
       console.error("Error during re-identification:", error);
       alert("Something went wrong while re-identifying the device.");
-    }
+    } finally {
+    setReidentifyLoading(false);
+  }
   };
 
   const handleExportCSV = () => {
@@ -399,6 +402,19 @@ const HistoryScreen = () => {
         </div>
       </div>
     )}
+    {reidentifyLoading && (
+  <div style={{
+    position: "fixed",
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 2000
+  }}>
+    <div className="loader" />
+  </div>
+)}
     </div>
   );
 };
