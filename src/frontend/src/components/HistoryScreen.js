@@ -4,6 +4,8 @@ import Title from "./Title";
 import UpperBar from "./UpperBar";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { RotateCcw } from "lucide-react";
+
 
 const HistoryScreen = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -165,6 +167,10 @@ const HistoryScreen = () => {
     }
   };
 
+  const sortedData = React.useMemo(() => {
+  return [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date));
+}, [filteredData]);
+
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
@@ -282,11 +288,22 @@ const HistoryScreen = () => {
                         setShowReidentifyModal(true);
                       }}
                       style={{
-                      backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", margin: "5px", cursor: "pointer",
-                      fontSize: "18px", borderRadius: "5px", }}
+                        backgroundColor: "#2CA6A4",
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        margin: "5px",
+                        cursor: "pointer",
+                        fontSize: "18px",
+                        borderRadius: "5px",
+                        display: "inline-flex", // keeps your layout intact
+                        alignItems: "center", // vertically centers icon/text
+                      }}
                     >
-                        Re-Identify
+                      <RotateCcw size={20} style={{ marginRight: "8px", position: "relative", top: "1px" }} />
+                      Re-Identify
                     </button>
+
                     <button
                       onClick={() => {
                         setItemToDelete(item);
@@ -301,9 +318,10 @@ const HistoryScreen = () => {
                         cursor: "pointer",
                         fontSize: "18px",
                         borderRadius: "5px",
+                        height: "40px",
                       }}
                     >
-                      🗑️ Delete
+                        <span style={{ position: "relative", top: "-3px", marginRight: "8px" }}>🗑️ Delete</span>
                     </button>
                     </div>
                 </div>
@@ -387,7 +405,7 @@ const HistoryScreen = () => {
           </p>
           <button 
             onClick={handleReidentify}
-            style={{ backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
+            style={{ backgroundColor: "#2CA6A4", color: "white", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
               fontSize: "16px", borderRadius: "5px", }}
           >
             Yes, Re-Identify
