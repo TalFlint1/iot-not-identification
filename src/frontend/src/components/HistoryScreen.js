@@ -14,6 +14,9 @@ const HistoryScreen = () => {
   const [itemToReidentify, setItemToReidentify] = useState(null);
   const [exportMode, setExportMode] = useState(false);  // If user clicked "Export"
   const [selectedExports, setSelectedExports] = useState([]);  // Which items are checked
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,7 +137,7 @@ const HistoryScreen = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/delete-identification", {
+      const response = await fetch("http://localhost:5000/delete-identification/", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -282,7 +285,10 @@ const HistoryScreen = () => {
                         Re-Identify
                     </button>
                     <button
-                      onClick={() => handleDelete(item)}  // define this function
+                      onClick={() => {
+                        setItemToDelete(item);
+                        setShowDeleteModal(true);
+                      }}
                       style={{
                         backgroundColor: "#E57373", // Red-ish for delete
                         color: "white",
@@ -303,6 +309,67 @@ const HistoryScreen = () => {
           ))}
         </div>
       </div>
+      {showDeleteModal && (
+  <div style={{
+    position: "fixed",
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  }}>
+    <div style={{
+      backgroundColor: "white",
+      padding: "30px",
+      borderRadius: "10px",
+      textAlign: "center",
+      width: "400px",
+    }}>
+      <p style={{ fontSize: "18px", marginBottom: "20px" }}>
+        Are you sure you want to delete this history entry?
+      </p>
+      <button
+        onClick={() => {
+          handleDelete(itemToDelete);
+          setShowDeleteModal(false);
+          setItemToDelete(null);
+        }}
+        style={{
+          backgroundColor: "#e55353",
+          color: "white",
+          border: "none",
+          padding: "10px 20px",
+          margin: "10px",
+          cursor: "pointer",
+          fontSize: "16px",
+          borderRadius: "5px",
+        }}
+      >
+        Yes, Delete
+      </button>
+      <button
+        onClick={() => {
+          setShowDeleteModal(false);
+          setItemToDelete(null);
+        }}
+        style={{
+          backgroundColor: "#ccc",
+          color: "black",
+          border: "none",
+          padding: "10px 20px",
+          margin: "10px",
+          cursor: "pointer",
+          fontSize: "16px",
+          borderRadius: "5px",
+        }}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
+
       {showReidentifyModal && (
       <div style={{
         position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
