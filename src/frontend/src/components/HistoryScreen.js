@@ -172,11 +172,11 @@ const HistoryScreen = () => {
 }, [filteredData]);
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ display: "flex", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
       {/* Sidebar */}
       <div
         style={{ backgroundImage: `url(${sidebarImage})`, backgroundColor: "#343C42", backgroundSize: "contain", 
-        backgroundPosition: "left", backgroundRepeat: "no-repeat", height: "100%", width: "14%", }}
+        backgroundPosition: "left", backgroundRepeat: "no-repeat", height: "100vh", width: "14%", position: "sticky",top: 0 }}
       />
       <UpperBar/>
 
