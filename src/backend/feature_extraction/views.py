@@ -14,6 +14,9 @@ from decimal import Decimal
 import boto3
 import json
 from utils.s3_utils import count_identified_devices
+import ast
+import pandas as pd
+from io import StringIO
 
 s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
 
@@ -402,26 +405,6 @@ def devices_over_time(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-# @csrf_exempt
-# def top_vendor_view(request):
-#     if request.method == 'GET':
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
-
-#         token = auth_header.split(' ')[1]
-#         user_id = get_user_id_from_token(token)
-#         if not user_id:
-#             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
-
-#         vendor = get_top_vendor(user_id, top_n=1)
-#         if not vendor:
-#             return JsonResponse({'vendor': ''})
-
-#         return JsonResponse({'vendor': vendor[0]})
-
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 @csrf_exempt
 def top_vendor_view(request):
     if request.method == 'GET':
@@ -479,5 +462,147 @@ def top_functions_chart_view(request):
             return JsonResponse({'function': []})
 
         return JsonResponse({'function': top_functions})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+# @csrf_exempt
+# def serpapi_usage(request):
+#     if request.method == 'GET':
+#         auth_header = request.headers.get('Authorization')
+#         if not auth_header or not auth_header.startswith('Bearer '):
+#             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+#         token = auth_header.split(' ')[1]
+#         user_id = get_user_id_from_token(token)
+
+#         if not user_id:
+#             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+#         try:
+#             # 👇 Load bucket here like you do in reidentify_device
+#             bucket_name = os.getenv('S3_BUCKET_NAME')
+#             s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
+
+#             prefix = f"{user_id}/input/"
+#             response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+
+#             if 'Contents' not in response:
+#                 return JsonResponse({'serpapi_queries': 0})
+
+#             total_queries = 0
+#             for obj in response['Contents']:
+#                 key = obj['Key']
+#                 if not key.endswith('.csv'):
+#                     continue
+
+#                 file_obj = s3.get_object(Bucket=bucket_name, Key=key)
+#                 file_content = file_obj['Body'].read().decode('utf-8')
+#                 df = pd.read_csv(StringIO(file_content))
+
+#                 search_fields = [
+#                     'dns_queries',
+#                     'reverse_dns',
+#                     'dhcp_hostnames',
+#                     'tls_cert_domains',
+#                     'tls_server_names',
+#                     'user_agents',
+#                 ]
+
+#                 for _, row in df.iterrows():
+#                     for field in search_fields:
+#                         if pd.notna(row.get(field)) and row[field].strip() != '':
+#                             try:
+#                                 values = ast.literal_eval(row[field])
+#                                 total_queries += len(values)
+#                             except Exception:
+#                                 pass  # Optional: log the field/key if debugging
+
+#             return JsonResponse({'serpapi_queries': total_queries})
+
+#         except Exception as e:
+#             print("🔥 Error in serpapi_usage_summary:", e)
+#             return JsonResponse({'error': str(e)}, status=500)
+
+#     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def serpapi_usage(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        try:
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
+
+            prefix = f"{user_id}/input/"
+            response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+
+            if 'Contents' not in response:
+                return JsonResponse({'serpapi_queries': 0, 'serpapi_queries_this_month': 0})
+
+            total_queries = 0
+            total_queries_this_month = 0
+
+            now = datetime.utcnow()
+            current_year = now.year
+            current_month = now.month
+
+            for obj in response['Contents']:
+                key = obj['Key']
+                if not key.endswith('.csv'):
+                    continue
+
+                # 🔍 Try to extract the timestamp from filename
+                try:
+                    filename = os.path.basename(key)
+                    timestamp_str = filename.replace("input_", "").replace(".csv", "")
+                    file_date = datetime.strptime(timestamp_str, "%Y-%m-%dT%H-%M-%SZ")
+                except Exception:
+                    file_date = None  # If can't parse date, skip from "this month"
+
+                file_obj = s3.get_object(Bucket=bucket_name, Key=key)
+                file_content = file_obj['Body'].read().decode('utf-8')
+                df = pd.read_csv(StringIO(file_content))
+
+                search_fields = [
+                    'dns_queries',
+                    'reverse_dns',
+                    'dhcp_hostnames',
+                    'tls_cert_domains',
+                    'tls_server_names',
+                    'user_agents',
+                ]
+
+                file_query_count = 0
+                for _, row in df.iterrows():
+                    for field in search_fields:
+                        if pd.notna(row.get(field)) and row[field].strip() != '':
+                            try:
+                                values = ast.literal_eval(row[field])
+                                file_query_count += len(values)
+                            except Exception:
+                                pass
+
+                total_queries += file_query_count
+
+                if file_date and file_date.year == current_year and file_date.month == current_month:
+                    total_queries_this_month += file_query_count
+
+            return JsonResponse({
+                'serpapi_queries': total_queries,
+                'serpapi_queries_this_month': total_queries_this_month
+            })
+
+        except Exception as e:
+            print("🔥 Error in serpapi_usage_summary:", e)
+            return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)

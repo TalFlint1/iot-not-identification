@@ -11,27 +11,10 @@ import ConfidenceAlertsTable from "./ConfidenceAlerts";
 import CircularConfidenceCard from "./CircularConfidenceCard";
 import { useState, useEffect } from "react";
 
-const data = [
-  { name: "Amazon", devices: 10 },
-  { name: "Samsung", devices: 8 },
-  { name: "Cisco", devices: 5 },
-  { name: "Edimax", devices: 5 },
-];
-
-const functionBreakdown = [
-  { name: "Sensor", count: 12 },
-  { name: "Lock", count: 6 },
-  { name: "Bulb", count: 3 },
-  { name: "Camera", count: 4 }
-];
 
 const getVendorLogoURL = (vendorName) => 
   `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
 
-// Fake API usage data
-const apiUsed = 45;
-const apiLimit = 100;
-const totalUsed = 150;
 
 const DashboardScreen = () => {
   const username = "Tal";
@@ -45,6 +28,9 @@ const DashboardScreen = () => {
   const [topVendor, setTopVendor] = useState("");
   const [topVendors, setTopVendors] = useState([]);
   const [topFunctions, setTopFunctions] = useState([]);
+  const [apiUsed, setApiUsed] = useState(0);
+  const apiLimit = 100;
+  const [totalUsed, setTotalUsed] = useState(0);
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -220,6 +206,32 @@ const DashboardScreen = () => {
     };
 
     fetchTopFunctions();
+  }, []);
+
+  useEffect(() => {
+    const fetchSerpApiUsage = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://localhost:5000/serpapi-usage/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setApiUsed(data.serpapi_queries_this_month);
+          setTotalUsed(data.serpapi_queries);
+        } else {
+          console.error("Failed to fetch SerpAPI usage:", data.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error fetching SerpAPI usage:", error);
+      }
+    };
+
+    fetchSerpApiUsage();
   }, []);
 
 
