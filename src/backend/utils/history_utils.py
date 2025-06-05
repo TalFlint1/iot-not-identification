@@ -186,3 +186,30 @@ def get_top_functions(user_id, top_n=4):
     print(sorted_functions)
 
     return [{"function": func.title(), "count": count} for func, count in sorted_functions]
+
+def delete_history_item(user_id, input_s3_path):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user or 'history' not in user:
+        return False, 'User or history not found'
+
+    history = user['history']
+    updated_history = []
+    item_to_delete = None
+
+    for item in history:
+        if item.get('input_s3_path') == input_s3_path:
+            item_to_delete = item
+        else:
+            updated_history.append(item)
+
+    if not item_to_delete:
+        return False, 'Item not found in history'
+
+    # Update DynamoDB
+    table.update_item(
+        Key={'username': user_id},
+        UpdateExpression='SET history = :new_history',
+        ExpressionAttributeValues={':new_history': updated_history}
+    )
+
+    return True, item_to_delete  # Return the deleted item to handle S3 outside

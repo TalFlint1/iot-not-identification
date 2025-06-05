@@ -91,6 +91,7 @@ const HistoryScreen = () => {
       alert("Something went wrong while re-identifying the device.");
     }
   };
+
   const handleExportCSV = () => {
     if (selectedExports.length === 0) return;
   
@@ -124,6 +125,39 @@ const HistoryScreen = () => {
     if (filter === "low") return item.confidence > 0 && item.confidence < 50;
     return true; // "all" filter
   });
+
+  const handleDelete = async (item) => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Authorization token is missing.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/delete-identification", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ input_s3_path: item.input_s3_path }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete item");
+      }
+
+      // Remove the deleted item from the historyData state
+      setHistoryData((prevData) =>
+        prevData.filter((entry) => entry.input_s3_path !== item.input_s3_path)
+      );
+
+      console.log("Item deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      alert("Something went wrong while deleting the item.");
+    }
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -246,6 +280,21 @@ const HistoryScreen = () => {
                       fontSize: "18px", borderRadius: "5px", }}
                     >
                         Re-Identify
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item)}  // define this function
+                      style={{
+                        backgroundColor: "#E57373", // Red-ish for delete
+                        color: "white",
+                        border: "none",
+                        padding: "10px 20px",
+                        margin: "5px",
+                        cursor: "pointer",
+                        fontSize: "18px",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      🗑️ Delete
                     </button>
                     </div>
                 </div>

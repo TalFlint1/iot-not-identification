@@ -8,7 +8,7 @@ from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
 from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications, get_low_confidence_alerts
-from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions
+from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions, delete_history_item
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -465,66 +465,6 @@ def top_functions_chart_view(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-# @csrf_exempt
-# def serpapi_usage(request):
-#     if request.method == 'GET':
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
-
-#         token = auth_header.split(' ')[1]
-#         user_id = get_user_id_from_token(token)
-
-#         if not user_id:
-#             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
-
-#         try:
-#             # 👇 Load bucket here like you do in reidentify_device
-#             bucket_name = os.getenv('S3_BUCKET_NAME')
-#             s3 = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
-
-#             prefix = f"{user_id}/input/"
-#             response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
-
-#             if 'Contents' not in response:
-#                 return JsonResponse({'serpapi_queries': 0})
-
-#             total_queries = 0
-#             for obj in response['Contents']:
-#                 key = obj['Key']
-#                 if not key.endswith('.csv'):
-#                     continue
-
-#                 file_obj = s3.get_object(Bucket=bucket_name, Key=key)
-#                 file_content = file_obj['Body'].read().decode('utf-8')
-#                 df = pd.read_csv(StringIO(file_content))
-
-#                 search_fields = [
-#                     'dns_queries',
-#                     'reverse_dns',
-#                     'dhcp_hostnames',
-#                     'tls_cert_domains',
-#                     'tls_server_names',
-#                     'user_agents',
-#                 ]
-
-#                 for _, row in df.iterrows():
-#                     for field in search_fields:
-#                         if pd.notna(row.get(field)) and row[field].strip() != '':
-#                             try:
-#                                 values = ast.literal_eval(row[field])
-#                                 total_queries += len(values)
-#                             except Exception:
-#                                 pass  # Optional: log the field/key if debugging
-
-#             return JsonResponse({'serpapi_queries': total_queries})
-
-#         except Exception as e:
-#             print("🔥 Error in serpapi_usage_summary:", e)
-#             return JsonResponse({'error': str(e)}, status=500)
-
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 @csrf_exempt
 def serpapi_usage(request):
     if request.method == 'GET':
@@ -602,7 +542,43 @@ def serpapi_usage(request):
             })
 
         except Exception as e:
-            print("🔥 Error in serpapi_usage_summary:", e)
+            print("Error in serpapi_usage_summary:", e)
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def delete_history_entry(request):
+    if request.method == 'POST':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        try:
+            body = json.loads(request.body)
+            input_s3_path = body.get('input_s3_path')
+            if not input_s3_path:
+                return JsonResponse({'error': 'Missing input_s3_path in request'}, status=400)
+
+            success, result = delete_history_item(user_id, input_s3_path)
+
+            if not success:
+                return JsonResponse({'error': result}, status=404)
+
+            # Delete files from S3
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            s3.delete_object(Bucket=bucket_name, Key=result['input_s3_path'])
+            s3.delete_object(Bucket=bucket_name, Key=result['result_s3_path'])
+
+            return JsonResponse({'message': 'History item deleted successfully'})
+
+        except Exception as e:
+            print("Error deleting history item:", e)
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
