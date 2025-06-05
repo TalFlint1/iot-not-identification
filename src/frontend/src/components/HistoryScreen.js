@@ -230,7 +230,7 @@ const HistoryScreen = () => {
 
         {/* History List */}
         <div style={{ marginTop: "20px" }}>
-          {filteredData.map((item, index) => (
+          {sortedData.map((item, index) => (
             <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
