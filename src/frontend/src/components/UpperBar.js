@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; 
-import settingsIcon from "../Icons/settings.png"; // Replace with your settings icon path
-import historyIcon from "../Icons/history.png"; // Replace with your history icon path
-import logoutIcon from "../Icons/logout.png"; // Replace with your logout icon path
+import resultIcon from "../Icons/result.png";
+import historyIcon from "../Icons/history.png";
+import logoutIcon from "../Icons/logout.png";
 import homepageIcon from "../Icons/homepage.png";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
@@ -19,8 +19,8 @@ const UpperBar = ({ username }) => {
     navigate("/history");
   };
 
-  const handleSettingsClick = () => {
-    navigate("/settings"); // Navigate to the settings page
+  const handleResultClick = () => {
+    navigate("/result"); // Navigate to the settings page
   };
 
   const handleDashboardClick = () => {
@@ -28,6 +28,7 @@ const UpperBar = ({ username }) => {
   };
 
   const handleLogoutClick = () => {
+    localStorage.removeItem("lastResult");
     // Remove the tokens from localStorage to log the user out
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -66,8 +67,8 @@ const UpperBar = ({ username }) => {
         }}
       >
         {/* Settings Icon */}
-        <button onClick={handleSettingsClick} style={iconButtonStyle}>
-          <img src={settingsIcon} alt="Settings" style={iconStyle} />
+        <button onClick={handleResultClick} style={iconButtonStyle}>
+          <img src={resultIcon} alt="Result" style={iconStyle} />
         </button>
 
         {/* Home Icon */}

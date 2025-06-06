@@ -93,6 +93,10 @@ const InputScreen = () => {
   
       const data = await response.json();
       console.log("Response data:", data);
+
+      // Save result to localStorage
+      localStorage.setItem("lastResult", JSON.stringify(data));
+
       // Navigate to result with the first device (assuming only one row for now)
       navigate("/result", { state: { resultData: data } });
       setLoading(false);
@@ -148,6 +152,10 @@ const InputScreen = () => {
   
       const data = await response.json();
       console.log("Response data:", data);
+
+      // Save result to localStorage
+      localStorage.setItem("lastResult", JSON.stringify(data));
+      
       navigate("/result", { state: { resultData: data } });
       setLoading(false);
     } catch (error) {

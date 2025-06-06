@@ -10,7 +10,18 @@ const ResultScreen = () => {
   const username = "Tal";
   const navigate = useNavigate();
   const location = useLocation();
-  const { resultData } = location.state || {};
+  let resultData = null;
+
+  // Prefer navigation state first
+  if (location.state && location.state.resultData) {
+    resultData = location.state.resultData;
+    localStorage.setItem("lastResult", JSON.stringify(resultData));  // Also update the saved result
+  } else {
+    const saved = localStorage.getItem("lastResult");
+    if (saved) {
+      resultData = JSON.parse(saved);
+    }
+  }
 
   const deviceResult = resultData?.device || "Unknown Device";
   const confidencePercentage = resultData ? Math.round(resultData.confidence) : 0;
