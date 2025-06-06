@@ -276,9 +276,9 @@ const HistoryScreen = () => {
             </div>
               {selectedItem?.id === item.id && (
                 <div style={{ backgroundColor: "#fff", padding: "10px", borderRadius: "10px", marginTop: "10px", color: "black",border: "1px solid #D9D9D9", }}>
-                  <p>Confidence: {item.confidence}%</p>
-                  <p>Date: {item.date}</p>
-                  <p>Justification: {item.justification}</p>
+                  <p><strong>Confidence:</strong> {item.confidence}%</p>
+                  <p><strong>Date:</strong> {item.date}</p>
+                  <p><strong>Justification:</strong> {item.justification}</p>
 
                     {/* Buttons for Re-identify and Export */}
                     <div style={{ marginTop: "20px" }}>

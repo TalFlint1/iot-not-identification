@@ -34,22 +34,22 @@ def analyze_device(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        print("User ID:", user_id)  # For debugging purposes, you can remove this later
+        print("User ID:", user_id)  # For debugging purposes
 
-        # 2. Get the uploaded file
+        # 2. Get the uploaded JSON file
         uploaded_file = request.FILES.get('file')
         if not uploaded_file:
             return JsonResponse({'error': 'No file provided'}, status=400)
 
         try:
-            # 3. Define data folder path (inside feature_extraction)
+            # 3. Define data folder path
             data_folder = os.path.join("feature_extraction", "data")
             os.makedirs(data_folder, exist_ok=True)
 
             # 4. Generate temp file paths
             unique_id = uuid.uuid4().hex
             input_json_path = os.path.join(data_folder, f"temp_input_{unique_id}.json")
-            output_csv_path = os.path.join(data_folder, f"enriched_dataset_{unique_id}.csv")
+            enriched_csv_path = os.path.join(data_folder, f"enriched_dataset_{unique_id}.csv")
 
             # 5. Save uploaded file
             with open(input_json_path, 'wb+') as destination:
@@ -57,29 +57,34 @@ def analyze_device(request):
                     destination.write(chunk)
 
             # 6. Run extraction + enrichment
-            extract_and_enrich(input_json_path, output_csv_path)
+            extract_and_enrich(input_json_path, enriched_csv_path)
 
-            # 7. Run function labeling
-            result = run_function_labeling_from_csv(output_csv_path)
+            # 7. Upload enriched input file to S3
+            input_s3_info = upload_input_to_s3(enriched_csv_path, user_id)
 
-            # 8. Upload result to S3 and Save S3 info to user history
-            s3_info = upload_result_to_s3(result, user_id)
-            
+            # 8. Run function labeling
+            result = run_function_labeling_from_csv(enriched_csv_path)
+
+            # 9. Upload result to S3
+            result_s3_info = upload_result_to_s3(result, user_id)
+
+            # 10. Format confidence if needed
             confidence = result.get('confidence', '')
             if isinstance(confidence, float):
                 confidence = Decimal(str(confidence))
 
+            # 11. Save history item
             history_item = {
                 'device': result.get('device', ''),
                 'confidence': confidence,
                 'justification': result.get('justification', ''),
-                's3_path': s3_info.get('s3_key', ''),
+                'input_s3_path': input_s3_info.get('s3_key', ''),
+                'result_s3_path': result_s3_info.get('s3_key', ''),
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
             }
             add_history_item(user_id, history_item)
 
-
-            # 9. Optional cleanup (only JSON, keeping CSV)
+            # 12. Optional cleanup
             os.remove(input_json_path)
 
             return JsonResponse(result)
