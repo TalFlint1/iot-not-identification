@@ -63,3 +63,26 @@ def count_identified_devices(username: str) -> int:
     except ClientError as e:
         print(f"Error accessing S3: {e}")
         return 0
+    
+# Upload raw JSON to S3 (raw user input before enrichment)
+def upload_raw_json_to_s3(json_path, user_id):
+    bucket_name = os.getenv('S3_BUCKET_NAME')
+    region = os.getenv('AWS_REGION')
+    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H-%M-%SZ')
+    raw_key = f"{user_id}/raw/input_{timestamp}.json"  # Raw files go under 'raw' folder
+
+    with open(json_path, 'r') as f:
+        raw_json_data = json.load(f)
+
+    s3.put_object(
+        Bucket=bucket_name,
+        Key=raw_key,
+        Body=json.dumps(raw_json_data),
+        ContentType='application/json'
+    )
+
+    return {
+        "timestamp": timestamp,
+        "s3_key": raw_key,
+        "s3_url": f"https://{bucket_name}.s3.{region}.amazonaws.com/{raw_key}"
+    }

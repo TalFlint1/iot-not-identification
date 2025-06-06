@@ -82,7 +82,7 @@ def label_vendor(csv_input):
         csv_data.seek(0)
     enriched_data = pd.read_csv(csv_data, dtype=str).fillna("")
 
-    irrelevant_phrases = ["google play", "google account", "google.com", "google:"]
+    irrelevant_phrases = ["google play", "google account", "google.com", "google:", "google translate", "google maps", "google scholar", "google gemini"]
     device_vendors = {}
 
     for index, row in enriched_data.iterrows():

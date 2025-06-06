@@ -6,7 +6,7 @@ import traceback
 from .function_labeling import run_function_labeling_from_csv
 from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
-from utils.s3_utils import upload_result_to_s3, upload_input_to_s3
+from utils.s3_utils import upload_result_to_s3, upload_input_to_s3, upload_raw_json_to_s3
 from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications, get_low_confidence_alerts
 from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions, delete_history_item
 from datetime import datetime, timezone
@@ -55,6 +55,7 @@ def analyze_device(request):
             with open(input_json_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
+            raw_s3_info = upload_raw_json_to_s3(input_json_path, user_id)
 
             # 6. Run extraction + enrichment
             extract_and_enrich(input_json_path, enriched_csv_path)
@@ -80,6 +81,7 @@ def analyze_device(request):
                 'justification': result.get('justification', ''),
                 'input_s3_path': input_s3_info.get('s3_key', ''),
                 'result_s3_path': result_s3_info.get('s3_key', ''),
+                'raw_input_s3_path': raw_s3_info.get('s3_key', ''),
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
             }
             add_history_item(user_id, history_item)
