@@ -54,8 +54,12 @@ const RecentActivityTable = ({ data }) => {
           {data.map((item, index) => (
             <tr key={index}>
               <td style={tdStyle}>{item.timestamp}</td>
-              <td style={tdStyle}>{item.vendor}</td>
-              <td style={tdStyle}>{item.function}</td>
+              <td style={tdStyle}>
+                {item.vendor.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+              </td>
+                            <td style={tdStyle}>
+                {item.function.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+              </td>
               <td style={tdStyle}>{item.confidence}%</td>
             </tr>
           ))}

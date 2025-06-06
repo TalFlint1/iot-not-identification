@@ -23,7 +23,10 @@ const ResultScreen = () => {
     }
   }
 
-  const deviceResult = resultData?.device || "Unknown Device";
+  const deviceResult = resultData?.device
+  ?.split(" ")
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ") || "Unknown Device";
   const confidencePercentage = resultData ? Math.round(resultData.confidence) : 0;
   const justificationText = resultData?.justification || "No justification available.";
 
