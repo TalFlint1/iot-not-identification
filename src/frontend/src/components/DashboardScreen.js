@@ -10,7 +10,7 @@ import RecentActivityTable from "./RecentActivityTable";
 import ConfidenceAlertsTable from "./ConfidenceAlerts";
 import CircularConfidenceCard from "./CircularConfidenceCard";
 import { useState, useEffect } from "react";
-
+import RawJsonModal from "./RawJsonModal";
 
 const getVendorLogoURL = (vendorName) => 
   `https://logo.clearbit.com/${vendorName.toLowerCase()}.com`;
@@ -31,6 +31,13 @@ const DashboardScreen = () => {
   const [apiUsed, setApiUsed] = useState(0);
   const apiLimit = 100;
   const [totalUsed, setTotalUsed] = useState(0);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleRowClick = (item) => {
+    setSelectedRow(item);
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchDashboardSummary = async () => {
@@ -324,7 +331,13 @@ const DashboardScreen = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             >
-            <ConfidenceAlertsTable data={confidenceAlerts} />
+            <ConfidenceAlertsTable data={confidenceAlerts} onRowClick={handleRowClick}/>
+            {modalOpen && (
+              <RawJsonModal
+                item={selectedRow}
+                onClose={() => setModalOpen(false)}
+              />
+            )}
             </motion.div>
         </div>
 

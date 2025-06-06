@@ -589,3 +589,32 @@ def delete_history_entry(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def get_raw_json(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        s3_key = request.GET.get('s3_key')
+        if not s3_key:
+            return JsonResponse({'error': 'Missing s3_key parameter'}, status=400)
+
+        try:
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            s3_object = s3.get_object(Bucket=bucket_name, Key=s3_key)
+            json_data = s3_object['Body'].read().decode('utf-8')
+            parsed = json.loads(json_data)
+            return JsonResponse(parsed, safe=False)
+
+        except Exception as e:
+            print("Error fetching raw JSON from S3:", e)
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

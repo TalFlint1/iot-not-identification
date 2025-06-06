@@ -1,4 +1,4 @@
-const ConfidenceAlertsTable = ({ data }) => {
+const ConfidenceAlertsTable = ({ data, onRowClick }) => {
   const lowConfidence = data.filter(item => item.confidence < 60);
 
   const tableStyle = {
@@ -38,7 +38,13 @@ const ConfidenceAlertsTable = ({ data }) => {
           </thead>
           <tbody>
             {lowConfidence.map((item, index) => (
-              <tr key={index}>
+              <tr
+                key={index}
+                style={{ cursor: "pointer", backgroundColor: "#fff" }}
+                onClick={() => onRowClick(item)}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f5f5f5")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+              >
                 <td style={tdStyle}>{item.timestamp}</td>
                 <td style={tdStyle}>
                   {item.vendor.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}

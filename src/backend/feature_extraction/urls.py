@@ -2,7 +2,7 @@
 
 from django.urls import path
 from .views import analyze_device, get_user_history, analyze_enriched_csv, cheap_reidentify_device, reidentify_device, dashboard_summary, recent_identifications, confidence_alerts
-from .views import devices_over_time, top_vendor_view, top_vendors_chart_view, top_functions_chart_view, serpapi_usage, delete_history_entry
+from .views import devices_over_time, top_vendor_view, top_vendors_chart_view, top_functions_chart_view, serpapi_usage, delete_history_entry, get_raw_json
 
 urlpatterns = [
     path('analyze/', analyze_device, name='analyze_device'),
@@ -19,4 +19,5 @@ urlpatterns = [
     path('top-functions/', top_functions_chart_view, name='top-functions'),
     path('serpapi-usage/', serpapi_usage, name='serpapi_usage'),
     path('delete-identification/', delete_history_entry, name='delete_history_entry'),
+    path('raw-json/', get_raw_json, name='get_raw_json'),
 ]
