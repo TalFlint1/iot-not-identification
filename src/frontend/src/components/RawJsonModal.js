@@ -65,38 +65,41 @@ const RawJsonModal = ({ item, onClose }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchRawJson = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        const response = await fetch(`http://localhost:5000/raw-json/?s3_key=${encodeURIComponent(item.raw_input_s3_path)}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+useEffect(() => {
+  const fetchRawJson = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch("http://localhost:5000/raw-json/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ s3_key: item.raw_input_s3_path }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch raw JSON");
-        }
-
-        const data = await response.json();
-        setRawJson(data.raw_json);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Failed to fetch raw JSON");
       }
-    };
 
-    if (item?.raw_input_s3_path) {
-      fetchRawJson();
+      const data = await response.json();
+      setRawJson(data.raw_json);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  }, [item]);
+  };
+
+  if (item?.raw_input_s3_path) {
+    fetchRawJson();
+  }
+}, [item]);
 
   return (
     <div style={{ position: "fixed", top: 50, left: "10%", width: "80%", background: "white", borderRadius: 12, padding: 20, boxShadow: "0 4px 16px rgba(0,0,0,0.2)", zIndex: 999 }}>
       <button onClick={onClose} style={{ float: "right" }}>Close</button>
-      <h3>📄 Raw JSON Input</h3>
+      <h3>📄📄 Raw JSON Input</h3>
 
       {loading ? (
         <p>Loading...</p>

@@ -172,15 +172,12 @@ def analyze_enriched_csv(request):
 @csrf_exempt
 def get_user_history(request):
     if request.method == 'GET':
-        print("Authorization header:", request.headers.get('Authorization'))
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
 
         token = auth_header.split(' ')[1]
-        print("this is token: ", token)
         user_id = get_user_id_from_token(token)
-        print("this is user_id:", user_id)
 
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
@@ -592,7 +589,7 @@ def delete_history_entry(request):
 
 @csrf_exempt
 def get_raw_json(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
@@ -602,16 +599,17 @@ def get_raw_json(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        s3_key = request.GET.get('s3_key')
-        if not s3_key:
-            return JsonResponse({'error': 'Missing s3_key parameter'}, status=400)
-
         try:
+            body = json.loads(request.body)
+            s3_key = body.get('s3_key')
+            if not s3_key:
+                return JsonResponse({'error': 'Missing s3_key parameter'}, status=400)
+
             bucket_name = os.getenv('S3_BUCKET_NAME')
             s3_object = s3.get_object(Bucket=bucket_name, Key=s3_key)
             json_data = s3_object['Body'].read().decode('utf-8')
             parsed = json.loads(json_data)
-            return JsonResponse(parsed, safe=False)
+            return JsonResponse({'raw_json': parsed})  # 🔄 wrap it like this so frontend can access data.raw_json
 
         except Exception as e:
             print("Error fetching raw JSON from S3:", e)

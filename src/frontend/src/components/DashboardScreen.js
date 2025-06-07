@@ -35,6 +35,7 @@ const DashboardScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleRowClick = (item) => {
+    console.log("Clicked item:", item);
     setSelectedRow(item);
     setModalOpen(true);
   };

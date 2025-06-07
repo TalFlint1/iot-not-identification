@@ -102,7 +102,8 @@ def get_low_confidence_alerts(user_id, threshold=60.0, count=2):
             'timestamp': entry.get('date', ''),
             'vendor': vendor,
             'function': function,
-            'confidence': round(float(entry.get('confidence', 0.0)), 2)
+            'confidence': round(float(entry.get('confidence', 0.0)), 2),
+            'raw_input_s3_path': entry.get('raw_input_s3_path', '')
         })
 
     # Pad if fewer than 'count'
@@ -111,7 +112,8 @@ def get_low_confidence_alerts(user_id, threshold=60.0, count=2):
             'timestamp': '',
             'vendor': '',
             'function': '',
-            'confidence': ''
+            'confidence': '',
+            'raw_input_s3_path': ''
         })
 
     return formatted_entries
