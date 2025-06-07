@@ -187,79 +187,6 @@ def get_user_history(request):
         return JsonResponse({'history': history})
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
-    
-# @csrf_exempt
-# def reidentify_device(request):
-#     if request.method == 'POST':
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
-
-#         token = auth_header.split(' ')[1]
-#         user_id = get_user_id_from_token(token)
-
-#         if not user_id:
-#             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
-
-#         # 1. Define paths
-#         data_folder = os.path.join("feature_extraction", "data")
-#         os.makedirs(data_folder, exist_ok=True)
-
-#         local_json_path = os.path.join(data_folder, f'temp_input_{uuid.uuid4().hex}.json')
-
-#         try:
-#             # 2. Parse the request body
-#             body = json.loads(request.body)
-#             input_s3_path = body.get('input_s3_path')
-
-#             if not input_s3_path:
-#                 return JsonResponse({'error': 'Missing input_s3_path'}, status=400)
-            
-#             if input_s3_path.startswith('/'):
-#                 input_s3_path = input_s3_path[1:]
-
-#             # 3. Download JSON file from S3
-#             bucket_name = os.getenv('S3_BUCKET_NAME')
-#             s3.download_file(bucket_name, input_s3_path, local_json_path)
-
-#             # 4. Extract and enrich
-#             enriched_csv_path = extract_and_enrich(local_json_path)
-
-#             # 5. Run function labeling
-#             result = run_function_labeling_from_csv(enriched_csv_path)
-
-#             # 6. Upload result to S3
-#             result_s3_info = upload_result_to_s3(result, user_id)
-
-#             # 7. Save history
-#             confidence = result.get('confidence', '')
-#             if isinstance(confidence, float):
-#                 confidence = Decimal(str(confidence))
-
-#             history_item = {
-#                 'device': result.get('device', ''),
-#                 'confidence': confidence,
-#                 'justification': result.get('justification', ''),
-#                 'input_s3_path': input_s3_path,
-#                 'result_s3_path': result_s3_info.get('s3_key', ''),
-#                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
-#                 'reidentify': True
-#             }
-#             add_history_item(user_id, history_item)
-
-#             return JsonResponse(result, status=200)
-
-#         except Exception as e:
-#             print("Error during reidentification:", e)
-#             traceback.print_exc()
-#             return JsonResponse({'error': str(e)}, status=500)
-
-#         finally:
-#             # Always clean up temp files
-#             if os.path.exists(local_json_path):
-#                 os.remove(local_json_path)
-
-#     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @csrf_exempt
 def reidentify_device(request):
@@ -326,6 +253,8 @@ def reidentify_device(request):
         finally:
             if os.path.exists(local_json_path):
                 os.remove(local_json_path)
+            if os.path.exists(enriched_csv_path):
+                os.remove(enriched_csv_path)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
