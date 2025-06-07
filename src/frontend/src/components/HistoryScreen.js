@@ -56,49 +56,93 @@ const HistoryScreen = () => {
     fetchHistory();
   }, []);
 
+  // Cheap Version of Re Identify
+  // const handleReidentify = async () => {
+  //   if (!itemToReidentify || !itemToReidentify.input_s3_path) {
+  //     alert("Missing original input file information.");
+  //     return;
+  //   }
+  
+  //   const token = localStorage.getItem("access_token");
+  //   if (!token) {
+  //     alert("Authorization token is missing.");
+  //     return;
+  //   }
+  
+  //   setShowReidentifyModal(false); // Close the modal
+  //   setReidentifyLoading(true);
+  
+  //   try {
+  //     const response = await fetch("http://localhost:5000/cheap_reidentify/", {
+  //       method: "POST",
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         input_s3_path: itemToReidentify.input_s3_path,
+  //       }),
+  //     });
+  
+  //     if (!response.ok) {
+  //       throw new Error("Failed to re-identify device");
+  //     }
+  
+  //     const data = await response.json();
+  //     console.log("Re-identify response:", data);
+  
+  //     // Navigate to result screen with the new data
+  //     navigate("/result", { state: { resultData: data } });
+  //   } catch (error) {
+  //     console.error("Error during re-identification:", error);
+  //     alert("Something went wrong while re-identifying the device.");
+  //   } finally {
+  //   setReidentifyLoading(false);
+  // }
+  // };
+
   const handleReidentify = async () => {
-    if (!itemToReidentify || !itemToReidentify.input_s3_path) {
-      alert("Missing original input file information.");
+    if (!itemToReidentify || !itemToReidentify.raw_input_s3_path) {
+      alert("Missing original raw input file path.");
       return;
     }
-  
+
     const token = localStorage.getItem("access_token");
     if (!token) {
       alert("Authorization token is missing.");
       return;
     }
-  
-    setShowReidentifyModal(false); // Close the modal
+
+    setShowReidentifyModal(false);
     setReidentifyLoading(true);
-  
+
     try {
-      const response = await fetch("http://localhost:5000/cheap_reidentify/", {
+      const response = await fetch("http://localhost:5000/reidentify/", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          input_s3_path: itemToReidentify.input_s3_path,
+          raw_input_s3_path: itemToReidentify.raw_input_s3_path,  // << important
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to re-identify device");
       }
-  
+
       const data = await response.json();
       console.log("Re-identify response:", data);
-  
-      // Navigate to result screen with the new data
       navigate("/result", { state: { resultData: data } });
     } catch (error) {
       console.error("Error during re-identification:", error);
       alert("Something went wrong while re-identifying the device.");
     } finally {
-    setReidentifyLoading(false);
-  }
+      setReidentifyLoading(false);
+    }
   };
+
 
   const handleExportCSV = () => {
     if (selectedExports.length === 0) return;
