@@ -129,7 +129,11 @@ const InputScreen = () => {
   
     try {
       // 1. Create a Blob with the JSON string
-      const jsonBlob = new Blob([JSON.stringify({ devices: [manualData] }, null, 2)], {
+      const fileJson = {
+        "manual_input_1.csv": manualData,
+      };
+
+      const jsonBlob = new Blob([JSON.stringify(fileJson, null, 2)], {
         type: "application/json",
       });
   
@@ -164,35 +168,6 @@ const InputScreen = () => {
       alert("Something went wrong while identifying the device.");
     }
   };
-
-  const downloadManualJson = () => {
-    const manualData = {
-      "dns.ptr.domain_name": dnsPtr ? dnsPtr.split(",").map(name => name.trim()) : [],
-      "dhcp.option.hostname": dhcpHostname ? dhcpHostname.split(",").map(name => name.trim()) : [],
-      "x509ce.dNSName": certificateDnsNames ? certificateDnsNames.split(",").map(name => name.trim()) : [],
-      "http.user_agent": httpUserAgent ? httpUserAgent.split(",").map(agent => agent.trim()) : [],
-      "tls.handshake.extensions_server_name": tlsServerName ? tlsServerName.split(",").map(name => name.trim()) : [],
-      "mac_address": macAddress,
-      "origin_dataset": "manual",
-      "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
-    };    
-  
-    const blob = new Blob(
-      [JSON.stringify({ devices: [manualData] }, null, 2)], 
-      { type: "application/json" }
-    );
-  
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'manual_input_test.json';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-  
-  
 
   const buttonStyle = {
     width: "200px", height: "40px", borderRadius: "5px", border: "1px solid #000000", fontSize: "18px",
