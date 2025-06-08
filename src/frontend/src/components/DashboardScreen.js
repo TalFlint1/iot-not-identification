@@ -29,7 +29,7 @@ const DashboardScreen = () => {
   const [topVendors, setTopVendors] = useState([]);
   const [topFunctions, setTopFunctions] = useState([]);
   const [apiUsed, setApiUsed] = useState(0);
-  const apiLimit = 100;
+  const apiLimit = 200;
   const [totalUsed, setTotalUsed] = useState(0);
   const [selectedRow, setSelectedRow] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);

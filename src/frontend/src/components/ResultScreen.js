@@ -65,12 +65,12 @@ const ResultScreen = () => {
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42", textAlign: "center", }}>
         <Title />
         
-        <p style={{ color: "white", fontSize: "36px", textTransform: "uppercase", fontStyle: "italic", marginBottom: "40px", marginRight: "60px" }}>
+        <p style={{ color: "white", fontSize: "36px", textTransform: "uppercase", fontStyle: "italic", marginBottom: "40px", marginRight: "70px" }}>
           RESULTS</p>
         
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "50px", marginTop: "20px" }}>
           {/* Device */}
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center",  marginLeft: "100px" }}>
             <p style={{ color: "white", fontSize: "20px", marginBottom: "10px", fontSize: "28px", marginRight: "50px" }}>Device</p>
             <div
               style={{
@@ -140,7 +140,7 @@ const ResultScreen = () => {
         </div>
         
         {/* Analyze Another Device */}
-        <div style={{ textAlign: "center", marginTop: "130px" }}>
+        <div style={{ textAlign: "center", marginTop: "130px", marginRight: "70px" }}>
           <p style={{ color: "white", fontSize: "24px" }}>Analyze Another Device</p>
           <button
             onClick={handleAnalyzeAnother}
