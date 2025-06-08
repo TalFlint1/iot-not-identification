@@ -5,7 +5,17 @@ import UpperBar from "./UpperBar";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
-
+import voice from "../Icons/voice-assistant.png";
+import tv from "../Icons/smart-tv.png";
+import robot from "../Icons/robot-vacuum.png";
+import hub from "../Icons/hub.png";
+import bulb from "../Icons/smart-light.png";
+import plug from "../Icons/smart-plug.png";
+import watch from "../Icons/smartwatch.png";
+import sensor from "../Icons/sensor.png";
+import camera from "../Icons/security_camera.png";
+import phone from "../Icons/mobile_phone.png";
+import laptop from "../Icons/laptop.png";
 
 const HistoryScreen = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -214,6 +224,41 @@ const HistoryScreen = () => {
   const sortedData = React.useMemo(() => {
   return [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date));
 }, [filteredData]);
+const getFunctionFromLabel = (deviceLabel) => {
+  const [vendor, ...funcWords] = deviceLabel.split(" ");
+  return funcWords.join(" ").toLowerCase(); // everything after first word
+};
+
+const getIconForFunction = (func) => {
+  const iconMap = {
+    "camera": camera,
+    "smartphone": phone,
+    "laptop": laptop,
+    "security camera": camera,
+    "smart camera": camera,
+    "smart speaker": voice,
+    "sensor": sensor,
+    "smart sensor": sensor,
+    "motion sensor": sensor,
+    "air quality sensor": sensor,
+    "environmental sensor": sensor,
+    "door Sensor": sensor,
+    "smartwatch": watch,
+    "plug": plug,
+    "smart plug": plug,
+    "smart bulb": bulb,
+    "bulb": bulb,
+    "hub": hub,
+    "smart home hub": hub,
+    "vacuum cleaner": robot,
+    "robot vacuum" : robot,
+    "smart tv": tv,
+    "voice assistant": voice
+  };
+
+  const match = Object.keys(iconMap).find(key => func.includes(key));
+  return match ? iconMap[match] : null; // fallback icon
+};
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -306,9 +351,19 @@ const HistoryScreen = () => {
                   style={{ marginRight: "10px" }}
                 />
                 )}
-                <div>
-                  {item.device} ({item.confidence}%) - {item.date}
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {getIconForFunction(getFunctionFromLabel(item.device)) && (
+                  <img
+                    src={getIconForFunction(getFunctionFromLabel(item.device))}
+                    alt="Function Icon"
+                    style={{ width: '24px', height: '24px' }}
+                  />
+                )}
+              <span>
+                {item.device.charAt(0).toUpperCase() + item.device.slice(1)} ({item.confidence}%) - {item.date}
+              </span>
+              </div>
+
               </div>
               <div style={{
                 transform: selectedItem?.id === item.id ? "rotate(90deg)" : "rotate(0deg)",
