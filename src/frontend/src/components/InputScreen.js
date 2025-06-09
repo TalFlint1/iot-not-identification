@@ -252,7 +252,7 @@ const InputScreen = () => {
             {inputType === "json" ? (
                 <div className="flex flex-col items-center gap-4" style={{ height: "100%", justifyContent: "center" }}>
                 <p className="italic" style={{ marginTop: "20px", marginLeft: "30px", marginBottom: "1px", paddingTop: "20px", fontSize: "18px" }}>
-                  Select your JSON file from your computer or drag and drop it into the box below
+                  Select a JSON file from your computer and start the analysis
                 </p>
                 
                 {/* Label for file upload */}
@@ -321,6 +321,12 @@ const InputScreen = () => {
             ) : (
               <div style={{ position: "relative", width: "100%", height: "100%" }}>
               <div className="input-grid">
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <p style={{ marginTop: "10px", fontStyle: "italic", color: "#666", marginBottom: "-10px" }}>
+                    Use commas to separate multiple entries in a single field (e.g. www.google.com, pool.ntp.org)
+                  </p>
+                </div>
+
                 {/* First row */}
                 <div className="input-box">
                   <h3>MAC Address</h3>

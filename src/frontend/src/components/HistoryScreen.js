@@ -287,7 +287,8 @@ const getIconForFunction = (func) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
             padding: '8px',
-            marginBottom: '16px',
+            marginBottom: '10px',
+            marginTop: '16px',
             borderRadius: '6px',
             border: '1px solid #ccc',
             width: '30%'
