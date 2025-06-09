@@ -29,6 +29,7 @@ const HistoryScreen = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [reidentifyLoading, setReidentifyLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -257,8 +258,14 @@ const getIconForFunction = (func) => {
   };
 
   const match = Object.keys(iconMap).find(key => func.includes(key));
-  return match ? iconMap[match] : null; // fallback icon
-};
+    return match ? iconMap[match] : null; // fallback icon
+  };
+
+  const finalFilteredData = React.useMemo(() => {
+    return sortedData.filter(item =>
+      item.device.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [sortedData, searchTerm]);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
@@ -273,6 +280,19 @@ const getIconForFunction = (func) => {
       <div style={{ flex: 1, padding: "20px", backgroundColor: "#343C42", textAlign: "center" }}>
         <Title />
         <p style={{ color: "white", fontSize: "36px", textTransform: "uppercase", fontStyle: "italic" }}>HISTORY</p>
+        <input
+          type="text"
+          placeholder="Search history..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            padding: '8px',
+            marginBottom: '16px',
+            borderRadius: '6px',
+            border: '1px solid #ccc',
+            width: '30%'
+          }}
+        />
 
         {/* Filters */}
         <div style={{ marginBottom: "20px" }}>
@@ -319,7 +339,7 @@ const getIconForFunction = (func) => {
 
         {/* History List */}
         <div style={{ marginTop: "20px" }}>
-          {sortedData.map((item, index) => (
+          {finalFilteredData.map((item, index) => (
             <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
@@ -359,9 +379,9 @@ const getIconForFunction = (func) => {
                     style={{ width: '24px', height: '24px' }}
                   />
                 )}
-              <span>
-                {item.device.charAt(0).toUpperCase() + item.device.slice(1)} ({item.confidence}%) - {item.date}
-              </span>
+                <span>
+                  {item.device.charAt(0).toUpperCase() + item.device.slice(1)} ({item.confidence}%) - {item.date}
+                </span>
               </div>
 
               </div>
