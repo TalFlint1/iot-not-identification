@@ -177,6 +177,8 @@ const HistoryScreen = () => {
     document.body.appendChild(link); // Required for Firefox
     link.click();
     document.body.removeChild(link);
+    setExportMode(false);
+    setSelectedExports([]);
   };
     
 
@@ -414,7 +416,7 @@ const getIconForFunction = (func) => {
                         padding: "10px 20px",
                         margin: "5px",
                         cursor: "pointer",
-                        fontSize: "18px",
+                        fontSize: "16px",
                         borderRadius: "5px",
                         display: "inline-flex", // keeps your layout intact
                         alignItems: "center", // vertically centers icon/text
