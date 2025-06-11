@@ -22,6 +22,19 @@ const InputScreen = () => {
   const [domains, setDomains] = useState("");
   const [dnsPtr, setDnsPtr] = useState("");
   const [tlsServerName, setTlsServerName] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  const exampleJson = `{
+    "device_sample.csv": {
+      "dns.ptr.domain_name": [],
+      "dhcp.option.hostname": [],
+      "x509ce.dNSName": ["example.domain.com"],
+      "http.user_agent": [],
+      "tls.handshake.extensions_server_name": [],
+      "mac_address": "00:11:22:33:44:55",
+      "dns.qry.name": ["example.com", "pool.ntp.org"]
+    }
+  }`;
 
   // const handleRealAnalyze = async () => {
   //   if (!selectedFile) {
@@ -61,9 +74,50 @@ const InputScreen = () => {
   //   }
   // };
 
+  const validateJsonFile = async (file) => {
+    try {
+      const text = await file.text();
+      const json = JSON.parse(text);
+
+      const topKeys = Object.keys(json);
+      if (topKeys.length !== 1) return false;
+
+      const content = json[topKeys[0]];
+      if (typeof content !== 'object' || content === null) return false;
+
+      const fieldsToCheck = [
+        "dns.ptr.domain_name",
+        "dhcp.option.hostname",
+        "x509ce.dNSName",
+        "http.user_agent",
+        "tls.handshake.extensions_server_name",
+        "dns.qry.name"
+      ];
+
+      const hasAtLeastOne = fieldsToCheck.some(
+        key => Array.isArray(content[key]) && content[key].length > 0
+      );
+
+      return hasAtLeastOne;
+    } catch (e) {
+      return false;
+    }
+  };
+
   const handleRealAnalyze = async () => {
     if (!selectedFile) {
-      alert("Please select a CSV file before identifying.");
+      alert("Please select a JSON file before identifying.");
+      return;
+    }
+
+    if (!selectedFile.name.toLowerCase().endsWith(".json")) {
+      alert("Please select a valid JSON file (.json).");
+      return;
+    }
+
+    const isValid = await validateJsonFile(selectedFile);
+    if (!isValid) {
+      alert("The uploaded JSON file is not properly formatted or missing required fields.");
       return;
     }
   
@@ -119,6 +173,20 @@ const InputScreen = () => {
       "dns.qry.name": domains ? domains.split(",").map(domain => domain.trim()) : [],
     };     
   
+    const allFieldsEmpty =
+      !dnsPtr.trim() &&
+      !dhcpHostname.trim() &&
+      !certificateDnsNames.trim() &&
+      !httpUserAgent.trim() &&
+      !tlsServerName.trim() &&
+      !macAddress.trim() &&
+      !domains.trim();
+
+    if (allFieldsEmpty) {
+      alert("Please enter at least one field before identifying.");
+      return;
+    }
+
     const token = localStorage.getItem("access_token");
     if (!token) {
       alert("Authorization token is missing.");
@@ -315,6 +383,92 @@ const InputScreen = () => {
                   <button onClick={handleRealAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "0px" }}>
                     IDENTIFY
                   </button>
+                  <>
+                    <div className="flex items-center space-x-2" style={{ marginTop: "10px" }}>
+                      <label htmlFor="jsonUpload" className="font-semibold">Example JSON Format</label>
+                      <button
+                        aria-label="Show example JSON format"
+                        onClick={() => setShowModal(true)}
+                        style={{
+                          marginLeft: "10px",
+                          background: "none",
+                          border: "none",
+                          padding: 0,
+                          cursor: "pointer",
+                          fontSize: "1rem",
+                          color: "#2563eb"
+                        }}
+                        onMouseOver={(e) => (e.target.style.color = "#1e40af")}
+                        onMouseOut={(e) => (e.target.style.color = "#2563eb")}
+                      >
+                        ℹ️
+                      </button>
+                    </div>
+
+                    {showModal && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+    onClick={() => setShowModal(false)}
+  >
+    <div
+      style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        maxWidth: "600px",
+        width: "90%",
+        maxHeight: "80vh",
+        overflowY: "auto",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+      }}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <pre
+        style={{
+          backgroundColor: "#f3f3f3",
+          padding: "15px",
+          borderRadius: "5px",
+          fontSize: "14px",
+          whiteSpace: "pre-wrap",
+          wordWrap: "break-word",
+          maxHeight: "60vh",
+          overflowY: "auto",
+        }}
+      >
+        {exampleJson}
+      </pre>
+      <button
+        onClick={() => setShowModal(false)}
+        style={{
+          marginTop: "15px",
+          padding: "8px 16px",
+          backgroundColor: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#1e40af")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#2563eb")}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+                  </>
                 </div>
               </div>
               
