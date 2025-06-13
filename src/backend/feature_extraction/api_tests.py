@@ -16,15 +16,15 @@ def test_analyze_device():
     assert "device" in response.json()
 
 def test_get_user_history():
-    params = {"user_id": "user123"}
-    response = requests.get("http://localhost:5000/history/", params=params, headers=HEADERS)
-    
+    response = requests.get("http://localhost:5000/history/", headers=HEADERS)
+
     assert response.status_code == 200
 
     data = response.json()
     assert isinstance(data, dict)
     assert "history" in data
     assert isinstance(data["history"], list)
+
 
 def test_recent_identifications():
     response = requests.get("http://localhost:5000/recent-identifications/", headers=HEADERS)
