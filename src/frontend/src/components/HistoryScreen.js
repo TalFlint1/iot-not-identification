@@ -184,7 +184,7 @@ const HistoryScreen = () => {
 
   // Filter data based on selection
   const filteredData = historyData.filter((item) => {
-    if (showUnsuccessful) return item.confidence === 0;
+    if (showUnsuccessful) return item.confidence < 50;
     if (filter === "high") return item.confidence >= 80;
     if (filter === "medium") return item.confidence >= 50 && item.confidence < 80;
     if (filter === "low") return item.confidence > 0 && item.confidence < 50;
