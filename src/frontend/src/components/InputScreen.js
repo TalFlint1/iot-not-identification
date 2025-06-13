@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Title from "./Title";
 import sidebarImage from "../Icons/sidebar.png";
 import './InputScreen.css'; // Make sure the path is correct
@@ -13,6 +13,7 @@ const InputScreen = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [focusedInput, setFocusedInput] = useState(""); // State to manage which input box is clicked
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef();
 
   // For Manual Entry
   const [macAddress, setMacAddress] = useState("");
@@ -333,16 +334,46 @@ const InputScreen = () => {
                   }}
                 >
                   {/* Small gray box inside the input box */}
+                  <input
+  type="file"
+  accept=".json"
+  onChange={(e) => setSelectedFile(e.target.files[0])}
+  ref={fileInputRef}
+  style={{ display: "none" }}
+/>
+
                   <div
-                    style={{
-                      backgroundColor: "#D9D9D9", padding: "10px", borderRadius: "8px", textAlign: "left", fontSize: "16px", color: "#333",
-                      width: "200px", border: "2px dashed #4C484E", display: "flex", alignItems: "center", justifyContent: "center",
-                      gap: "8px", marginLeft: "-40px", marginTop: "-40px", cursor: "pointer"
-                    }}
-                  >
-                    <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
-                    Choose file or drag it here
-                  </div>
+  onClick={() => fileInputRef.current?.click()}
+  onDragOver={(e) => e.preventDefault()}
+  onDrop={(e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === "application/json") {
+      setSelectedFile(file); // or however you're handling file selection
+    }
+  }}
+  style={{
+    backgroundColor: "#D9D9D9",
+    padding: "10px",
+    borderRadius: "8px",
+    textAlign: "left",
+    fontSize: "16px",
+    color: "#333",
+    width: "200px",
+    border: "2px dashed #4C484E",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    marginLeft: "-40px",
+    marginTop: "-40px",
+    cursor: "pointer"
+  }}
+>
+  <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
+  Choose file or drag it here
+</div>
+
                   
               
                   {/* Show file name directly under the gray box */}
