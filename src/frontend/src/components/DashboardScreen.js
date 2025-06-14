@@ -55,7 +55,7 @@ const DashboardScreen = () => {
 
         const data = await response.json();
         setDevicesIdentified(data.devices_identified);
-        setAverageConfidence(data.average_confidence);  // <-- new line
+        setAverageConfidence(data.average_confidence);
       } catch (err) {
         console.error('Failed to fetch dashboard summary:', err);
         setError('Failed to load data');
@@ -80,7 +80,7 @@ const DashboardScreen = () => {
         }
 
         const data = await response.json();
-        setRecentIdentifications(data.recent_identifications); // assuming your response has this field
+        setRecentIdentifications(data.recent_identifications);
       } catch (err) {
         console.error('Failed to fetch recent identifications:', err);
         setError('Failed to load recent identifications');
@@ -105,7 +105,7 @@ const DashboardScreen = () => {
         }
 
         const data = await response.json();
-        setConfidenceAlerts(data.confidence_alerts);  // set it!
+        setConfidenceAlerts(data.confidence_alerts);
       } catch (err) {
         console.error('Failed to fetch confidence alerts:', err);
       }
@@ -173,7 +173,7 @@ const DashboardScreen = () => {
         const data = await response.json();
         const rawData = data.vendor || [];
 
-        // 🔁 Transform for chart compatibility
+        // Transform for chart compatibility
         const formattedData = rawData.map(item => ({
           name: item.vendor,
           devices: item.count,
@@ -200,9 +200,9 @@ const DashboardScreen = () => {
         const data = await response.json();
         const rawData = data.function || [];
 
-        // 🔁 Transform for chart compatibility
+        // Transform for chart compatibility
         const formattedData = rawData.map(item => ({
-          name: item["function"],  // safely access key named 'function'
+          name: item["function"],
           devices: item.count,
         }));
 
@@ -365,25 +365,25 @@ const DashboardScreen = () => {
             </ChartCard>
 
             <ChartCard title="Top Functions">
-  <BarChart
-    width={300}
-    height={300}
-    data={topFunctions}
-    margin={{ top: 20, right: 0, bottom: 10, left: -30 }}
-  >
-    <XAxis
-      dataKey="name"
-      angle={-10}
-      textAnchor="end"
-      interval={0}
-      style={{ fontSize: '12px' }}
-      dx={15}
-    />
-    <YAxis />
-    <Tooltip />
-    <Bar dataKey="devices" fill="#9F7AEA" />
-  </BarChart>
-</ChartCard>
+              <BarChart
+                width={300}
+                height={300}
+                data={topFunctions}
+                margin={{ top: 20, right: 0, bottom: 10, left: -30 }}
+              >
+                <XAxis
+                  dataKey="name"
+                  angle={-10}
+                  textAnchor="end"
+                  interval={0}
+                  style={{ fontSize: '12px' }}
+                  dx={15}
+                />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="devices" fill="#9F7AEA" />
+              </BarChart>
+            </ChartCard>
 
             <ChartCard title="Devices Identified Over Time">
             <LineChart

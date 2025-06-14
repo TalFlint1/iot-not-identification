@@ -34,16 +34,16 @@
   
   .input-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr; /* Define three equal-width columns */
-    gap: 20px;  /* Adjust the space between each grid item */
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
     margin-top: 10px;
     margin-bottom: 50px;
     margin-left: 20px;
   }
   /* Apply margin adjustment directly to h3 tags inside .input-box */
 .input-box h3 {
-  margin-bottom: 5px; /* Shortens the space between the label and the input */
-  margin-top: 10px; /* Shortens the space between the label and the input */
+  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 /* Apply to input elements directly inside .input-box */
@@ -52,17 +52,17 @@
   height: 40px;
   border: 1px solid #000000;
   border-radius: 5px;
-  width: 100%; /* Ensures the input takes the full width */
+  width: 100%;
   box-sizing: border-box;
   font-size: 12px;
-  padding-left: 5px; /* Optional: adds padding inside the input */
+  padding-left: 5px;
 }
 
 /* Adjusting the overall height and padding for .input-box */
 .input-box {
   border-radius: 5px;
-  padding: 10px 15px; /* Reduces the space inside the box */
-  height: 100px; /* Adjust height for compact design */
+  padding: 10px 15px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

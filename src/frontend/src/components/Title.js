@@ -1,5 +1,5 @@
 import React from "react";
-import titleImage from "../Icons/logo.png"; // Update path as needed
+import titleImage from "../Icons/logo.png";
 
 const Title = () => {
   return (

@@ -212,7 +212,7 @@ const SettingsScreen = () => {
                     fontSize: "16px",
                     display: "block",
                     padding: "10px 0",
-                    marginBottom: "10px", // Add more space after the question
+                    marginBottom: "10px",
                   }}
                 >
                   {item.question} {expandedFAQ === index ? "▲" : "▼"}
@@ -298,15 +298,15 @@ const SettingsScreen = () => {
       {/* Sidebar */}
       <div
         style={{
-            backgroundImage: `url(${sidebarImage})`, // Use the imported image
+            backgroundImage: `url(${sidebarImage})`,
             backgroundColor: "#343C42",
             backgroundSize: "contain",
             backgroundPosition: "left",
             backgroundRepeat: "no-repeat",
-            height: "100%", // Full height of the viewport
-            width: "14%", // Same width as before
-            margin: 0, // Remove any default margin
-            padding: 0, // Remove any default padding
+            height: "100%",
+            width: "14%",
+            margin: 0,
+            padding: 0,
           }}
       >
       </div>

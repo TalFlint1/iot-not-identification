@@ -122,7 +122,7 @@ const RegisterScreen = () => {
           {/* Already have an account */}
           <div style={{ textAlign: "center", marginTop: "10px" }}>
             <button
-              onClick={handleSignInClick}  // Use onClick handler to navigate
+              onClick={handleSignInClick}
               style={{ fontSize: "14px", color: "#68CABE", background: "none", border: "none", cursor: "pointer" }}
             >
               Already have an account? Sign In

@@ -34,8 +34,6 @@ def analyze_device(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        print("User ID:", user_id)  # For debugging purposes
-
         # 2. Get the uploaded JSON file
         uploaded_file = request.FILES.get('file')
         if not uploaded_file:
@@ -86,7 +84,7 @@ def analyze_device(request):
             }
             add_history_item(user_id, history_item)
 
-            # 12. Optional cleanup
+            # 12. cleanup
             os.remove(input_json_path)
 
             return JsonResponse(result)
@@ -111,8 +109,6 @@ def analyze_enriched_csv(request):
 
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
-
-        print("User ID:", user_id)  # For debugging purposes
 
         # 2. Get the uploaded CSV file
         uploaded_file = request.FILES.get('file')
@@ -146,18 +142,18 @@ def analyze_enriched_csv(request):
             if isinstance(confidence, float):
                 confidence = Decimal(str(confidence))
             
-            # 8.5 Build full history item  <-- updated to include both input and result paths
+            # 8.5 Build full history item
             history_item = {
                 'device': result.get('device', ''),
                 'confidence': confidence,
                 'justification': result.get('justification', ''),
-                'input_s3_path': input_s3_info.get('s3_key', ''),  # Include input file S3 path
-                'result_s3_path': result_s3_info.get('s3_key', ''),  # Include result file S3 path
+                'input_s3_path': input_s3_info.get('s3_key', ''),
+                'result_s3_path': result_s3_info.get('s3_key', ''),
                 'date': datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
             }
             add_history_item(user_id, history_item)
 
-            # 9. Optional cleanup
+            # 9. cleanup
             os.remove(input_csv_path)
 
             return JsonResponse(result)
@@ -209,7 +205,7 @@ def reidentify_device(request):
 
         try:
             body = json.loads(request.body)
-            raw_input_s3_path = body.get('raw_input_s3_path')  # << this is what frontend must send
+            raw_input_s3_path = body.get('raw_input_s3_path')
 
             if not raw_input_s3_path:
                 return JsonResponse({'error': 'Missing raw_input_s3_path'}, status=400)
@@ -271,7 +267,7 @@ def cheap_reidentify_device(request):
         if not user_id:
             return JsonResponse({'error': 'Invalid or expired token'}, status=401)
 
-        # 1. Define the path to save the file under your 'data' folder
+        # 1. The path to save the file under 'data' folder
         data_folder = os.path.join("feature_extraction", "data")
         os.makedirs(data_folder, exist_ok=True)
 
@@ -501,7 +497,7 @@ def serpapi_usage(request):
                 if not key.endswith('.csv'):
                     continue
 
-                # 🔍 Try to extract the timestamp from filename
+                # Try to extract the timestamp from filename
                 try:
                     filename = os.path.basename(key)
                     timestamp_str = filename.replace("input_", "").replace(".csv", "")
@@ -606,7 +602,7 @@ def get_raw_json(request):
             s3_object = s3.get_object(Bucket=bucket_name, Key=s3_key)
             json_data = s3_object['Body'].read().decode('utf-8')
             parsed = json.loads(json_data)
-            return JsonResponse({'raw_json': parsed})  # 🔄 wrap it like this so frontend can access data.raw_json
+            return JsonResponse({'raw_json': parsed})
 
         except Exception as e:
             print("Error fetching raw JSON from S3:", e)

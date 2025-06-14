@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 import Title from "./Title";
 import sidebarImage from "../Icons/sidebar.png";
-import './InputScreen.css'; // Make sure the path is correct
-import attachmentIcon from "../Icons/attachment.png"; // Adjust path if needed
+import './InputScreen.css';
+import attachmentIcon from "../Icons/attachment.png";
 import UpperBar from "./UpperBar";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -137,7 +137,7 @@ const InputScreen = () => {
       const response = await fetch("http://localhost:5000/analyze_device/", {
         method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,  // Adding Authorization header
+          'Authorization': `Bearer ${token}`,
         },
         body: formData,
       });
@@ -152,7 +152,7 @@ const InputScreen = () => {
       // Save result to localStorage
       localStorage.setItem("lastResult", JSON.stringify(data));
 
-      // Navigate to result with the first device (assuming only one row for now)
+      // Navigate to result with the first device
       navigate("/result", { state: { resultData: data } });
       setLoading(false);
     } catch (error) {
@@ -326,90 +326,90 @@ const InputScreen = () => {
                 
                 {/* Label for file upload */}
                 <label
-  htmlFor="file-upload"
-  className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer relative"
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "150px",
-    width: "300px",
-    color: "#333",
-    position: "relative",
-    borderRadius: "8px",
-  }}
-  onDragOver={(e) => e.preventDefault()} // allow drop
-  onDrop={(e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.name.endsWith(".json")) {
-      setSelectedFile(file);
-    }
-  }}
->
-  {/* Small gray box inside the input box */}
-  <div
-    style={{
-      backgroundColor: "#D9D9D9",
-      padding: "10px",
-      borderRadius: "8px",
-      textAlign: "left",
-      fontSize: "16px",
-      color: "#333",
-      width: "200px",
-      border: "2px dashed #4C484E",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "8px",
-      marginLeft: "-40px",
-      marginTop: "-40px",
-      cursor: "pointer",
-    }}
-  >
-    <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
-    Choose file or drag it here
-  </div>
+                  htmlFor="file-upload"
+                  className="border border-dashed border-gray-500 p-4 w-full text-center cursor-pointer relative"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "150px",
+                    width: "300px",
+                    color: "#333",
+                    position: "relative",
+                    borderRadius: "8px",
+                  }}
+                  onDragOver={(e) => e.preventDefault()} // allow drop
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.name.endsWith(".json")) {
+                      setSelectedFile(file);
+                    }
+                  }}
+                >
+                  {/* Small gray box inside the input box */}
+                  <div
+                    style={{
+                      backgroundColor: "#D9D9D9",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      textAlign: "left",
+                      fontSize: "16px",
+                      color: "#333",
+                      width: "200px",
+                      border: "2px dashed #4C484E",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      marginLeft: "-40px",
+                      marginTop: "-40px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
+                    Choose file or drag it here
+                  </div>
 
-  {/* Show file name directly under the gray box */}
-  {selectedFile && (
-    <p
-      style={{
-        position: "absolute",
-        bottom: "10px",
-        fontSize: "16px",
-        textAlign: "left",
-        marginLeft: "40px",
-        marginBottom: "20px",
-        width: "calc(100% - 5px)",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
-      }}
-    >
-      Selected file: {selectedFile.name}
-    </p>
-  )}
+                  {/* Show file name directly under the gray box */}
+                  {selectedFile && (
+                    <p
+                      style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        fontSize: "16px",
+                        textAlign: "left",
+                        marginLeft: "40px",
+                        marginBottom: "20px",
+                        width: "calc(100% - 5px)",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Selected file: {selectedFile.name}
+                    </p>
+                  )}
 
-  <input
-    id="file-upload"
-    type="file"
-    style={{ display: "none" }}
-    accept=".json"
-    onChange={(e) => setSelectedFile(e.target.files[0] || null)}
-  />
-</label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    accept=".json"
+                    onChange={(e) => setSelectedFile(e.target.files[0] || null)}
+                  />
+                </label>
 
                 {/* Show loader spinner if loading */}
                 {loading && (
                   <div
                     className="loader"
                     style={{
-                      position: "absolute", // Position it over the same container
-                      top: "50%", // Vertically centered
-                      left: "50%", // Adjusted to move it a bit right of the box (smaller offset)
-                      transform: "translate(-50%, -50%)", // Adjust the positioning to center vertically
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
                     }}
                   ></div>
                 )}
@@ -442,67 +442,67 @@ const InputScreen = () => {
                     </div>
 
                     {showModal && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-    onClick={() => setShowModal(false)}
-  >
-    <div
-      style={{
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        maxWidth: "600px",
-        width: "90%",
-        maxHeight: "80vh",
-        overflowY: "auto",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      }}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <pre
-        style={{
-          backgroundColor: "#f3f3f3",
-          padding: "15px",
-          borderRadius: "5px",
-          fontSize: "14px",
-          whiteSpace: "pre-wrap",
-          wordWrap: "break-word",
-          maxHeight: "60vh",
-          overflowY: "auto",
-        }}
-      >
-        {exampleJson}
-      </pre>
-      <button
-        onClick={() => setShowModal(false)}
-        style={{
-          marginTop: "15px",
-          padding: "8px 16px",
-          backgroundColor: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-        onMouseOver={(e) => (e.target.style.backgroundColor = "#1e40af")}
-        onMouseOut={(e) => (e.target.style.backgroundColor = "#2563eb")}
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+                    <div
+                      style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 1000,
+                      }}
+                      onClick={() => setShowModal(false)}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: "white",
+                          padding: "20px",
+                          borderRadius: "8px",
+                          maxWidth: "600px",
+                          width: "90%",
+                          maxHeight: "80vh",
+                          overflowY: "auto",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <pre
+                          style={{
+                            backgroundColor: "#f3f3f3",
+                            padding: "15px",
+                            borderRadius: "5px",
+                            fontSize: "14px",
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                            maxHeight: "60vh",
+                            overflowY: "auto",
+                          }}
+                        >
+                          {exampleJson}
+                        </pre>
+                        <button
+                          onClick={() => setShowModal(false)}
+                          style={{
+                            marginTop: "15px",
+                            padding: "8px 16px",
+                            backgroundColor: "#2563eb",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                          }}
+                          onMouseOver={(e) => (e.target.style.backgroundColor = "#1e40af")}
+                          onMouseOut={(e) => (e.target.style.backgroundColor = "#2563eb")}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   </>
                 </div>

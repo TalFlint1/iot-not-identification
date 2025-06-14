@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Package, Clock, Brain } from "lucide-react";
-//... (rest of your imports)
 
 const getColor = (percentage) => {
   if (percentage >= 80) return "#03C04A"; // Green

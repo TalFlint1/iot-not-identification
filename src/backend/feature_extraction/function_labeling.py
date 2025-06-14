@@ -14,7 +14,7 @@ import nltk
 nltk.download("punkt")
 import io
 
-# Load RoBERTa Zero-Shot Classifier
+# Load BART Zero-Shot Classifier
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
@@ -84,7 +84,7 @@ def detect_feature_type(col, val):
     Prioritizes enriched features with a higher weight.
     """
     val = str(val).lower()
-    if 'enriched' in col:  # Give higher priority to enriched fields
+    if 'enriched' in col:
         if 'dns' in col or 'host' in col:
             return "domain"
         if 'user_agent' in col:

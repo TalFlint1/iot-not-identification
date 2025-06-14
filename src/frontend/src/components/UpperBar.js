@@ -105,8 +105,8 @@ const iconButtonStyle = {
 };
 
 const iconStyle = {
-  width: "28px", // Adjust size as needed
-  height: "28px", // Adjust size as needed
+  width: "28px",
+  height: "28px",
 };
 
 export default UpperBar;

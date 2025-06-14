@@ -55,7 +55,7 @@ const LoginScreen = () => {
       {/* Sidebar */}
       <div
         style={{
-          backgroundImage: `url(${sidebarImage})`, // Use the imported image
+          backgroundImage: `url(${sidebarImage})`,
           backgroundColor: "#343C42",
           backgroundSize: "contain",
           backgroundPosition: "left",

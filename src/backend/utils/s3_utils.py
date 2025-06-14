@@ -11,7 +11,7 @@ def upload_result_to_s3(result_data, user_id):
     bucket_name = os.getenv('S3_BUCKET_NAME')
     region = os.getenv('AWS_REGION')
     timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H-%M-%SZ')
-    result_key = f"{user_id}/result/result_{timestamp}.json"  # Result file goes under 'result' folder
+    result_key = f"{user_id}/result/result_{timestamp}.json"
 
     s3.put_object(
         Bucket=bucket_name,
@@ -69,7 +69,7 @@ def upload_raw_json_to_s3(json_path, user_id):
     bucket_name = os.getenv('S3_BUCKET_NAME')
     region = os.getenv('AWS_REGION')
     timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H-%M-%SZ')
-    raw_key = f"{user_id}/raw/input_{timestamp}.json"  # Raw files go under 'raw' folder
+    raw_key = f"{user_id}/raw/input_{timestamp}.json"
 
     with open(json_path, 'r') as f:
         raw_json_data = json.load(f)

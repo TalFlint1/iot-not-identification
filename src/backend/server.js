@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const AWS = require('aws-sdk');
-const dynamoSetup = require('../../dynamoSetup'); // Import DynamoDB setup
+const dynamoSetup = require('../../dynamoSetup');
 const bodyParser = require('body-parser');
 
 // Initialize environment variables
@@ -20,7 +20,6 @@ AWS.config.update({
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-// Example endpoint for user registration
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
@@ -28,9 +27,6 @@ app.post('/register', async (req, res) => {
     // Salt and hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Save the user in the database (replace this with your database logic)
-    // Example: save user in a database (will add this later)
 
     // Respond with success
     res.status(201).json({ message: 'User registered successfully!' });
