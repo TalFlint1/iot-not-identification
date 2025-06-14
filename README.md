@@ -111,15 +111,17 @@ Or use the **manual input** option through the web UI.
 <details>
 <summary>📷 Click to expand</summary>
 
-* **Dashboard Screen**
+* **Input Screen**
   *(Insert image here)*
+  ![alt text](<JSON input.png>)
 
 * **Result Screen**
   *(Insert image here)*
+  ![alt text](Result.png)
 
-* **Input Screen**
+* **History Screen**
   *(Insert image here)*
-
+  ![alt text](History.png)
 </details>
 
 ---
@@ -142,6 +144,14 @@ Additionally, a planned improvement is to allow the system to **auto-update the 
 * AWS DynamoDB
 * Hugging Face Transformers (BART)
 * SerpAPI
+
+---
+
+## 📚 References
+
+This project is based on the approach described in the paper:  
+“Reading Between the Strings: Breaking Down IoT Device Labeling Barriers with LLM”  
+[https://arxiv.org/abs/2403.01586v1](https://arxiv.org/abs/2403.01586v1)
 
 ---
 
