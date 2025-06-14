@@ -107,14 +107,14 @@ def get_low_confidence_alerts(user_id, threshold=60.0, count=2):
         })
 
     # Pad if fewer than 'count'
-    while len(formatted_entries) < count:
-        formatted_entries.append({
-            'timestamp': '',
-            'vendor': '',
-            'function': '',
-            'confidence': '',
-            'raw_input_s3_path': ''
-        })
+    # while len(formatted_entries) < count:
+    #     formatted_entries.append({
+    #         'timestamp': '',
+    #         'vendor': '',
+    #         'function': '',
+    #         'confidence': '',
+    #         'raw_input_s3_path': ''
+    #     })
 
     return formatted_entries
 
