@@ -51,7 +51,7 @@ def upload_input_to_s3(file_path, user_id):
 
 def count_identified_devices(username: str) -> int:
     s3 = boto3.client('s3')
-    bucket_name = 'iot-identification-results'
+    bucket_name = os.getenv('S3_BUCKET_NAME')
     prefix = f'{username}/result/'
 
     try:
