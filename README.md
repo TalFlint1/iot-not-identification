@@ -1,6 +1,7 @@
 # IDENT
 
 **Labeling System for Unseen IoT and NoT Devices**
+
 IDENT is a web-based tool designed to help IT professionals identify and label unknown IoT and NoT devices in their network, offering visibility and insight into connected endpoints.
 
 ---
@@ -82,7 +83,7 @@ Or use the **manual input** option through the web UI.
 ## 🧠 How It Works
 
 * **Vendor Labeling**: A string-matching algorithm compares the vendor catalog against the enriched data extracted from the input.
-* **Function Labeling**: A BART transformer model classifies the function using enriched context and provides a confidence score and justification.
+* **Function Labeling**: A BART-based LLM classifies the device’s function using enriched context, and provides a confidence score along with a natural language justification.
 * **Data Storage**:
 
   * All files are stored in AWS S3 under a user-specific folder structure
@@ -94,7 +95,7 @@ Or use the **manual input** option through the web UI.
 
 * **Frontend**: React
 * **Backend**: Django REST Framework
-* **ML**: BART model (via Hugging Face Transformers)
+* **LLM**: BART model (via Hugging Face Transformers)
 * **Cloud**: AWS S3, AWS DynamoDB
 * **Enrichment**: SerpAPI for context fetching
 
@@ -126,17 +127,6 @@ Or use the **manual input** option through the web UI.
 ## 🧪 Future Improvements
 
 IDENT is planned to be enhanced with the ability to **auto-update the function catalog** upon encountering devices with new or unknown functions.
-
----
-
-## 🛠️ Built With
-
-* Python
-* React
-* AWS S3
-* AWS DynamoDB
-* Hugging Face Transformers (BART)
-* SerpAPI
 
 ---
 
