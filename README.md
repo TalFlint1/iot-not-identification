@@ -112,15 +112,12 @@ Or use the **manual input** option through the web UI.
 <summary>📷 Click to expand</summary>
 
 * **Input Screen**
-  *(Insert image here)*
   ![alt text](<JSON input.png>)
 
 * **Result Screen**
-  *(Insert image here)*
   ![alt text](Result.png)
 
 * **History Screen**
-  *(Insert image here)*
   ![alt text](History.png)
 </details>
 
@@ -128,11 +125,7 @@ Or use the **manual input** option through the web UI.
 
 ## 🧪 Future Improvements
 
-IDENT will soon be extended to support **NoT (Non-IoT)** identification.
-
-Additionally, a planned improvement is to allow the system to **auto-update the function catalog** when it encounters devices with new or unknown functions:
-
-> “The algorithm is able to update this catalog when the device type does not already appear in the catalog.”
+IDENT is planned to be enhanced with the ability to **auto-update the function catalog** upon encountering devices with new or unknown functions.
 
 ---
 
