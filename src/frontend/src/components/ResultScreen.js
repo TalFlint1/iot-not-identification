@@ -129,9 +129,6 @@ const ResultScreen = () => {
               marginBottom: "-80px",
               overflowY: "auto",
               overflowX: "hidden",
-              // display: "flex",
-              // alignItems: "flex-start",
-              // justifyContent: "flex-start",
             }}
           >
             <p style={{ color: "black", fontSize: "18px", fontStyle: "italic" }}>{justificationText}</p>
@@ -142,19 +139,7 @@ const ResultScreen = () => {
         {/* Analyze Another Device */}
         <div style={{ textAlign: "center", marginTop: "130px", marginRight: "70px" }}>
           <p style={{ color: "white", fontSize: "24px" }}>Analyze Another Device</p>
-          <button
-            onClick={handleAnalyzeAnother}
-            style={{
-              width: "200px",
-              height: "40px",
-              borderRadius: "5px",
-              border: "1px solid #000000",
-              fontSize: "18px",
-              backgroundColor: "#68CABE",
-              color: "white",
-              marginTop: "20px",
-            }}
-          >
+          <button onClick={handleAnalyzeAnother} className="new-device-btn">
             New Device
           </button>
         </div>

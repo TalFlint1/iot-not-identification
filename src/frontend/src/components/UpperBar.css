@@ -25,20 +25,19 @@
 
 .upperbar-btn {
   background-color: transparent;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
   padding: 10px;
   margin-left: 1px;
   margin-right: -3px;
+  overflow: hidden;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .upperbar-btn:hover {
-  /* You can choose one or combine effects */
   transform: scale(1.1);
   filter: brightness(1.2);
-  /* or use box-shadow for a glow effect */
-  /* box-shadow: 0 0 8px rgba(100, 150, 200, 0.6); */
 }
 
 .upperbar-icon {

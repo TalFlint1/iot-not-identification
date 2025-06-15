@@ -20,3 +20,21 @@
 .justification-box {
     padding-right: 30px;
 }
+
+.new-device-btn {
+  width: 200px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  font-size: 18px;
+  background-color: #68CABE;
+  color: white;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.new-device-btn:hover {
+  background-color: #4EB5AA;
+}
+
