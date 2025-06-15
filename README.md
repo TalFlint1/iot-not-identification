@@ -128,7 +128,7 @@ Or use the **manual input** option through the web UI.
 
 IDENT is planned to be enhanced with the ability to **auto-update the function catalog** upon encountering devices with new or unknown functions.
 
-Another upcoming feature is Two-Factor Authentication (2FA) to strengthen account security.
+Another upcoming feature is **Two-Factor Authentication (2FA)** to strengthen account security.
 
 ---
 

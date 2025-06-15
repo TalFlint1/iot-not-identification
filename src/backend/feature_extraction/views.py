@@ -8,7 +8,7 @@ from .extract_features import extract_and_enrich
 from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3, upload_raw_json_to_s3
 from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications, get_low_confidence_alerts
-from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions, delete_history_item
+from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions, delete_history_item, get_user_info
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -609,3 +609,28 @@ def get_raw_json(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def get_user_info_view(request):
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+    token = auth_header.split(' ')[1]
+    user_id = get_user_id_from_token(token)
+
+    if not user_id:
+        return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+    try:
+        user_info = get_user_info(user_id)
+        if not user_info:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse(user_info)
+
+    except Exception as e:
+        print("Error fetching user info:", e)
+        return JsonResponse({'error': str(e)}, status=500)

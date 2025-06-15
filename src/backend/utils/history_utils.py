@@ -215,3 +215,12 @@ def delete_history_item(user_id, input_s3_path):
     )
 
     return True, item_to_delete  # Return the deleted item to handle S3 outside
+
+def get_user_info(user_id):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user:
+        return None
+    return {
+        'username': user_id,
+        'email': user.get('email', '')
+    }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import sidebarImage from "../Icons/sidebar.png";
 import Title from "./Title";
 import UpperBar from "./UpperBar";
@@ -6,11 +6,12 @@ import './SettingsScreen.css';
 import { motion } from "framer-motion";
 
 const SettingsScreen = () => {
-  const [activeTab, setActiveTab] = useState("General Settings");
+  const [activeTab, setActiveTab] = useState("Account Management");
   const [expandedTab, setExpandedTab] = useState(null); // For collapsible tabs
   const [expandedFAQ, setExpandedFAQ] = useState(null);
   const [syncStatus, setSyncStatus] = useState(false);
   const [dataIntegrityCheckEnabled, setDataIntegrityCheckEnabled] = useState(false);
+  const [userInfo, setUserInfo] = useState({ username: '', email: '' });
 
   const username = "Tal";
 
@@ -59,25 +60,58 @@ const SettingsScreen = () => {
   const toggleExpand = (tab) => {
     setExpandedTab(expandedTab === tab ? null : tab);
   };
-  
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch('http://localhost:5000/user-info/', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUserInfo(data);
+      } catch (err) {
+        console.error('Failed to fetch user info:', err);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
       case "Account Management":
         return (
           <div>
-            <h3 style={{ marginTop: "20px" }}>Account Management</h3>
-            <div className="account-info">
-              <p style={{ marginTop: "20px" }}><span>Name:</span> Tal</p>
-              <p style={{ marginTop: "20px" }}><span>Username:</span> tal123</p>
-              <p style={{ marginTop: "20px" }}><span>Connected Accounts:</span></p>
-              <p style={{ marginTop: "20px" }}>Platform: Google</p>
-              <p style={{ marginTop: "20px", marginBottom: "20px" }}>Status: <span style={{ color: "green" }}>Connected</span></p>
-            </div>
-
-            <div className="account-buttons">
-            <button className="btn change-password-btn">Change Password</button>
-            <button className="btn delete-account-btn">Delete Account</button>
+            <p style={{ marginTop: "20px", marginLeft: "240px", fontSize: "36px" }}>Account Management</p>
+            <div className="account-info" style={{ marginLeft: "100px", marginTop: "40px" }}>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <p style={{ width: "200px" }}>Username:</p>
+                <span>{userInfo.username}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <p style={{ width: "200px" }}>Email:</p>
+                <span>{userInfo.email}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <p style={{ width: "200px" }}>Export history data to CSV:</p>
+                <button className="btn export-btn">Export</button>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <p style={{ width: "200px" }}>Clear my history:</p>
+                <button className="btn clear-history-btn">Clear</button>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <p style={{ width: "200px" }}>Delete my account:</p>
+                <button className="btn delete-account-btn">Delete</button>
+              </div>
             </div>
           </div>
         );
