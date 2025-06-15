@@ -1,0 +1,52 @@
+.upperbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: fixed;
+  top: 2px;
+  left: 320px;
+  width: 20%;
+  z-index: 1000;
+}
+
+.upperbar-inner {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px 15px;
+  width: 400px;
+  height: 45px;
+  gap: 17px;
+  border: 1px solid gray;
+}
+
+.upperbar-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  margin-left: 1px;
+  margin-right: -3px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.upperbar-btn:hover {
+  /* You can choose one or combine effects */
+  transform: scale(1.1);
+  filter: brightness(1.2);
+  /* or use box-shadow for a glow effect */
+  /* box-shadow: 0 0 8px rgba(100, 150, 200, 0.6); */
+}
+
+.upperbar-icon {
+  width: 28px;
+  height: 28px;
+  transition: filter 0.2s ease;
+}
+
+.upperbar-btn:hover .upperbar-icon {
+  filter: grayscale(20%) brightness(90%);
+}

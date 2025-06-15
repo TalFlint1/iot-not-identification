@@ -8,6 +8,7 @@ import settingsIcon from "../Icons/settings.png"
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import dashboardIcon from "../Icons/dashboard.png";
+import "./UpperBar.css";
 
 const UpperBar = ({ username }) => {
   const navigate = useNavigate();
@@ -43,66 +44,35 @@ const UpperBar = ({ username }) => {
   };
   
   return (
-    <div
-        style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px",
-            position: "fixed",
-            top: "2px",
-            left: "320px",
-            width: "20%",
-            zIndex: "1000",
-        }}
-    >
-      {/* Rectangle box with rounded corners */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          backgroundColor: "white",
-          borderRadius: "10px",
-          padding: "5px 15px",
-          width: "400px",
-          height: "45px",
-          gap: "17px",
-          border: "1px solid gray"
-        }}
-      >
-        {/* Settings Icon */}
-        <button onClick={handleSettingsClick} style={iconButtonStyle}>
-          <img src={settingsIcon} alt="Settings" style={iconStyle} />
+    <div className="upperbar-container">
+      <div className="upperbar-inner">
+        <button onClick={handleSettingsClick} className="upperbar-btn">
+          <img src={settingsIcon} alt="Settings" className="upperbar-icon" />
         </button>
 
-        {/* Result Icon */}
-        <button onClick={handleResultClick} style={iconButtonStyle}>
-          <img src={resultIcon} alt="Result" style={iconStyle} />
+        <button onClick={handleResultClick} className="upperbar-btn">
+          <img src={resultIcon} alt="Result" className="upperbar-icon" />
         </button>
 
-        {/* Home Icon */}
-        <button onClick={handleHomeClick} style={iconButtonStyle}>
-          <img src={homepageIcon} alt="Home" style={iconStyle} />
+        <button onClick={handleHomeClick} className="upperbar-btn">
+          <img src={homepageIcon} alt="Home" className="upperbar-icon" />
         </button>          
 
-        {/* History Icon (with fake click) */}
-        <button onClick={handleHistoryClick} style={iconButtonStyle}>
-          <img src={historyIcon} alt="History" style={iconStyle} />
+        <button onClick={handleHistoryClick} className="upperbar-btn">
+          <img src={historyIcon} alt="History" className="upperbar-icon" />
         </button>
 
-        {/* Dashboard Icon */}
-        <button onClick={handleDashboardClick} style={iconButtonStyle}>
-          <img src={dashboardIcon} alt="Dashboard" style={iconStyle} />
+        <button onClick={handleDashboardClick} className="upperbar-btn">
+          <img src={dashboardIcon} alt="Dashboard" className="upperbar-icon" />
         </button>
 
-        {/* Logout Icon */}
-        <button onClick={handleLogoutClick} style={iconButtonStyle}>
-          <img src={logoutIcon} alt="Logout" style={iconStyle} />
+        <button onClick={handleLogoutClick} className="upperbar-btn">
+          <img src={logoutIcon} alt="Logout" className="upperbar-icon" />
         </button>
       </div>
     </div>
   );
+
 };
 
 const iconButtonStyle = {
