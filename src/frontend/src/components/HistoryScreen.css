@@ -37,3 +37,42 @@
     }    
   }
   
+.btnn {
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+  .delete-account-btnn {
+    background-color: #f44336; /* Red for Delete Account */
+    color: white;
+  }
+  
+  .delete-account-btnn:hover {
+    background-color: #e53935; /* Darker red on hover */
+    transform: scale(1.03);
+  }
+  
+  .delete-account-btnn:focus {
+    outline: 3px solid #e53935; /* Red outline when focused */
+  }
+
+  .reidentify-btn {
+    background-color: white; /* Red for Delete Account */
+    color: black;
+    border: 1px solid gray;
+  }
+  
+  .reidentify-btn:hover {
+    background-color: #dadada; /* Darker red on hover */
+    transform: scale(1.03);
+  }
+  
+  .reidentify-btn:focus {
+    outline: 3px solid gray; /* Red outline when focused */
+  }

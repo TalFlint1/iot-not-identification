@@ -16,6 +16,7 @@ import sensor from "../Icons/sensor.png";
 import camera from "../Icons/security_camera.png";
 import phone from "../Icons/mobile_phone.png";
 import laptop from "../Icons/laptop.png";
+import './HistoryScreen.css';
 
 const HistoryScreen = () => {
   const [historyData, setHistoryData] = useState([]);
@@ -409,20 +410,9 @@ const getIconForFunction = (func) => {
                         setItemToReidentify(item); 
                         setShowReidentifyModal(true);
                       }}
-                      style={{
-                        backgroundColor: "#2CA6A4",
-                        color: "white",
-                        border: "none",
-                        padding: "10px 20px",
-                        margin: "5px",
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        borderRadius: "5px",
-                        display: "inline-flex",
-                        alignItems: "center",
-                      }}
+                      className="btnn reidentify-btn"
                     >
-                      <RotateCcw size={20} style={{ marginRight: "8px", position: "relative", top: "1px" }} />
+                      <RotateCcw size={14} style={{ marginRight: "8px", position: "relative", top: "2px" }} />
                       Re-Identify
                     </button>
 
@@ -431,19 +421,9 @@ const getIconForFunction = (func) => {
                         setItemToDelete(item);
                         setShowDeleteModal(true);
                       }}
-                      style={{
-                        backgroundColor: "#E57373", // Red-ish for delete
-                        color: "white",
-                        border: "none",
-                        padding: "10px 20px",
-                        margin: "5px",
-                        cursor: "pointer",
-                        fontSize: "18px",
-                        borderRadius: "5px",
-                        height: "40px",
-                      }}
+                      className="btnn delete-account-btnn"
                     >
-                        <span style={{ position: "relative", top: "-3px", marginRight: "8px" }}>🗑️ Delete</span>
+                      <span >Delete</span>
                     </button>
                     </div>
                 </div>
