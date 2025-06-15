@@ -37,44 +37,6 @@ const InputScreen = () => {
     }
   }`;
 
-  // const handleRealAnalyze = async () => {
-  //   if (!selectedFile) {
-  //     alert("Please select a CSV file before identifying.");
-  //     return;
-  //   }
-  
-  //   const formData = new FormData();
-  //   formData.append("file", selectedFile);
-
-  //   const token = localStorage.getItem("access_token");
-  //   if (!token) {
-  //     alert("Authorization token is missing.");
-  //     return;
-  //   }
-  
-  //   try {
-  //     const response = await fetch("http://localhost:5000/analyze_enriched_csv/", {
-  //       method: "POST",
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`,  // Adding Authorization header
-  //       },
-  //       body: formData,
-  //     });
-  
-  //     if (!response.ok) {
-  //       throw new Error("Failed to analyze device");
-  //     }
-  
-  //     const data = await response.json();
-  //     console.log("Response data:", data);
-  //     // Navigate to result with the first device (assuming only one row for now)
-  //     navigate("/result", { state: { resultData: data } });
-  //   } catch (error) {
-  //     console.error("Error during analysis:", error);
-  //     alert("Something went wrong while identifying the device.");
-  //   }
-  // };
-
   const validateJsonFile = async (file) => {
     try {
       const text = await file.text();
