@@ -17,7 +17,6 @@ const SettingsScreen = () => {
 
   const menuItems = [
     { title: "Account Management" },
-    { title: "Data Management" },
     { title: "FAQ" },
     { title: "Contact Support" },
   ];
@@ -45,7 +44,7 @@ const SettingsScreen = () => {
     {
       question: "What should I do if my device is not identified?",
       answer:
-        "Try uploading different network data samples. If issues persist, contact support.",
+        "Try uploading different network data samples. If issues persist, consider verifying it manually.",
     },
   ];
 
@@ -136,33 +135,42 @@ const SettingsScreen = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "Account Management":
-        return (
-          <div>
-            <p style={{ marginTop: "20px", marginLeft: "240px", fontSize: "36px" }}>Account Management</p>
-            <div className="account-info" style={{ marginLeft: "100px", marginTop: "40px" }}>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                <p style={{ width: "200px" }}>Username:</p>
-                <span>{userInfo.username}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                <p style={{ width: "200px" }}>Email:</p>
-                <span>{userInfo.email}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                <p style={{ width: "200px" }}>Export history data to CSV:</p>
-                <button className="btn export-btn" onClick={handleExportClick}>Export</button>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                <p style={{ width: "200px" }}>Clear my history:</p>
-                <button className="btn clear-history-btn">Clear</button>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-                <p style={{ width: "200px" }}>Delete my account:</p>
-                <button className="btn delete-account-btn">Delete</button>
-              </div>
-            </div>
-          </div>
-        );
+  return (
+    <div>
+      <p style={{ marginTop: "20px", marginLeft: "240px", fontSize: "36px" }}>Account Management</p>
+      <div className="account-info" style={{ marginLeft: "100px", marginTop: "40px", maxWidth: "600px" }}>
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <p style={{ width: "200px" }}>Username:</p>
+          <span>{userInfo.username}</span>
+        </div>
+        <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
+
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <p style={{ width: "200px" }}>Email:</p>
+          <span>{userInfo.email}</span>
+        </div>
+        <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
+
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <p style={{ width: "200px" }}>Export history data to CSV:</p>
+          <button className="btn export-btn" onClick={handleExportClick}>Export</button>
+        </div>
+        <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
+
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <p style={{ width: "200px" }}>Clear my history:</p>
+          <button className="btn clear-history-btn">Clear</button>
+        </div>
+        <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
+
+        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+          <p style={{ width: "200px" }}>Delete my account:</p>
+          <button className="btn delete-account-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+
       case "General Settings":
         return <div><h3>General Settings</h3><p>Update your general preferences here.</p></div>;
       case "User Preferences":
@@ -279,7 +287,7 @@ const SettingsScreen = () => {
       case "FAQ":
         return (
           <div>
-            <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>Frequently Asked Questions</h3>
+            <p style={{ marginTop: "20px", marginLeft: "240px", fontSize: "36px", marginBottom: "40px" }}>Frequently Asked Questions</p>
             {faqData.map((item, index) => (
               <div key={index} style={{ marginBottom: "15px", borderBottom: "1px solid #ddd", paddingBottom: "10px" }}>
                 <button
@@ -306,8 +314,8 @@ const SettingsScreen = () => {
       case "Contact Support":
         return (
           <div>
-            <h3 style={{ marginBottom: "20px", marginTop: "20px" }}>Contact Support</h3>
-            <p style={{ marginBottom: "20px", marginTop: "20px" }}>If you need help, feel free to reach out to our support team!</p>
+            <p style={{ marginTop: "20px", marginLeft: "300px", fontSize: "36px" }}>Contact Support</p>
+            <p style={{ marginBottom: "20px", marginTop: "40px" }}>If you need help, feel free to reach out to our support team!</p>
             
             <form style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "400px" }}>
               <label htmlFor="name">Full Name:</label>
