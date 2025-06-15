@@ -7,6 +7,6 @@
         "tls.handshake.extensions_server_name": [],
         "mac_address": "",
         "origin_dataset": "sentinel",
-        "dns.qry.name": []
+        "dns.qry.name": ["www.myedimax.com"]
     }
 }

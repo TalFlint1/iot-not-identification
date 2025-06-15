@@ -571,6 +571,7 @@ def delete_history_entry(request):
             bucket_name = os.getenv('S3_BUCKET_NAME')
             s3.delete_object(Bucket=bucket_name, Key=result['input_s3_path'])
             s3.delete_object(Bucket=bucket_name, Key=result['result_s3_path'])
+            s3.delete_object(Bucket=bucket_name, Key=result['raw_input_s3_path'])
 
             return JsonResponse({'message': 'History item deleted successfully'})
 

@@ -259,10 +259,13 @@ def clear_user_history(user_id):
     for item in history_items:
         input_path = item.get('input_s3_path')
         result_path = item.get('result_s3_path')
+        raw_path = item.get('raw_input_s3_path')
         if input_path:
             s3_paths_to_delete.append(input_path)
         if result_path:
             s3_paths_to_delete.append(result_path)
+        if raw_path:
+            s3_paths_to_delete.append(raw_path)
 
     # Clear the history in DynamoDB
     table.update_item(
