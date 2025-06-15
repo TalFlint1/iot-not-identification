@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.http import HttpResponse
 from feature_extraction.views import analyze_device, get_user_history, analyze_enriched_csv, reidentify_device, cheap_reidentify_device, dashboard_summary, recent_identifications, confidence_alerts
 from feature_extraction.views import devices_over_time, top_vendor_view, top_vendors_chart_view, top_functions_chart_view, serpapi_usage, delete_history_entry, get_raw_json, get_user_info_view
-from feature_extraction.views import download_user_history, contact_support
+from feature_extraction.views import download_user_history, contact_support, clear_history
 
 def home(request):
     return HttpResponse("Welcome to the IoT project!")
@@ -46,5 +46,6 @@ urlpatterns = [
     path('user-info/', get_user_info_view),
     path('download-history/', download_user_history),
     path('contact-support/', contact_support),
+    path('clear-history/', clear_history),
     path('', home),
 ]

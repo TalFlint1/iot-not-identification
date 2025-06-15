@@ -248,3 +248,26 @@ def save_support_message(user_id, name, email, message):
     )
 
     return True, 'Message saved'
+
+def clear_user_history(user_id):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user or 'history' not in user:
+        return False, 'User or history not found', []
+
+    history_items = user['history']
+    s3_paths_to_delete = []
+    for item in history_items:
+        input_path = item.get('input_s3_path')
+        result_path = item.get('result_s3_path')
+        if input_path:
+            s3_paths_to_delete.append(input_path)
+        if result_path:
+            s3_paths_to_delete.append(result_path)
+
+    # Clear the history in DynamoDB
+    table.update_item(
+        Key={'username': user_id},
+        UpdateExpression='REMOVE history'
+    )
+
+    return True, 'History cleared successfully', s3_paths_to_delete

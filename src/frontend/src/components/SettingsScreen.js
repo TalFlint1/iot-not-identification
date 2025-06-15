@@ -121,6 +121,33 @@ const SettingsScreen = () => {
     fetchUserInfo();
   }, []);
 
+  const handleClearHistory = async () => {
+    if (!window.confirm("Are you sure you want to clear your entire history? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch('http://localhost:5000/clear-history/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      alert(data.message || "History cleared successfully.");
+    } catch (err) {
+      console.error('Failed to clear history:', err);
+      alert("Failed to clear history. Please try again.");
+    }
+  };
+
+
   const handleExportClick = async () => {
     try {
       const token = localStorage.getItem("access_token");
@@ -196,7 +223,7 @@ const SettingsScreen = () => {
 
         <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
           <p style={{ width: "200px" }}>Clear my history:</p>
-          <button className="btn clear-history-btn">Clear</button>
+          <button className="btn clear-history-btn" onClick={handleClearHistory}>Clear</button>
         </div>
         <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
 
