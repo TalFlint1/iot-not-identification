@@ -634,3 +634,24 @@ def get_user_info_view(request):
     except Exception as e:
         print("Error fetching user info:", e)
         return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def download_user_history(request):
+    if request.method == 'GET':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        try:
+            history = get_user_history_from_db(user_id)
+            return JsonResponse({'history': history})
+        except Exception as e:
+            print("Error downloading user history:", e)
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

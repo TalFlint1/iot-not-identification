@@ -85,6 +85,54 @@ const SettingsScreen = () => {
     fetchUserInfo();
   }, []);
 
+  const handleExportClick = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch("http://localhost:5000/download-history/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const history = data.history || [];
+
+      if (history.length === 0) {
+        alert("No history data to export.");
+        return;
+      }
+
+      const headers = ["Device", "Confidence", "Date", "Justification"];
+      const rows = history.map((item) => [
+        item.device || "",
+        item.confidence || "",
+        item.date || "",
+        item.justification || "",
+      ]);
+
+      const csvContent =
+        "data:text/csv;charset=utf-8," +
+        [headers, ...rows]
+          .map((row) => row.map((field) => `"${field}"`).join(","))
+          .join("\n");
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "ident_history_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error("Failed to export history:", err);
+      alert("Something went wrong while exporting.");
+    }
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "Account Management":
@@ -102,7 +150,7 @@ const SettingsScreen = () => {
               </div>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
                 <p style={{ width: "200px" }}>Export history data to CSV:</p>
-                <button className="btn export-btn">Export</button>
+                <button className="btn export-btn" onClick={handleExportClick}>Export</button>
               </div>
               <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
                 <p style={{ width: "200px" }}>Clear my history:</p>
