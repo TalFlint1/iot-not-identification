@@ -3,7 +3,7 @@
 from django.urls import path
 from .views import analyze_device, get_user_history, analyze_enriched_csv, cheap_reidentify_device, reidentify_device, dashboard_summary, recent_identifications, confidence_alerts
 from .views import devices_over_time, top_vendor_view, top_vendors_chart_view, top_functions_chart_view, serpapi_usage, delete_history_entry, get_raw_json, get_user_info_view
-from .views import download_user_history, contact_support, clear_history
+from .views import download_user_history, contact_support, clear_history, delete_account
 urlpatterns = [
     path('analyze/', analyze_device, name='analyze_device'),
     path('history/', get_user_history, name='get_user_history'),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('download-history/', download_user_history, name='download_user_history'),
     path('contact-support/', contact_support, name="contact_support"),
     path('clear-history/', clear_history, name="clear_history"),
+    path('delete-account/', delete_account, name="delete_account"),
 ]

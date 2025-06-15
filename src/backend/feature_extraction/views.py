@@ -9,6 +9,7 @@ from user_management.auth_utils import get_user_id_from_token
 from utils.s3_utils import upload_result_to_s3, upload_input_to_s3, upload_raw_json_to_s3
 from utils.history_utils import add_history_item, get_user_history_from_db, get_dashboard_summary_from_dynamodb, get_recent_identifications, get_low_confidence_alerts
 from utils.history_utils import get_monthly_device_counts, get_top_vendor, get_top_functions, delete_history_item, get_user_info, save_support_message, clear_user_history
+from utils.history_utils import delete_user_account
 from datetime import datetime, timezone
 from decimal import Decimal
 import boto3
@@ -719,6 +720,37 @@ def clear_history(request):
 
         except Exception as e:
             print("Error clearing history:", e)
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def delete_account(request):
+    if request.method == 'POST':
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Authorization header missing or invalid'}, status=401)
+
+        token = auth_header.split(' ')[1]
+        user_id = get_user_id_from_token(token)
+        if not user_id:
+            return JsonResponse({'error': 'Invalid or expired token'}, status=401)
+
+        try:
+            success, s3_paths = delete_user_account(user_id)
+
+            if not success:
+                return JsonResponse({'error': 'User not found'}, status=404)
+
+            # Delete associated files from S3
+            bucket_name = os.getenv('S3_BUCKET_NAME')
+            for path in s3_paths:
+                s3.delete_object(Bucket=bucket_name, Key=path)
+
+            return JsonResponse({'message': 'Account deleted successfully'})
+
+        except Exception as e:
+            print("Error deleting user account:", e)
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)

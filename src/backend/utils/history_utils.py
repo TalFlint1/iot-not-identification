@@ -274,3 +274,21 @@ def clear_user_history(user_id):
     )
 
     return True, 'History cleared successfully', s3_paths_to_delete
+
+def delete_user_account(user_id):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user:
+        return False, 'User not found'
+
+    # Collect all possible file paths to delete from S3
+    s3_paths = []
+    if 'history' in user:
+        for item in user['history']:
+            for key in ['input_s3_path', 'result_s3_path', 'raw_input_s3_path']:
+                if item.get(key):
+                    s3_paths.append(item[key])
+
+    # Delete the user from DynamoDB
+    table.delete_item(Key={'username': user_id})
+
+    return True, s3_paths

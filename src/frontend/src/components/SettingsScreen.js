@@ -147,6 +147,32 @@ const SettingsScreen = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm("Are you sure you want to permanently delete your account? This action cannot be undone.");
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch('http://localhost:5000/delete-account/', {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      alert("Account deleted successfully.");
+      // Optional: redirect or clear localStorage
+      localStorage.removeItem("access_token");
+      window.location.href = "/"; // go back to homepage or login screen
+    } catch (err) {
+      console.error("Failed to delete account:", err);
+      alert("Something went wrong while trying to delete your account.");
+    }
+  };
 
   const handleExportClick = async () => {
     try {
@@ -229,7 +255,7 @@ const SettingsScreen = () => {
 
         <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
           <p style={{ width: "200px" }}>Delete my account:</p>
-          <button className="btn delete-account-btn">Delete</button>
+          <button className="btn delete-account-btn" onClick={handleDeleteAccount}>Delete</button>
         </div>
       </div>
     </div>
