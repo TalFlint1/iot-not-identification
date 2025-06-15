@@ -60,6 +60,43 @@ const SettingsScreen = () => {
     setExpandedTab(expandedTab === tab ? null : tab);
   };
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch('http://localhost:5000/contact-support/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      alert("Support request submitted successfully!");
+      setFormData({ name: '', email: '', message: '' }); // reset form
+    } catch (err) {
+      console.error('Failed to submit support request:', err);
+      alert("Failed to send support request.");
+    }
+  };
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -315,9 +352,9 @@ const SettingsScreen = () => {
         return (
           <div>
             <p style={{ marginTop: "20px", marginLeft: "300px", fontSize: "36px" }}>Contact Support</p>
-            <p style={{ marginBottom: "20px", marginTop: "40px" }}>If you need help, feel free to reach out to our support team!</p>
+            <p style={{ marginBottom: "20px", marginTop: "30px" }}>If you need help, feel free to reach out to our support team!</p>
             
-            <form style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "400px" }}>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "400px" }}>
               <label htmlFor="name">Full Name:</label>
               <input
                 id="name"
@@ -329,6 +366,7 @@ const SettingsScreen = () => {
                   border: "1px solid #ccc",
                   marginBottom: "10px",
                 }}
+                onChange={handleInputChange} value={formData.name}
               />
       
               <label htmlFor="email">Email Address:</label>
@@ -342,6 +380,7 @@ const SettingsScreen = () => {
                   border: "1px solid #ccc",
                   marginBottom: "10px",
                 }}
+                onChange={handleInputChange} value={formData.email}
               />
       
               <label htmlFor="message">Your Message:</label>
@@ -355,6 +394,7 @@ const SettingsScreen = () => {
                   border: "1px solid #ccc",
                   marginBottom: "10px",
                 }}
+                onChange={handleInputChange} value={formData.message}
               />
       
               <button

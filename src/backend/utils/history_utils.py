@@ -3,7 +3,7 @@ import os
 from boto3.dynamodb.conditions import Key
 import calendar
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION'))
@@ -224,3 +224,27 @@ def get_user_info(user_id):
         'username': user_id,
         'email': user.get('email', '')
     }
+
+def save_support_message(user_id, name, email, message):
+    user = table.get_item(Key={'username': user_id}).get('Item')
+    if not user:
+        return False, 'User not found'
+
+    existing_messages = user.get('support_messages', [])
+
+    new_message = {
+        'name': name,
+        'email': email,
+        'message': message,
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    }
+
+    existing_messages.append(new_message)
+
+    table.update_item(
+        Key={'username': user_id},
+        UpdateExpression='SET support_messages = :msgs',
+        ExpressionAttributeValues={':msgs': existing_messages}
+    )
+
+    return True, 'Message saved'
