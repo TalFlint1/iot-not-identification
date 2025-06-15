@@ -4,12 +4,17 @@ import resultIcon from "../Icons/result.png";
 import historyIcon from "../Icons/history.png";
 import logoutIcon from "../Icons/logout.png";
 import homepageIcon from "../Icons/homepage.png";
+import settingsIcon from "../Icons/settings.png"
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import dashboardIcon from "../Icons/dashboard.png";
 
 const UpperBar = ({ username }) => {
   const navigate = useNavigate();
+
+  const handleSettingsClick = () => {
+    navigate("/settings");
+  };
 
   const handleHomeClick = () => {
     navigate("/identify");
@@ -20,7 +25,7 @@ const UpperBar = ({ username }) => {
   };
 
   const handleResultClick = () => {
-    navigate("/result"); // Navigate to the settings page
+    navigate("/result");
   };
 
   const handleDashboardClick = () => {
@@ -60,13 +65,18 @@ const UpperBar = ({ username }) => {
           backgroundColor: "white",
           borderRadius: "10px",
           padding: "5px 15px",
-          width: "320px",
+          width: "400px",
           height: "45px",
           gap: "17px",
           border: "1px solid gray"
         }}
       >
         {/* Settings Icon */}
+        <button onClick={handleSettingsClick} style={iconButtonStyle}>
+          <img src={settingsIcon} alt="Settings" style={iconStyle} />
+        </button>
+
+        {/* Result Icon */}
         <button onClick={handleResultClick} style={iconButtonStyle}>
           <img src={resultIcon} alt="Result" style={iconStyle} />
         </button>

@@ -15,7 +15,6 @@ const SettingsScreen = () => {
   const username = "Tal";
 
   const menuItems = [
-    { title: "User Preferences",},
     { title: "Account Management" },
     { title: "Data Management" },
     { title: "FAQ" },
