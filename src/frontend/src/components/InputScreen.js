@@ -349,25 +349,7 @@ const InputScreen = () => {
                   }}
                 >
                   {/* Small gray box inside the input box */}
-                  <div
-                    style={{
-                      backgroundColor: "#D9D9D9",
-                      padding: "10px",
-                      borderRadius: "8px",
-                      textAlign: "left",
-                      fontSize: "16px",
-                      color: "#333",
-                      width: "200px",
-                      border: "2px dashed #4C484E",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      marginLeft: "-40px",
-                      marginTop: "-40px",
-                      cursor: "pointer",
-                    }}
-                  >
+                  <div className="upload-box">
                     <img src={attachmentIcon} alt="Attachment Icon" style={{ width: "25px", height: "25px" }} />
                     Choose file or drag it here
                   </div>
@@ -416,9 +398,11 @@ const InputScreen = () => {
               
                 {/* Buttons */}
                 <div className="flex gap-4 mt-8" style={{ marginLeft: "30px",  }}>
-                  <button onClick={handleRealAnalyze} style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginLeft: "0px" }}>
-                    IDENTIFY
-                  </button>
+                  <div className="json-identify-wrapper">
+                    <button onClick={handleRealAnalyze} className="identify-btn">
+                      IDENTIFY
+                    </button>
+                  </div>
                   <>
                     <div className="flex items-center space-x-2" style={{ marginTop: "10px" }}>
                       <label htmlFor="jsonUpload" className="font-semibold">Example JSON Format</label>
@@ -552,7 +536,8 @@ const InputScreen = () => {
                 </div>
                 <div className="input-box">
                 <button
-                  style={{ ...buttonStyle, backgroundColor: "#68CABE", color: "white", marginTop: "40px" }}
+                  style={{ marginTop: "40px" }} 
+                  className="identify-btn"
                   onClick={handleManualAnalyze}
                 >
                   IDENTIFY
