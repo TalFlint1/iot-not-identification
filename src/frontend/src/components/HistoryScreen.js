@@ -309,20 +309,15 @@ const getIconForFunction = (func) => {
             <option value="medium">Medium Confidence (50-79%)</option>
             <option value="low">Low Confidence (1-49%)</option>
           </select>
+
           <button
             onClick={() => {
               if (exportMode) {
-                // If we are currently in export mode and clicking to cancel, reset the ticks
                 setSelectedExports([]);
               }
-              setExportMode(!exportMode); // Toggle the mode
+              setExportMode(!exportMode);
             }}
-            
-            style={{
-              backgroundColor: exportMode ? "#FFA500" : "#68CABE",  // Orange if active, green if not
-              color: "white", border: "none", padding: "10px 20px", marginTop: "10px", cursor: "pointer",
-              fontSize: "18px", borderRadius: "5px", marginLeft: "40px"
-            }}
+            className={`export-btnn ${exportMode ? "active" : "default"}`}
           >
             {exportMode ? "Cancel Export" : "Export"}
           </button>

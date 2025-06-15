@@ -41,11 +41,7 @@
   
   .delete-account-btn:hover {
     background-color: #e53935; /* Darker red on hover */
-    transform: scale(1.03);
-  }
-  
-  .delete-account-btn:focus {
-    outline: 3px solid #e53935; /* Red outline when focused */
+    transform: scale(1.00);
   }
 
   .clear-history-btn {
@@ -56,11 +52,7 @@
   
   .clear-history-btn:hover {
     background-color: #dadada; /* Darker red on hover */
-    transform: scale(1.03);
-  }
-  
-  .clear-history-btn:focus {
-    outline: 3px solid gray; /* Red outline when focused */
+    transform: scale(1.00);
   }
 
   .export-btn {
@@ -71,10 +63,6 @@
   
   .export-btn:hover {
     background-color: #dadada; /* Darker red on hover */
-    transform: scale(1.03);
-  }
-  
-  .export-btn:focus {
-    outline: 3px solid gray; /* Red outline when focused */
+    transform: scale(1.00);
   }
   

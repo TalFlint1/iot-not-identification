@@ -55,11 +55,7 @@
   
   .delete-account-btnn:hover {
     background-color: #e53935; /* Darker red on hover */
-    transform: scale(1.03);
-  }
-  
-  .delete-account-btnn:focus {
-    outline: 3px solid #e53935; /* Red outline when focused */
+    transform: scale(1.00);
   }
 
   .reidentify-btn {
@@ -70,9 +66,33 @@
   
   .reidentify-btn:hover {
     background-color: #dadada; /* Darker red on hover */
-    transform: scale(1.03);
+    transform: scale(1.00);
   }
-  
-  .reidentify-btn:focus {
-    outline: 3px solid gray; /* Red outline when focused */
-  }
+
+  .export-btnn {
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-left: 40px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.export-btnn.default {
+  background-color: #68CABE;
+}
+
+.export-btnn.default:hover {
+  background-color: #4EB5AA;
+}
+
+.export-btnn.active {
+  background-color: #FFA500;
+}
+
+.export-btnn.active:hover {
+  background-color: #e59400;
+}
