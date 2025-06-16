@@ -68,7 +68,7 @@ def label_vendor(csv_input):
 
 def main():
     # Example usage
-    results = label_vendor("feature_extraction/data/enriched_not3_output.csv")
+    results = label_vendor("feature_extraction/not_data/1st_enriched.csv")
 
     for device, (vendor, count) in results.items():
         print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")

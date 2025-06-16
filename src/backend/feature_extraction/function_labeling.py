@@ -222,4 +222,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/data/enriched_file1_not.csv")
+    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
