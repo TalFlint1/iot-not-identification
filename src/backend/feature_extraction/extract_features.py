@@ -81,3 +81,15 @@ def extract_and_enrich(input_json_path, output_csv_path):
     df.to_csv(output_csv_path, index=False)
     print(f"Enriched CSV saved to: {output_csv_path}")
     return output_csv_path
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 3:
+        print("Usage: python extract_features.py <input_json_path> <output_csv_path>")
+        sys.exit(1)
+
+    input_json = sys.argv[1]
+    output_csv = sys.argv[2]
+
+    extract_and_enrich(input_json, output_csv)
