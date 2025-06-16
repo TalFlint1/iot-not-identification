@@ -115,7 +115,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     best_chunks = {}
 
     # Define which columns to allow
-    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names", "enriched_tls_cert_domains", "enriched_user_agents"]
+    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names", "enriched_tls_cert_domains", "enriched_user_agents", "enriched_mac_address"]
 
     # For each feature (loop through the enriched features)
     for feature, col in enriched_features:
@@ -166,52 +166,6 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
     return final_label, aggregated_scores[final_label], best_sequence
 
-
-# === Example usage from enriched CSV ===
-# def run_function_labeling_from_csv(csv_path):
-#     # Get vendor labels dynamically from vendor_labeling.py
-#     vendor_labels = label_vendor(csv_path)  # This will give a dictionary of device_name -> (vendor, count)
-    
-#     df = pd.read_csv(csv_path, dtype=str).fillna("")
-
-#     function_results = {}
-
-#     for index, row in df.iterrows():
-#         device_name = row.get("device_name", f"row_{index}")
-#         vendor, _ = vendor_labels.get(device_name, (None, 0))  # Get the vendor using the label_vendor result
-#         enriched_features = []
-
-#         # Prepare enriched features and detect their types
-#         for col, val in row.items():
-#             try:
-#                 parsed = ast.literal_eval(val)
-#                 enriched_features.append((parsed, col))  # Store feature and column name for later type detection
-#             except (ValueError, SyntaxError):
-#                 enriched_features.append((val, col))
-
-#         print(f"\n[INFO] Classifying: {device_name}, Vendor: {vendor}")
-#         # Print enriched DNS and hostname for this device
-#         for feature, col in enriched_features:
-#             if "enriched_dns" in col.lower() or "enriched_hostname" in col.lower():
-#                 print(f"[DEBUG] {device_name} - {col}: {feature}")
-#         final_label, score, justification = function_labeling(enriched_features, vendor)
-#         print(f"[RESULT] {device_name}: {final_label} ({score:.2f})")
-#         function_results[device_name] = (final_label, score)
-
-#     final_results = []
-
-#     for device_name in function_results:
-#         function, score = function_results[device_name]
-#         vendor, _ = vendor_labels.get(device_name, ("Unknown", 0))
-        
-#         result = {
-#             "device": f"{vendor} {function}".strip(),
-#             "confidence": round(score * 100, 2),  # turn into percentage
-#             "justification": justification
-#         }
-#         final_results.append(result)
-
-    # return final_results[0]
 def run_function_labeling_from_csv(csv_input):
     if isinstance(csv_input, str):
         csv_data = csv_input

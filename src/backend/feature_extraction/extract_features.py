@@ -51,6 +51,8 @@ def extract_and_enrich(input_json_path, output_csv_path):
         enriched_tls_domains = [search_google(domain) for domain in tls_cert_domains] if tls_cert_domains else None
         enriched_tls_server_names = [search_google(name) for name in tls_server_names] if tls_server_names else None
         enriched_user_agents = [search_google(agent) for agent in user_agents] if user_agents else None
+        # Try to enrich mac too
+        enriched_mac_address = search_google(oui) if oui else None
         
         extracted_data.append({
             "device_name": device,
@@ -67,6 +69,7 @@ def extract_and_enrich(input_json_path, output_csv_path):
             "user_agents": user_agents,
             "enriched_user_agents": enriched_user_agents,
             "mac_address": mac_address,
+            "enriched_mac_address": enriched_mac_address,
             "oui": oui,  # Extracted but NOT enriched
             "origin_dataset": details.get("origin_dataset", "")
         })

@@ -1,0 +1,12 @@
+{
+    "EdimaxPlug2101W_merged_sentinel.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "74:da:38:23:22:7b",
+        "origin_dataset": "sentinel",
+        "dns.qry.name": []
+    }
+}
