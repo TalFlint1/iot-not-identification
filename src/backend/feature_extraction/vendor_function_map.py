@@ -50,7 +50,7 @@ vendor_function_map = {
     "wansview": ['Smart Camera', 'automatic pet feeder', 'bulb'],
     "worldsensing": [  "Wireless Data Logger", "Vibration Meter", "Piconode Data Logger"],
     "wyze": ['Smart Camera', 'video doorbell', 'smart lock', 'smart lighting'],
-    "xiaomi": ['Camera', 'bulb', 'plug', 'thermostat', 'vacuum cleaner', 'smartwatch', 'Smart TV', 'air purifier'],
+    "xiaomi": ['Camera', 'bulb', 'plug', 'thermostat', 'vacuum cleaner', 'smartwatch', 'Smart TV', 'air purifier', 'smartphone'],
     "zebra technologies": ['Barcode Scanner', 'Radio Frequency Identification Reader', 'Tablet', 'Inventory Management System', 'Location Tracking Device', 'Printer', 'Mobile Computer'],
     "lg": ['Smart TV', 'Smart Monitor', 'smart refrigerator', 'Smart Microwave', 'Smart Gas', 'Smart Oven', 'Laptop', 'Smart Air Conditioner'],
     "tp-link": ['Wi-Fi Router', 'Smart Plug', 'Smart Bulb', 'Smart Camera', 'Smart Switch', 'Hub', 'Robot Vacuum', 'Sensor'],
