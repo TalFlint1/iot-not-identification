@@ -6,6 +6,7 @@ import pyshark
 def extract_tls_features(pcap_path, mac_address):
     tls_snis = set()
     x509_domains = set()
+    cap = None  # <-- Define cap first to avoid UnboundLocalError
 
     try:
         cap = pyshark.FileCapture(pcap_path, display_filter="tls", keep_packets=False)
@@ -24,20 +25,24 @@ def extract_tls_features(pcap_path, mac_address):
                     dnsnames = pkt.tls.x509ce_dnsname.split(',')
                     for dn in dnsnames:
                         x509_domains.add(dn.strip())
-
             except AttributeError:
                 continue
-
-        cap.close()
-
+            except Exception:
+                continue
     except Exception as e:
-        print(f"[WARNING] Failed to parse TLS features: {e}")
+        print(f"[WARNING] Failed to fully parse TLS features: {e}")
+    finally:
+        try:
+            if cap:
+                cap.close()
+                del cap
+        except Exception:
+            pass  # Clean up any crash silently
 
     return {
         "tls.handshake.extensions_server_name": list(tls_snis),
         "x509ce.dNSName": list(x509_domains)
     }
-
 
 def extract_features_from_pcap(pcap_path, mac_address, device_name, origin_dataset="sentinel", packet_limit=None):
     packets = rdpcap(pcap_path)
@@ -99,7 +104,7 @@ if __name__ == "__main__":
         pcap_path=pcap_path,
         mac_address=mac,
         device_name=name,
-        packet_limit=1000
+        packet_limit=30000
     )
 
     tls_results = extract_tls_features(pcap_path, mac)

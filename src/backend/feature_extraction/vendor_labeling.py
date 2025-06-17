@@ -29,7 +29,9 @@ def label_vendor(csv_input):
     enriched_data = pd.read_csv(csv_data, dtype=str).fillna("")
 
     irrelevant_phrases = ["google play", "google account", "google.com", "google:", "google translate", "google maps", "google scholar", "google gemini", 
-                          "google accounts", "google news", "google chrome", "Google AdSense", "google help", "google search", "google help", "google trends"]
+                          "google accounts", "google news", "google chrome", "Google AdSense", "google help", "google search", "google help", "google trends",
+                          "google api", "google apis", "google analytics", "google drive", "google people api", "google cloud", "google llc", "google services",
+                          "google inc", "google marketing", "google sheet", "google/", "google enterprise api", "google for developers", "google contacts api", "google's domain"]
     device_vendors = {}
 
     for index, row in enriched_data.iterrows():
@@ -68,7 +70,7 @@ def label_vendor(csv_input):
 
 def main():
     # Example usage
-    results = label_vendor("feature_extraction/not_data/2nd_enriched.csv")
+    results = label_vendor("feature_extraction/not_data/enriched_not4_output.csv")
 
     for device, (vendor, count) in results.items():
         print(f"Device: {device} -> Identified Vendor: {vendor} (Occurrences: {count})")
