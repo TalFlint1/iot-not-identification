@@ -228,8 +228,20 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
         else:
             aggregated_scores[label] = 0
 
-    final_label = max(aggregated_scores, key=aggregated_scores.get)
+    # Sort labels by their aggregated score (descending)
+    sorted_labels = sorted(aggregated_scores.items(), key=lambda x: x[1], reverse=True)
+
+    final_label, final_score = sorted_labels[0]
+    print(f"[TOP LABEL] {final_label} ({final_score:.2f})")
+
+    if len(sorted_labels) > 1:
+        second_label, second_score = sorted_labels[1]
+        print(f"[SECOND LABEL] {second_label} ({second_score:.2f})")
+    else:
+        print("[SECOND LABEL] None")
+
     best_sequence = best_chunks.get(final_label, (0, "[No best sequence found]"))[1]
+
 
     print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
     return final_label, aggregated_scores[final_label], best_sequence
@@ -290,4 +302,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/data/mod_enriched_6.csv")
+    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
