@@ -1,6 +1,6 @@
 vendor_function_map = {
     "amazon": ['Smart Speaker', 'Smart Outlets', 'Smart Home Hub', 'Voice Assistant', 'Smart TV', 'Media Streamer'],
-    "apple": ['Smartwatch', 'Smart Speaker', 'Smartphone', 'iPad'],
+    "apple": ['Smartwatch', 'Smart Speaker', 'Smartphone', 'iPad', 'Laptop'],
     "belkin": ['Smart Plug', 'Smart Switch', 'Smart Bulb', 'Smart Sensor', 'Smart Camera', 'Smart Home Hub'],
     "blink": ['Video Doorbell', 'Smart Camera'],
     "bosch": ['Smart Kitchen Appliances', 'Smart Sensor', 'Smart Thermostat'],

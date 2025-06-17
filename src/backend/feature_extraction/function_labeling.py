@@ -224,7 +224,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     aggregated_scores = {}
     for label, scores in confidence_scores.items():
         if scores:
-            aggregated_scores[label] = sum(scores) / len(scores)  # or just sum(scores)
+            aggregated_scores[label] = sum(scores) / len(scores)
         else:
             aggregated_scores[label] = 0
 
