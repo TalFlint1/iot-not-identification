@@ -1,6 +1,43 @@
 from scapy.all import rdpcap, DNSQR, DNSRR, BOOTP, DHCP, TCP, Raw
 from collections import defaultdict
 import json
+import pyshark
+
+def extract_tls_features(pcap_path, mac_address):
+    tls_snis = set()
+    x509_domains = set()
+
+    try:
+        cap = pyshark.FileCapture(pcap_path, display_filter="tls", keep_packets=False)
+
+        for pkt in cap:
+            try:
+                eth_src = pkt.eth.src.lower()
+                eth_dst = pkt.eth.dst.lower()
+                if mac_address.lower() not in [eth_src, eth_dst]:
+                    continue
+
+                if hasattr(pkt.tls, "handshake_extensions_server_name"):
+                    tls_snis.add(pkt.tls.handshake_extensions_server_name)
+
+                if hasattr(pkt.tls, "x509ce_dnsname"):
+                    dnsnames = pkt.tls.x509ce_dnsname.split(',')
+                    for dn in dnsnames:
+                        x509_domains.add(dn.strip())
+
+            except AttributeError:
+                continue
+
+        cap.close()
+
+    except Exception as e:
+        print(f"[WARNING] Failed to parse TLS features: {e}")
+
+    return {
+        "tls.handshake.extensions_server_name": list(tls_snis),
+        "x509ce.dNSName": list(x509_domains)
+    }
+
 
 def extract_features_from_pcap(pcap_path, mac_address, device_name, origin_dataset="sentinel", packet_limit=None):
     packets = rdpcap(pcap_path)
@@ -52,13 +89,26 @@ def extract_features_from_pcap(pcap_path, mac_address, device_name, origin_datas
     return result
 
 if __name__ == "__main__":
+    # Basic input
+    pcap_path = "not_data/output3.pcap"
+    mac = ""
+    name = "not_device_3"
+
+    # Run both extractors
     result_json = extract_features_from_pcap(
-        pcap_path="not_data/output3.pcap",   # <--- your file location
-        mac_address="fill in mac address",                         # <--- change to actual target MAC if needed
-        device_name="not_device_1",                  # <--- or whatever name you want
-        packet_limit=3000
+        pcap_path=pcap_path,
+        mac_address=mac,
+        device_name=name,
+        packet_limit=1000
     )
 
-    # Save result
-    with open("not_data/output2_features.json", "w") as f:
+    tls_results = extract_tls_features(pcap_path, mac)
+
+    # Merge TLS fields into the same device's features
+    feature_dict = list(result_json.values())[0]
+    feature_dict.update(tls_results)
+
+    # Save merged output
+    with open("not_data/output4_features.json", "w") as f:
         json.dump(result_json, f, indent=4)
+

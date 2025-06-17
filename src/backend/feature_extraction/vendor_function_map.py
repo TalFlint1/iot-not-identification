@@ -39,7 +39,7 @@ vendor_function_map = {
     "rockwell automation": ['Sensor', 'Industrial Gateway', 'Switch'],
     "roku": ['Smart tv', 'streaming device', 'Smart Camera', 'plug', 'lights', 'video doorbell', 'home monitoring'],
     "samsara": ['Vehicle Gateway', 'Smart Camera', 'Industrial Controller'],
-    "samsung": ['Smart TV', 'Refrigerator', 'Washing Machine', 'Smartwatch', 'Speaker', 'Smart Camera'],
+    "samsung": ['Smart TV', 'Refrigerator', 'Washing Machine', 'Smartwatch', 'Speaker', 'Smart Camera', 'Smartphone'],
     "smartthings": ['Hub', 'Plug', 'Bulb', 'Lock', 'Sensor', 'Thermostat'],
     "sierra wireless": ['IoT gateway', 'Cellular routers', 'Tracking devices'],
     "sonos": ['smart speaker', 'multi room audio', 'home theater system', 'Voice Assistant'],
