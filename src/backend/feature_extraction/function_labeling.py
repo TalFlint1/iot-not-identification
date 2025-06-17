@@ -100,69 +100,137 @@ def detect_feature_type(col, val):
         return "mac"
     return "other"
 
+#this version works fine for iot
+# def function_labeling(enriched_features, vendor=None, max_tokens=50):
+#     """
+#     Implements the function labeling algorithm with soft vendor-based restriction
+#     and feature-by-feature score aggregation, integrating text chunking logic.
+#     """
+#     # Get candidate labels from vendor_function_map if vendor exists, else use master_functions
+#     if vendor and vendor.lower() in vendor_function_map:
+#         candidate_labels = vendor_function_map[vendor.lower()]
+#     else:
+#         candidate_labels = master_functions  # Fallback to general functions if vendor is not found
+    
+#     confidence_scores = {label: [] for label in candidate_labels}
+#     best_chunks = {}
+
+#     # Define which columns to allow
+#     allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names", "enriched_tls_cert_domains", "enriched_user_agents", "enriched_mac_address"]
+
+#     # For each feature (loop through the enriched features)
+#     for feature, col in enriched_features:
+#         if not any(col.lower().startswith(allowed) for allowed in allowed_cols):
+#             #print(f"[SKIPPED] Not an allowed column: {col}")
+#             continue
+
+#         cleaned = clean_feature(feature)
+#         if not cleaned:
+#             print(f"[SKIPPED] Empty feature in column: {col}")
+#             continue
+#         #print(f"Cleaning and classifying: {col}: {cleaned}")
+#         feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
+#         #print(f"Detected feature type: {feature_type}")
+
+#         # Split large text features into chunks (if applicable)
+#         chunks = split_into_chunks(cleaned, max_tokens=max_tokens)
+#         for chunk in chunks:
+#             hypothesis_template = "This is a {} type of device."
+#             result = classifier(chunk, candidate_labels, hypothesis_template=hypothesis_template)
+#             print("this is result: ", result)
+
+#             # === Check if the prediction is meaningful ===
+#             scores = result["scores"]
+#             top_score = scores[0]
+#             second_score = scores[1] if len(scores) > 1 else 0
+#             score_diff = top_score - second_score
+
+#             # Only continue if the chunk is meaningful (customizable thresholds)
+#             if top_score < 0.4:
+#                 print(f"[SKIPPED CHUNK] Not confident enough — top score: {top_score:.2f}, diff: {score_diff:.2f}")
+#                 continue  # Skip this chunk
+
+#             # Apply weight based on feature type (higher weight for enriched fields)
+#             weight = 1.0 if 'enriched' in col else 0.5
+
+#             # Track both max score and its sequence
+#             for label, score in zip(result["labels"], result["scores"]):
+#                 weighted_score = score * weight
+#                 if not confidence_scores[label] or weighted_score > max(confidence_scores[label]):
+#                     confidence_scores[label].append(weighted_score)
+#                     best_chunks[label] = chunk  # NEW: Save best chunk for this label
+    
+#     #Use the maximum score per label instead of the mean
+#     aggregated_scores = {label: max(scores) if scores else 0 for label, scores in confidence_scores.items()}
+#     final_label = max(aggregated_scores, key=aggregated_scores.get)
+#     best_sequence = best_chunks.get(final_label, "[No best sequence found]")
+#     print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
+#     return final_label, aggregated_scores[final_label], best_sequence
+
 def function_labeling(enriched_features, vendor=None, max_tokens=50):
     """
-    Implements the function labeling algorithm with soft vendor-based restriction
-    and feature-by-feature score aggregation, integrating text chunking logic.
+    Function labeling based on confident top-labels only (score ≥ 0.6).
+    Only the most likely label per chunk is considered if it's confident enough.
     """
-    # Get candidate labels from vendor_function_map if vendor exists, else use master_functions
     if vendor and vendor.lower() in vendor_function_map:
         candidate_labels = vendor_function_map[vendor.lower()]
     else:
-        candidate_labels = master_functions  # Fallback to general functions if vendor is not found
-    
+        candidate_labels = master_functions
+
     confidence_scores = {label: [] for label in candidate_labels}
     best_chunks = {}
 
-    # Define which columns to allow
-    allowed_cols = ["enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns", "enriched_tls_server_names", "enriched_tls_cert_domains", "enriched_user_agents", "enriched_mac_address"]
+    allowed_cols = [
+        "enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns",
+        "enriched_tls_server_names", "enriched_tls_cert_domains",
+        "enriched_user_agents", "enriched_mac_address"
+    ]
 
-    # For each feature (loop through the enriched features)
     for feature, col in enriched_features:
         if not any(col.lower().startswith(allowed) for allowed in allowed_cols):
-            #print(f"[SKIPPED] Not an allowed column: {col}")
             continue
 
         cleaned = clean_feature(feature)
         if not cleaned:
-            print(f"[SKIPPED] Empty feature in column: {col}")
             continue
-        #print(f"Cleaning and classifying: {col}: {cleaned}")
-        feature_type = detect_feature_type(col, cleaned)  # Detect the feature type
-        #print(f"Detected feature type: {feature_type}")
 
-        # Split large text features into chunks (if applicable)
         chunks = split_into_chunks(cleaned, max_tokens=max_tokens)
         for chunk in chunks:
-            hypothesis_template = "This feature belongs to an IoT device and can perform the function of a {}."
+            hypothesis_template = "This is a {} type of device."
             result = classifier(chunk, candidate_labels, hypothesis_template=hypothesis_template)
-            print("this is result: ", result)
 
-            # === Check if the prediction is meaningful ===
             scores = result["scores"]
+            labels = result["labels"]
+
+            if not scores or not labels:
+                continue
+
             top_score = scores[0]
-            second_score = scores[1] if len(scores) > 1 else 0
-            score_diff = top_score - second_score
+            top_label = labels[0]
 
-            # Only continue if the chunk is meaningful (customizable thresholds)
-            if top_score < 0.4:
-                print(f"[SKIPPED CHUNK] Not confident enough — top score: {top_score:.2f}, diff: {score_diff:.2f}")
-                continue  # Skip this chunk
+            # Filter out low-confidence predictions
+            if top_score < 0.6:
+                continue
 
-            # Apply weight based on feature type (higher weight for enriched fields)
             weight = 1.0 if 'enriched' in col else 0.5
+            weighted_score = top_score * weight
+            confidence_scores[top_label].append(weighted_score)
 
-            # Track both max score and its sequence
-            for label, score in zip(result["labels"], result["scores"]):
-                weighted_score = score * weight
-                if not confidence_scores[label] or weighted_score > max(confidence_scores[label]):
-                    confidence_scores[label].append(weighted_score)
-                    best_chunks[label] = chunk  # NEW: Save best chunk for this label
-    
-    #Use the maximum score per label instead of the mean
-    aggregated_scores = {label: max(scores) if scores else 0 for label, scores in confidence_scores.items()}
+            # Update best chunk for this label if it's better
+            if top_label not in best_chunks or weighted_score > best_chunks[top_label][0]:
+                best_chunks[top_label] = (weighted_score, chunk)
+
+    # Aggregate by averaging (or summing) scores for each label
+    aggregated_scores = {}
+    for label, scores in confidence_scores.items():
+        if scores:
+            aggregated_scores[label] = sum(scores) / len(scores)  # or just sum(scores)
+        else:
+            aggregated_scores[label] = 0
+
     final_label = max(aggregated_scores, key=aggregated_scores.get)
-    best_sequence = best_chunks.get(final_label, "[No best sequence found]")
+    best_sequence = best_chunks.get(final_label, (0, "[No best sequence found]"))[1]
+
     print(f"[MATCHING CHUNK] Best matching chunk for '{final_label}':\n{best_sequence}")
     return final_label, aggregated_scores[final_label], best_sequence
 
@@ -222,4 +290,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
+    run_function_labeling_from_csv("feature_extraction/data/mod_enriched_6.csv")
