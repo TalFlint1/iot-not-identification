@@ -16,6 +16,7 @@ import sensor from "../Icons/sensor.png";
 import camera from "../Icons/security_camera.png";
 import phone from "../Icons/mobile_phone.png";
 import laptop from "../Icons/laptop.png";
+import tablet from "../Icons/tablet.png"
 import './HistoryScreen.css';
 
 const HistoryScreen = () => {
@@ -238,6 +239,8 @@ const getIconForFunction = (func) => {
     "camera": camera,
     "smartphone": phone,
     "laptop": laptop,
+    "tablet": tablet,
+    "ipad": tablet,
     "security camera": camera,
     "smart camera": camera,
     "smart speaker": voice,
