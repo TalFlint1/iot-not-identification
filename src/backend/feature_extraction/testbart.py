@@ -4,10 +4,10 @@ from transformers import pipeline
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 # The enriched text chunk
-sequence = "Know and compare the dimensions and screen sizes of all iPad models, including the most recent iPad Pro M4 and iPad Air M2 of 2024."
+sequence = "Problems start when I'm trying to commission the plugs into my network - it seems like the plugs does not get in contact with Internet over my network."
 
 # Candidate labels (from your vendor-function map)
-candidate_labels = ['Tablet', 'Smartwatch', 'Smart Speaker', 'Smartphone']
+candidate_labels = ['Plug', 'Camera', 'Motion Sensor', 'Hub']
 
 # New hypothesis template
 hypothesis_template = "This is a {} type of device."

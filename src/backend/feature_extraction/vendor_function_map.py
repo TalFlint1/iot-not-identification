@@ -11,7 +11,7 @@ vendor_function_map = {
     "digi": ["gateways", "industrial router", "mesh networking", "embedded system"],
     "dji enterprise": ['Drone'],
     "eaton": ["gateway"],
-    "edimax": ['Smart Plug', 'Smart Camera', 'Motion Sensor', 'Smart Home Hub'],
+    "edimax": ['Plug', 'Camera', 'Sensor', 'Hub'],
     "eseye": ["Router"],
     "fitbit": ['Smartwatch'],
     "google": ['Smart Speaker', 'Voice Assistant', 'Smart TV', 'Smart Thermostat', 'Smart Camera', 'Smart Doorbell', 'Smart Smoke Detector'],

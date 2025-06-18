@@ -205,6 +205,11 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             if not scores or not labels:
                 continue
 
+            # 🔍 DEBUG PRINT: All scores for this chunk
+            # print(f"\n[CHUNK DEBUG] {col} - Chunk: {chunk[:100]}...")
+            # for label, score in zip(labels, scores):
+            #     print(f"    {label}: {score:.2f}")
+
             top_score = scores[0]
             top_label = labels[0]
 
@@ -212,7 +217,14 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             if top_score < 0.6:
                 continue
 
-            weight = 1.0 if 'enriched' in col else 0.5
+            col_lower = col.lower()
+            if 'user_agent' in col_lower:
+                weight = 1.5 if 'enriched' in col_lower else 1.2  # Stronger weight for user agent clues
+            elif 'enriched' in col_lower:
+                weight = 1.0
+            else:
+                weight = 0.5
+
             weighted_score = top_score * weight
             confidence_scores[top_label].append(weighted_score)
 
@@ -302,4 +314,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
+    run_function_labeling_from_csv("feature_extraction/data/mod_enriched_2.csv")

@@ -205,6 +205,11 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             if not scores or not labels:
                 continue
 
+            # 🔍 DEBUG PRINT: All scores for this chunk
+            print(f"\n[CHUNK DEBUG] {col} - Chunk: {chunk[:100]}...")
+            for label, score in zip(labels, scores):
+                print(f"    {label}: {score:.2f}")
+
             top_score = scores[0]
             top_label = labels[0]
 
@@ -309,4 +314,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
+    run_function_labeling_from_csv("feature_extraction/data/mod_enriched_4.csv")
