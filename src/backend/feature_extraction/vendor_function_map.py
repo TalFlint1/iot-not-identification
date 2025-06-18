@@ -32,7 +32,7 @@ vendor_function_map = {
     "omron industrial automation": ['robot', 'Sensor', 'industiral switch'],
     "panasonic": ['Smart TV', 'Smart Camera', 'Baby Monitor', 'Massage Chair'],
     "philips": ['Smart Lighting', 'Smart TV', 'Smart ear Thermometer'],
-    "piper": ['Security Camera', 'Home Monitoring', 'Motion Detection', 'Environmental Sensor', 'Smart Home Hub'],
+    "piper": ['Camera', 'Smart Switch'],
     "proglove": ["Smart Wearable Scanner"],
     "qualcomm": ['Smartphone', 'Smart Speaker'],
     "relayr": ['Industrial Sensors', 'IoT Gateway'],
