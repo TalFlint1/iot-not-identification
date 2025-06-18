@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # Basic input
     pcap_path = "not_data/output3.pcap"
     mac = ""
-    name = "not_device_3"
+    name = "not_device"
 
     # Run both extractors
     result_json = extract_features_from_pcap(
@@ -114,6 +114,6 @@ if __name__ == "__main__":
     feature_dict.update(tls_results)
 
     # Save merged output
-    with open("not_data/output4_features.json", "w") as f:
+    with open("not_data/test_not_input.json", "w") as f:
         json.dump(result_json, f, indent=4)
 
