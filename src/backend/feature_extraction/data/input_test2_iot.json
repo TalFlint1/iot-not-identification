@@ -1,21 +1,4 @@
 {
-    "xiaomi-cleaner_merged_us_IMC19.csv": {
-        "dns.ptr.domain_name": [
-            "roborock-vacuum-s5_miio11670639._miio._udp.local"
-        ],
-        "dhcp.option.hostname": [
-            "rockrobo"
-        ],
-        "x509ce.dNSName": [],
-        "http.user_agent": [],
-        "tls.handshake.extensions_server_name": [],
-        "mac_address": "f0:b4:29:41:ec:d7",
-        "origin_dataset": "IMC19",
-        "dns.qry.name": [
-            "us.ot.io.mi.com",
-            "us.ott.io.mi.com"
-        ]
-    },
     "smartthings-hub_merged_uk_IMC19.csv": {
         "dns.ptr.domain_name": [],
         "dhcp.option.hostname": [

@@ -1,0 +1,25 @@
+{
+    "Nest_Dropcam_Wireless_sivanathan.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [
+            "oculus690-vir.dropcam.com",
+            "oculus1170-vir.dropcam.com",
+            "oculus1396-vir.dropcam.com",
+            "oculus391-vir.dropcam.com",
+            "oculus305-vir.dropcam.com",
+            "oculus1121-vir.dropcam.com",
+            "oculus1160-vir.dropcam.com"
+        ],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "30:8c:fb:b6:ea:45",
+        "origin_dataset": "sivanathan",
+        "dns.qry.name": [
+            "nexus.dropcam.com",
+            "oculus1170-vir.dropcam.com",
+            "files.dropcam.com",
+            "pool.ntp.org"
+        ]
+    }
+}
