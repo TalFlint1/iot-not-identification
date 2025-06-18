@@ -1,0 +1,2 @@
+device_name,dns_queries,enriched_dns_queries,reverse_dns,enriched_reverse_dns,dhcp_hostnames,enriched_hostnames,tls_cert_domains,enriched_tls_cert_domains,tls_server_names,enriched_tls_server_names,user_agents,enriched_user_agents,mac_address,oui,origin_dataset
+device.csv,"['you can take pictures with it']"

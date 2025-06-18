@@ -173,8 +173,10 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     Only the most likely label per chunk is considered if it's confident enough.
     """
     if vendor and vendor.lower() in vendor_function_map:
+        print("hi")
         candidate_labels = vendor_function_map[vendor.lower()]
     else:
+        print("bye")
         candidate_labels = master_functions
 
     confidence_scores = {label: [] for label in candidate_labels}
@@ -183,8 +185,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
     allowed_cols = [
         "enriched_hostnames", "enriched_dns_queries", "enriched_reverse_dns",
         "enriched_tls_server_names", "enriched_tls_cert_domains",
-        "enriched_user_agents", "enriched_mac_address"
-    ]
+        "enriched_user_agents", "enriched_mac_address"]
 
     for feature, col in enriched_features:
         if not any(col.lower().startswith(allowed) for allowed in allowed_cols):
@@ -205,7 +206,7 @@ def function_labeling(enriched_features, vendor=None, max_tokens=50):
             if not scores or not labels:
                 continue
 
-            # 🔍 DEBUG PRINT: All scores for this chunk
+            #🔍 DEBUG PRINT: All scores for this chunk
             # print(f"\n[CHUNK DEBUG] {col} - Chunk: {chunk[:100]}...")
             # for label, score in zip(labels, scores):
             #     print(f"    {label}: {score:.2f}")
@@ -314,4 +315,4 @@ def run_function_labeling_from_csv(csv_input):
 
 if __name__ == "__main__":
     # Run the function labeling from the enriched dataset CSV
-    run_function_labeling_from_csv("feature_extraction/data/mod_enriched_7.csv")
+    run_function_labeling_from_csv("feature_extraction/not_data/1st_enriched.csv")
