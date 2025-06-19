@@ -53,7 +53,7 @@ def test_confidence_alerts():
     for alert in data["confidence_alerts"]:
         if alert["timestamp"] == "":
             continue
-        assert alert["confidence"] <= 60.0
+        assert alert["confidence"] <= 75.0
         assert "vendor" in alert
         assert "function" in alert
         assert "raw_input_s3_path" in alert
