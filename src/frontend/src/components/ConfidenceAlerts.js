@@ -1,5 +1,5 @@
 const ConfidenceAlertsTable = ({ data, onRowClick }) => {
-  const lowConfidence = data.filter(item => item.confidence < 70);
+  const lowConfidence = data.filter(item => item.confidence < 75);
 
   const tableStyle = {
     borderCollapse: "collapse",

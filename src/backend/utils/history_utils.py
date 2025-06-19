@@ -73,7 +73,7 @@ def get_recent_identifications(user_id, count=3):
 
     return formatted_entries
 
-def get_low_confidence_alerts(user_id, threshold=70.0, count=2):
+def get_low_confidence_alerts(user_id, threshold=75.0, count=2):
     user = table.get_item(Key={'username': user_id}).get('Item')
     if not user or 'history' not in user:
         return []
