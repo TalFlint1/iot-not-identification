@@ -14,7 +14,7 @@ vendor_function_map = {
     "edimax": ['Plug', 'Camera', 'Sensor', 'Hub'],
     "eseye": ["Router"],
     "fitbit": ['Smartwatch'],
-    "google": ['Smart Speaker', 'Voice Assistant', 'Smart TV', 'Smart Thermostat', 'Smart Camera', 'Smart Doorbell', 'Smoke Detector'],
+    "google": ['Smart Speaker', 'Voice Assistant', 'Smart TV', 'Smart Thermostat', 'Smart Camera', 'Smart Doorbell', 'Smoke Alarm'],
     "honeywell": ['Smart Thermostat', 'Air Quality Sensor', 'Smart Lock', 'Smart Camera', 'Security System', 'Smart Doorbell'],
     "hp": ['Smart Printer', 'Smart Home Hub'],
     "huawei": ["Smartphone", "Smart TV", "Smart Speaker", "Router", "Smart Camera", "Smart Home Hub", "Smartwatch", "Smart Plug", "Smart Bulb"],

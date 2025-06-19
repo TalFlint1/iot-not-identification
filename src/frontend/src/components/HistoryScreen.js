@@ -249,7 +249,7 @@ const getIconForFunction = (func) => {
     "smart sensor": sensor,
     "motion sensor": sensor,
     "air quality sensor": sensor,
-    "smoke detector": smoke_detector,
+    "smoke alarm": smoke_detector,
     "environmental sensor": sensor,
     "door Sensor": sensor,
     "smartwatch": watch,

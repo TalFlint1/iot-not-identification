@@ -1,17 +1,22 @@
 {
-    "blink-camera_merged_us_IMC19.csv": {
+    "Xiaomi_light_bulb_our_lab.csv": {
         "dns.ptr.domain_name": [],
         "dhcp.option.hostname": [
-            "F4B85E3173DB-mysimplelink"
+            "yeelink-light-mono6_miap5EE0"
         ],
         "x509ce.dNSName": [],
-        "http.user_agent": [],
+        "http.user_agent": [
+            "MIoT"
+        ],
         "tls.handshake.extensions_server_name": [],
-        "mac_address": "f4:b8:5e:31:73:db",
-        "origin_dataset": "IMC19",
+        "mac_address": "5c:e5:0c:0c:5e:e0",
+        "origin_dataset": "lab",
         "dns.qry.name": [
-            "IS-cam.u002.immedia-semi.com",
-            "VS-cam.u002.immedia-semi.com"
+            "us.ot.io.mi.com",
+            "cdn.awsusor0.fds.api.mi-img.com",
+            "de.ot.io.mi.com",
+            "sg.ot.io.mi.com",
+            "i2.ot.io.mi.com"
         ]
     }
 }
