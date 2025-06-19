@@ -355,9 +355,15 @@ const DashboardScreen = () => {
                 width={300}
                 height={300}
                 data={topVendors}
-                margin={{ top: 20, right: 0, bottom: 0, left: -30 }}
+                margin={{ top: 20, right: 0, bottom: 10, left: -30 }}
             >
-                <XAxis dataKey="name" angle={0} textAnchor="end" interval={0} style={{ fontSize: '12px' }} dx={25} />
+                <XAxis
+                  dataKey="name"
+                  angle={-10}
+                  textAnchor="middle"
+                  interval={0}
+                  style={{ fontSize: '12px' }}
+                />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="devices" fill="#60A5FA" />
@@ -374,10 +380,9 @@ const DashboardScreen = () => {
                 <XAxis
                   dataKey="name"
                   angle={-10}
-                  textAnchor="end"
+                  textAnchor="middle"
                   interval={0}
                   style={{ fontSize: '12px' }}
-                  dx={15}
                 />
                 <YAxis />
                 <Tooltip />
@@ -390,7 +395,7 @@ const DashboardScreen = () => {
                 width={700}
                 height={300}
                 data={monthlyDeviceData}
-                margin={{ top: 20, right: 30, bottom: 0, left: -30 }}
+                margin={{ top: 20, right: 40, bottom: 10, left: -20 }}
             >
                 <XAxis dataKey="month" />
                 <YAxis />
