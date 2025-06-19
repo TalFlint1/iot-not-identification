@@ -73,16 +73,16 @@ const InputScreen = () => {
       return;
     }
 
-    if (!selectedFile.name.toLowerCase().endsWith(".json")) {
-      alert("Please select a valid JSON file (.json).");
-      return;
-    }
+    // if (!selectedFile.name.toLowerCase().endsWith(".json")) {
+    //   alert("Please select a valid JSON file (.json).");
+    //   return;
+    // }
 
-    const isValid = await validateJsonFile(selectedFile);
-    if (!isValid) {
-      alert("The uploaded JSON file is not properly formatted or missing required fields.");
-      return;
-    }
+    // const isValid = await validateJsonFile(selectedFile);
+    // if (!isValid) {
+    //   alert("The uploaded JSON file is not properly formatted or missing required fields.");
+    //   return;
+    // }
   
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -96,7 +96,7 @@ const InputScreen = () => {
     setLoading(true);
   
     try {
-      const response = await fetch("http://localhost:5000/analyze_device/", {
+      const response = await fetch("http://localhost:5000/analyze_enriched_csv/", {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,

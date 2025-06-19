@@ -113,13 +113,16 @@ Or use the **manual input** option through the web UI.
 <summary>📷 Click to expand</summary>
 
 * **Input Screen**
-  ![alt text](<JSON input.png>)
+  ![alt text](Input.png)
 
 * **Result Screen**
   ![alt text](Result.png)
 
 * **History Screen**
   ![alt text](History.png)
+
+* **Dashboard Screen**
+  ![alt text](Dashboard.png)
 </details>
 
 ---
