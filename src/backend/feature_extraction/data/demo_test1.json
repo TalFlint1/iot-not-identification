@@ -1,0 +1,17 @@
+{
+    "blink-camera_merged_us_IMC19.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [
+            "F4B85E3173DB-mysimplelink"
+        ],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "f4:b8:5e:31:73:db",
+        "origin_dataset": "IMC19",
+        "dns.qry.name": [
+            "IS-cam.u002.immedia-semi.com",
+            "VS-cam.u002.immedia-semi.com"
+        ]
+    }
+}

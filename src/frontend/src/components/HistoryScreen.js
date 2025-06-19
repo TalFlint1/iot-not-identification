@@ -17,6 +17,7 @@ import camera from "../Icons/security_camera.png";
 import phone from "../Icons/mobile_phone.png";
 import laptop from "../Icons/laptop.png";
 import tablet from "../Icons/tablet.png"
+import smoke_detector from "../Icons/smoke-detector.png"
 import './HistoryScreen.css';
 
 const HistoryScreen = () => {
@@ -248,6 +249,7 @@ const getIconForFunction = (func) => {
     "smart sensor": sensor,
     "motion sensor": sensor,
     "air quality sensor": sensor,
+    "smoke detector": smoke_detector,
     "environmental sensor": sensor,
     "door Sensor": sensor,
     "smartwatch": watch,

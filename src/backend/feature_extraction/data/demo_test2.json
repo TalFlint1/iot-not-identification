@@ -1,0 +1,18 @@
+{
+    "NEST_Protect_smoke_alarm_Wireless_sivanathan.csv": {
+        "dns.ptr.domain_name": [],
+        "dhcp.option.hostname": [],
+        "x509ce.dNSName": [],
+        "http.user_agent": [],
+        "tls.handshake.extensions_server_name": [],
+        "mac_address": "18:b4:30:25:be:e4",
+        "origin_dataset": "sivanathan",
+        "dns.qry.name": [
+            "frontdoor.nest.com",
+            "transport02.rts08.iad01.production.nest.com",
+            "log-rts08-iad01.devices.nest.com",
+            "transport04.rts23.iad01.production.nest.com",
+            "log-rts23-iad01.devices.nest.com"
+        ]
+    }
+}
