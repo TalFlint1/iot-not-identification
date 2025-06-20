@@ -549,16 +549,55 @@ const InputScreen = () => {
               </div>
               {/* Loader - OVERLAY the entire input-grid */}
               {loading && (
-                <div
-                  className="loader"
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                ></div>
-              )}
+  <div
+    style={{
+      position: "fixed",  // full viewport overlay
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.5)",
+      zIndex: 1000,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    {/* Red circular spinner */}
+    <div
+      className="loader"
+      style={{
+        width: "60px",
+        height: "60px",
+        border: "6px solid #f3f3f3",
+        borderTop: "6px solid #e11d48",
+        borderRadius: "50%",
+        animation: "spin 1s linear infinite",
+      }}
+    />
+
+    {/* Bold message underneath */}
+    <p style={{
+      marginTop: "16px",
+      color: "white",
+      fontSize: "16px",
+      fontWeight: "bold",
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+    }}>
+      Analyzing your input…
+      <span style={{
+        display: "inline-block",
+        animation: "pulse 1.2s ease-in-out infinite",
+      }}>
+        ⏳
+      </span>
+    </p>
+  </div>
+)}
+
             </div>
             )}
             </motion.div>
