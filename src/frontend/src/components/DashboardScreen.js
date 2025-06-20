@@ -317,12 +317,21 @@ const DashboardScreen = () => {
             }}
         >
             <motion.div
-            style={{ width: "100%" }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+              style={{ width: "100%" }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-            <RecentActivityTable data={recentIdentifications} />
+              <RecentActivityTable
+                data={recentIdentifications}
+                onRowClick={handleRowClick}
+              />
+              {modalOpen && (
+                <RawJsonModal
+                  item={selectedRow}
+                  onClose={() => setModalOpen(false)}
+                />
+              )}
             </motion.div>
 
             <motion.div

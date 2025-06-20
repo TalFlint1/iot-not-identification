@@ -1,6 +1,6 @@
 import React from "react";
 
-const RecentActivityTable = ({ data }) => {
+const RecentActivityTable = ({ data, onRowClick }) => {
   const tableStyle = {
     borderCollapse: "collapse",
     width: "100%",
@@ -52,7 +52,12 @@ const RecentActivityTable = ({ data }) => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr key={index}
+                onClick={() => onRowClick(item)}
+                style={{ cursor: "pointer" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f5f5f5")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+            >
               <td style={tdStyle}>{item.timestamp}</td>
               <td style={tdStyle}>
                 {item.vendor.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}

@@ -68,7 +68,8 @@ def get_recent_identifications(user_id, count=3):
             'timestamp': entry.get('date', ''),
             'vendor': vendor,
             'function': function,
-            'confidence': round(float(entry.get('confidence', 0.0)), 2)
+            'confidence': round(float(entry.get('confidence', 0.0)), 2),
+            'raw_input_s3_path': entry.get('raw_input_s3_path', '')
         })
 
     return formatted_entries
@@ -105,16 +106,6 @@ def get_low_confidence_alerts(user_id, threshold=75.0, count=2):
             'confidence': round(float(entry.get('confidence', 0.0)), 2),
             'raw_input_s3_path': entry.get('raw_input_s3_path', '')
         })
-
-    # Pad if fewer than 'count'
-    # while len(formatted_entries) < count:
-    #     formatted_entries.append({
-    #         'timestamp': '',
-    #         'vendor': '',
-    #         'function': '',
-    #         'confidence': '',
-    #         'raw_input_s3_path': ''
-    #     })
 
     return formatted_entries
 
