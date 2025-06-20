@@ -458,16 +458,7 @@ const getIconForFunction = (func) => {
               setShowDeleteModal(false);
               setItemToDelete(null);
             }}
-            style={{
-              backgroundColor: "#e55353",
-              color: "white",
-              border: "none",
-              padding: "10px 20px",
-              margin: "10px",
-              cursor: "pointer",
-              fontSize: "16px",
-              borderRadius: "5px",
-            }}
+            className="btnn delete-account-btnn"
           >
             Yes, Delete
           </button>
@@ -476,16 +467,7 @@ const getIconForFunction = (func) => {
               setShowDeleteModal(false);
               setItemToDelete(null);
             }}
-            style={{
-              backgroundColor: "#ccc",
-              color: "black",
-              border: "none",
-              padding: "10px 20px",
-              margin: "10px",
-              cursor: "pointer",
-              fontSize: "16px",
-              borderRadius: "5px",
-            }}
+            className="btnn reidentify-btn"
           >
             Cancel
           </button>
