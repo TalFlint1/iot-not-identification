@@ -489,15 +489,13 @@ const getIconForFunction = (func) => {
           </p>
           <button 
             onClick={handleReidentify}
-            style={{ backgroundColor: "#2CA6A4", color: "white", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
-              fontSize: "16px", borderRadius: "5px", }}
+            className="btnn reidentify-btn"
           >
             Yes, Re-Identify
           </button>
           <button 
             onClick={() => setShowReidentifyModal(false)}
-            style={{ backgroundColor: "#ccc", color: "black", border: "none", padding: "10px 20px", margin: "10px", cursor: "pointer",
-              fontSize: "16px", borderRadius: "5px", }}
+            className="btnn reidentify-btn"
           >
             Cancel
           </button>
@@ -508,13 +506,23 @@ const getIconForFunction = (func) => {
   <div style={{
     position: "fixed",
     top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 2000
+    zIndex: 2000,
+    flexDirection: "column"
   }}>
     <div className="loader" />
+    <p style={{
+      marginTop: "20px",
+      color: "white",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center"
+    }}>
+      Re-identifying device...
+    </p>
   </div>
 )}
     </div>
