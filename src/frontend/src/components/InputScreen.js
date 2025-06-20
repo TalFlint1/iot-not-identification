@@ -357,10 +357,12 @@ const InputScreen = () => {
                       backgroundColor: "rgba(0,0,0,0.5)",
                       zIndex: 1000,
                       display: "flex",
+                      flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
+                    {/* Red circular spinner */}
                     <div
                       className="loader"
                       style={{
@@ -372,6 +374,25 @@ const InputScreen = () => {
                         animation: "spin 1s linear infinite",
                       }}
                     />
+                    
+                    {/* Bold message underneath */}
+                    <p style={{
+                      marginTop: "16px",
+                      color: "white",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}>
+                      Analyzing your input…
+                      <span style={{
+                        display: "inline-block",
+                        animation: "pulse 1.2s ease-in-out infinite",
+                      }}>
+                        ⏳
+                      </span>
+                    </p>
                   </div>
                 )}
               
