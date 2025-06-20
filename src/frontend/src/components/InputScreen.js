@@ -348,14 +348,31 @@ const InputScreen = () => {
                 {/* Show loader spinner if loading */}
                 {loading && (
                   <div
-                    className="loader"
                     style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      zIndex: 1000,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                  ></div>
+                  >
+                    <div
+                      className="loader"
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        border: "6px solid #f3f3f3",
+                        borderTop: "6px solid #e11d48",
+                        borderRadius: "50%",
+                        animation: "spin 1s linear infinite",
+                      }}
+                    />
+                  </div>
                 )}
               
                 {/* Buttons */}
