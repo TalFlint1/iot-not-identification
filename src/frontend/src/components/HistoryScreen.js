@@ -18,6 +18,7 @@ import phone from "../Icons/mobile_phone.png";
 import laptop from "../Icons/laptop.png";
 import tablet from "../Icons/tablet.png"
 import smoke_detector from "../Icons/smoke-detector.png"
+import { Download } from "lucide-react";
 import './HistoryScreen.css';
 
 const HistoryScreen = () => {
@@ -330,10 +331,12 @@ const getIconForFunction = (func) => {
           {exportMode && selectedExports.length > 0 && (
             <button
               onClick={handleExportCSV}
-              style={{ backgroundColor: "#68CABE", color: "white", border: "none", padding: "10px 20px", marginTop: "10px",
-                marginLeft: "20px", cursor: "pointer", fontSize: "18px", borderRadius: "5px", }}
+              style={{ color: "black", border: "none", padding: "10px 20px", marginTop: "10px",
+                marginLeft: "20px", cursor: "pointer", fontSize: "18px" }}
+                className="btnn reidentify-btn"
             >
-              Download Selected as CSV
+              <Download size={16} style={{ marginRight: "8px" }} />
+              Download
             </button>
           )}
           <br />
