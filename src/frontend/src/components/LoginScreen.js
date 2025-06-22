@@ -4,6 +4,7 @@ import Title from "./Title";
 import googleIcon from "../Icons/google.png";
 import { useNavigate } from "react-router-dom";
 import { handleGoogleSignIn } from "../utils/googleAuthUtils";
+import './LoginScreen.css';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -147,15 +148,7 @@ const LoginScreen = () => {
 
           {/* Sign In Button */}
           <button
-            style={{
-              padding: "12px",
-              backgroundColor: "#68CABE",
-              color: "white",
-              borderRadius: "5px",
-              fontSize: "16px",
-              cursor: "pointer",
-              border: "1px solid #4B5A66"
-            }}
+            className="login-btn"
             onClick={handleLogin}
           >
             Sign In
@@ -166,13 +159,7 @@ const LoginScreen = () => {
            <div style={{ textAlign: "center", marginTop: "10px" }}>
             <button
               onClick={handleCreateAccountClick}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#68CABE",
-                fontSize: "14px",
-                cursor: "pointer",
-              }}
+              className="text-linkk-btn"
             >
               Create Account
             </button>

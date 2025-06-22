@@ -4,6 +4,7 @@ import Title from "./Title";
 import googleIcon from "../Icons/google.png";
 import { useNavigate } from 'react-router-dom';
 import { handleGoogleSignIn } from "../utils/googleAuthUtils";
+import './RegisterScreen.css';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
@@ -117,13 +118,13 @@ const RegisterScreen = () => {
           <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} style={inputStyle} />
 
           {/* Register Button */}
-          <button onClick={handleRegister} style={buttonStyle}>Register</button>
+          <button onClick={handleRegister} className="register-btn">Register</button>
           {message && <p style={{ textAlign: "center", color: "red" }}>{message}</p>}
           {/* Already have an account */}
           <div style={{ textAlign: "center", marginTop: "10px" }}>
             <button
               onClick={handleSignInClick}
-              style={{ fontSize: "14px", color: "#68CABE", background: "none", border: "none", cursor: "pointer" }}
+              className="text-link-btn"
             >
               Already have an account? Sign In
             </button>
@@ -140,16 +141,6 @@ const inputStyle = {
   fontSize: "16px",
   borderRadius: "5px",
   border: "1px solid #ccc",
-};
-
-const buttonStyle = {
-  padding: "12px",
-  backgroundColor: "#68CABE",
-  color: "white",
-  borderRadius: "5px",
-  fontSize: "16px",
-  cursor: "pointer",
-  border: "1px solid #4B5A66",
 };
 
 export default RegisterScreen;
