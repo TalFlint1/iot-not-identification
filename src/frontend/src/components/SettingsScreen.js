@@ -242,7 +242,7 @@ const SettingsScreen = () => {
         <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
 
         <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-          <p style={{ width: "200px" }}>Export history data to CSV:</p>
+          <p style={{ width: "200px" }}>Export history data:</p>
           <button className="btn export-btn" onClick={handleExportClick}>Export</button>
         </div>
         <hr style={{ height: "1px", backgroundColor: "#ddd", border: "none", marginBottom: "30px" }} />
