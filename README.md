@@ -103,7 +103,7 @@ Or use the **manual input** option through the web UI.
 
 ## 📺 Demo
 
-[Watch the Demo on YouTube](https://www.youtube.com/watch?v=qWl7yj36YrQ)
+[Watch the Demo on YouTube](https://www.youtube.com/watch?v=tJtfH9hNl5I)
 
 ---
 
