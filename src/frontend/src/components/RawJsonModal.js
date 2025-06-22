@@ -15,7 +15,7 @@ const RawJsonModal = ({ item, onClose }) => {
     backgroundColor: isHovered ? primaryHover : primaryColor,
     color: "#fff",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "25px",
     padding: "8px 16px",
     cursor: "pointer",
     fontWeight: "bold",
