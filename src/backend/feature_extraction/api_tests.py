@@ -1,6 +1,6 @@
 import requests
 
-TOKEN = "access token here"
+TOKEN = "insert access token here"
 HEADERS = {"Authorization": f"Bearer {TOKEN}"}
 
 def test_analyze_device():
@@ -15,6 +15,12 @@ def test_analyze_device():
     assert response.status_code == 200
     assert "device" in response.json()
 
+    # Print full response
+    # data = response.json()
+    # print("Device:", data.get("device"))
+    # print("Confidence:", data.get("confidence"))
+    # print("Justification:", data.get("justification"))
+
 def test_get_user_history():
     response = requests.get("http://localhost:5000/history/", headers=HEADERS)
 
@@ -25,6 +31,9 @@ def test_get_user_history():
     assert "history" in data
     assert isinstance(data["history"], list)
 
+    # Print full response
+    # for item in data["history"]:
+    #     print(item)
 
 def test_recent_identifications():
     response = requests.get("http://localhost:5000/recent-identifications/", headers=HEADERS)
@@ -42,7 +51,10 @@ def test_recent_identifications():
         assert "function" in item
         assert "confidence" in item
         assert isinstance(item["confidence"], float)
-
+    
+    # Print full response
+    # for item in recent_list:
+    #     print(item)
 
 def test_confidence_alerts():
     response = requests.get("http://localhost:5000/confidence-alerts/", headers=HEADERS)
@@ -57,7 +69,22 @@ def test_confidence_alerts():
         assert "vendor" in alert
         assert "function" in alert
         assert "raw_input_s3_path" in alert
+    
+    # Print full response
+    # for alert in data["confidence_alerts"]:
+    #     print(alert)
+
+def run_test(fn, name):
+    try:
+        fn()
+        print(f"✅ {name} passed")
+    except AssertionError as e:
+        print(f"❌ {name} failed: {e}")
+        raise
+
 
 if __name__ == "__main__":
-    test_recent_identifications()
-    print("passed recent test.")
+    run_test(test_analyze_device, "test_analyze_device")
+    run_test(test_get_user_history, "test_get_user_history")
+    run_test(test_recent_identifications, "test_recent_identifications")
+    run_test(test_confidence_alerts, "test_confidence_alerts")
